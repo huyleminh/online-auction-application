@@ -1,0 +1,39 @@
+{
+	"name": "online-auction-application",
+	"version": "1.0.0",
+	"description": "Final project of web application class HCMUS",
+	"type": "module",
+	"main": "src/index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node src/index.js",
+		"dev": "nodemon src/index.js"
+	},
+	"keywords": [
+		"auction",
+		"hcmus",
+		"web",
+		"application"
+	],
+	"author": "H2A",
+	"license": "ISC",
+	"devDependencies": {
+		"nodemon": "^2.0.15"
+	},
+	"dependencies": {
+		"axios": "^0.24.0",
+		"dotenv": "^10.0.0",
+		"express": "^4.17.1",
+		"express-handlebars": "^6.0.2",
+		"express-handlebars-sections": "^1.0.1",
+		"express-session": "^1.17.2",
+		"knex": "^0.95.14",
+		"moment": "^2.29.1",
+		"morgan": "^1.10.0",
+		"mysql2": "^2.3.3",
+		"nodemailer": "^6.7.2",
+		"passport": "^0.5.0",
+		"passport-google-oauth20": "^2.0.0",
+		"passport-local": "^1.0.0"
+	}
+}
