@@ -1,23 +1,31 @@
+.signup-body {
+    background: #f8f9fd;
+}
+
 .containner-login {
     background: #f8f9fd;
 }
 
-.containner-login > .row {
+.containner-login > .row,
+.containner-signup > .row {
     margin: 0;
 }
 
-.login-form .alert {
+.login-form .alert,
+.signup-form .alert {
     padding: 1rem 1.25rem;
 }
 
-.containner-login .divider {
+.containner .divider,
+.containner-signup .divider {
     width: 100%;
     border: 1px solid #eee;
     position: relative;
     margin: 20px 0px;
 }
 
-.containner-login .divider span {
+.containner-login .divider span,
+.containner-signup .divider span {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -29,7 +37,8 @@
     width: 70px;
 }
 
-.containner-login .login-wrapper {
+.containner-login .login-wrapper,
+.containner-signup .signup-wrapper {
     background-color: #fff;
     border-radius: 5px;
     padding: 0;
@@ -38,7 +47,7 @@
 
 .login-wrapper .login-image {
     padding: 0;
-    background-image: url(/images/auth-bg.jpg);
+    background-image: url(/images/signup.jpg);
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -47,11 +56,17 @@
     border-bottom-right-radius: 5px;
 }
 
-.login-image img {
-    width: 100%;
-    height: 100%;
+.signup-wrapper .signup-image {
+    padding: 0;
+    background-image: url(/images/signup.jpg);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
 }
 
-.login-wrapper .login-form {
+.login-wrapper .login-form,
+.signup-wrapper .signup-form {
     padding: 50px 25px;
 }
