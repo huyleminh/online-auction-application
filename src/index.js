@@ -34,7 +34,7 @@ class AppServer {
                 saveUninitialized: true,
                 cookie: {
                     secure: AppConstant.PROD,
-                    maxAge: AppConstant.COOKIE_KEY,
+                    maxAge: AppConstant.COOKIE_KEY_MAX_AGE,
                 },
             })
         );

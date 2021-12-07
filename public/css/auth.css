@@ -1,0 +1,57 @@
+.containner-login {
+    background: #f8f9fd;
+}
+
+.containner-login > .row {
+    margin: 0;
+}
+
+.login-form .alert {
+    padding: 1rem 1.25rem;
+}
+
+.containner-login .divider {
+    width: 100%;
+    border: 1px solid #eee;
+    position: relative;
+    margin: 20px 0px;
+}
+
+.containner-login .divider span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+    background: #fff;
+    color: #dddddd;
+
+    width: 70px;
+}
+
+.containner-login .login-wrapper {
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 0;
+    box-shadow: 0 10px 34px -15px rgb(0 0 0 / 24%);
+}
+
+.login-wrapper .login-image {
+    padding: 0;
+    background-image: url(/images/auth-bg.jpg);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.login-image img {
+    width: 100%;
+    height: 100%;
+}
+
+.login-wrapper .login-form {
+    padding: 50px 25px;
+}
