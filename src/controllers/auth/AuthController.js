@@ -63,11 +63,34 @@ export default class AuthController extends AppController {
                 failureFlash: true,
             })
         );
+
+        // Register routes
+        this._router.get("/signup", this.signupPage);
+        this._router.post("/signup", this.postSignup);
+        this._router.get("/api/signup/otp", this.getSignupOTP);
     }
 
     loginPage(req, res) {
         res.render("pages/auth/login", {
             layout: false,
         });
+    }
+
+    signupPage(req, res) {
+        res.render("pages/auth/signup", {
+            layout: false,
+        });
+    }
+
+    postSignup(req, res) {
+        const body = req.body;
+        console.log(body);
+        res.redirect("/");
+    }
+
+    getSignupOTP(req, res) {
+        const { email } = req.query;
+        console.log(email);
+        res.json({ status: 200, message: "Ok" });
     }
 }

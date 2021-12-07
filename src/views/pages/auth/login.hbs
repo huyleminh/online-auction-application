@@ -48,6 +48,7 @@
                                     name="username"
                                     class="form-control form-control-lg form-icon-trailing"
                                     autofocus
+                                    required
                                 />
                                 <label class="form-label" for="username">Tên đăng nhập</label>
                             </div>
@@ -58,6 +59,7 @@
                                     id="password"
                                     name="password"
                                     class="form-control form-control-lg form-icon-trailing"
+                                    required
                                 />
                                 <label class="form-label" for="password">Mật khẩu</label>
                             </div>
@@ -69,7 +71,7 @@
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-primary btn-lg btn-block mb-4">Đăng nhập</button>
+                            <div class="row"><button type="submit" class="btn btn-primary btn-lg col" style="margin: 0px 12px;">Đăng nhập</button></div>
 
                             <div class="divider mt-4 mb-4">
                                 <span class="text-center">Hoặc</span>
@@ -106,7 +108,6 @@
         {{!-- Submit action --}}
         $("#loginForm").on("submit", function(e) {
             e.preventDefault();
-             event.stopPropagation();
 
             const username = $("#username");
             if (!username.val() || !username.val().trim()) {
