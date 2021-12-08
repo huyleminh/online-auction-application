@@ -1,105 +1,71 @@
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Online Auction</title>
+<body>
+    <div class="containner containner-login h-100">
+        <div class="row align-items-center justify-content-center h-100">
+            <div class="col-xl-8 col-lg-10 col-md-9 justify-content-center row login-wrapper">
+                <div class="col-lg-6 col-md-10 ps-lg-5 pe-lg-5 login-form">
+                    <h2 class="text-center mb-3">Đăng nhập</h3>
+                    <form action="/login" method="post" id="loginForm" class="">
+                        <div class="form-outline mb-4">
+                            <i class="fas fa-user trailing"></i>
+                            <input
+                                type="text"
+                                id="username"
+                                name="username"
+                                class="form-control form-control-lg form-icon-trailing"
+                                autofocus
+                                required
+                            />
+                            <label class="form-label" for="username">Tên đăng nhập</label>
+                        </div>
+                        <div class="form-outline mb-4">
+                            <i class="fas fa-lock trailing"></i>
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                class="form-control form-control-lg form-icon-trailing"
+                                required
+                            />
+                            <label class="form-label" for="password">Mật khẩu</label>
+                        </div>
+                        <div class="alert alert-danger d-none" id="loginAlert"></div>
 
-        <link rel="icon" type="image/png" href="/images/auction.png" />
-        <link rel="stylesheet" href="/css/auth.css">
-
-        <!-- Font Awesome -->
-        <link
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
-            rel="stylesheet"
-        />
-        <!-- Google Fonts -->
-        <link
-            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-            rel="stylesheet"
-        />
-        <!-- MDB -->
-        <link
-            href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.1/mdb.min.css"
-            rel="stylesheet"
-        />
-
-        <!-- MDB -->
-        <script
-            type="text/javascript"
-            src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.1/mdb.min.js"
-        ></script>
-
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
-    </head>
-
-    <body>
-        <div class="containner containner-login h-100">
-            <div class="row align-items-center justify-content-center h-100">
-                <div class="col-xl-8 col-lg-10 col-md-9 justify-content-center row login-wrapper">
-                    <div class="col-lg-6 col-md-10 ps-lg-5 pe-lg-5 login-form">
-                        <h2 class="text-center mb-3">Đăng nhập</h3>
-                        <form action="/login" method="post" id="loginForm" class="">
-                            <div class="form-outline mb-4">
-                                <i class="fas fa-user trailing"></i>
-                                <input
-                                    type="text"
-                                    id="username"
-                                    name="username"
-                                    class="form-control form-control-lg form-icon-trailing"
-                                    autofocus
-                                    required
-                                />
-                                <label class="form-label" for="username">Tên đăng nhập</label>
+                        <div class="row mb-4">
+                            <div class="col">
+                                <a href="/forget-pwd">Quên mật khẩu?</a>
                             </div>
-                            <div class="form-outline mb-4">
-                                <i class="fas fa-lock trailing"></i>
-                                <input
-                                    type="password"
-                                    id="password"
-                                    name="password"
-                                    class="form-control form-control-lg form-icon-trailing"
-                                    required
-                                />
-                                <label class="form-label" for="password">Mật khẩu</label>
-                            </div>
-                            <div class="alert alert-danger d-none" id="loginAlert"></div>
+                        </div>
 
-                            <div class="row mb-4">
-                                <div class="col">
-                                    <a href="/forget-pwd">Quên mật khẩu?</a>
-                                </div>
-                            </div>
+                        <div class="row"><button type="submit" class="btn btn-primary btn-lg col" style="margin: 0px 12px;">Đăng nhập</button></div>
 
-                            <div class="row"><button type="submit" class="btn btn-primary btn-lg col" style="margin: 0px 12px;">Đăng nhập</button></div>
+                        <div class="divider mt-4 mb-4">
+                            <span class="text-center">Hoặc</span>
+                        </div>
 
-                            <div class="divider mt-4 mb-4">
-                                <span class="text-center">Hoặc</span>
-                            </div>
+                        <a role="button" href="/login/google" type="button" class="btn btn-block btn-lg" style="background-color: #dd4b39; color: #fff;">
+                            <i class="fab fa-google me-1"></i>
+                            Đăng nhập với google
+                        </a>
 
-                            <a role="button" href="/login/google" type="button" class="btn btn-block btn-lg" style="background-color: #dd4b39; color: #fff;">
-                                <i class="fab fa-google me-1"></i>
-                                Đăng nhập với google
+                        <p class="mt-4 mb-4 text-center">Chưa là thành viên? <a href="/signup">Đăng kí tại đây</a></p>
+                        <p class="mt-4 mb-4 text-center home-navigation">
+                            <a href="/" class="btn btn-info">
+                                <i class="fas fa-arrow-left me-1"></i>
+                                Trang chủ
                             </a>
+                        </p>
 
-                            <p class="mt-4 mb-4 text-center">Chưa là thành viên? <a href="/signup">Đăng kí tại đây</a></p>
-                            <p class="mt-4 mb-4 text-center home-navigation">
-                                <a href="/" class="btn btn-info">
-                                    <i class="fas fa-arrow-left me-1"></i>
-                                    Trang chủ
-                                </a>
-                            </p>
-
-                        </form>
-                    </div>
-
-                    <div class="col-lg-6 d-none d-lg-block login-image"></div>
+                    </form>
                 </div>
 
+                <div class="col-lg-6 d-none d-lg-block login-image"></div>
             </div>
-        </div>
-    </body>
 
+        </div>
+    </div>
+</body>
+
+{{#section "js"}}
     <script>
         document.querySelectorAll('.form-outline').forEach((formOutline) => {
             new mdb.Input(formOutline).init();
@@ -128,4 +94,4 @@
             $("#loginForm").off("submit").submit();
         })
     </script>
-</html>
+{{/section}}

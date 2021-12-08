@@ -1,5 +1,6 @@
 import express from "express";
 import { create } from "express-handlebars";
+import HandlebarsSection from "express-handlebars-sections";
 import session from "express-session";
 import morgan from "morgan";
 import passport from "passport";
@@ -51,6 +52,8 @@ class AppServer {
             defaultLayout: "main",
             extname: "hbs",
         });
+
+        HandlebarsSection(handlebars);
 
         this.app.engine("hbs", handlebars.engine);
         this.app.set("view engine", "hbs");
