@@ -11,6 +11,12 @@ export default class HomeController extends AppController {
     }
 
     renderHome(req, res) {
-        res.send("Home");
+        res.render("pages/home", {
+            products: {
+                topDue: [1, 2, 3, 4, 5, 6, 7],
+                topBidded: [1, 2, 3, 4, 5, 6, 7],
+                topHighest: [1, 2, 3, 4, 5, 6, 7],
+            },
+        });
     }
 }

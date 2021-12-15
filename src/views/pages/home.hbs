@@ -1,0 +1,259 @@
+{{#section "css"}}
+    <link rel="stylesheet" href="/css/home.css" />
+    <link rel="stylesheet" href="owlcarousel/assets/owl.carousel.min.css" />
+    <link rel="stylesheet" href="owlcarousel/assets/owl.theme.default.min.css" />
+{{/section}}
+
+<section class="main">
+    {{! How to bid section start }}
+    <div class="section" id="howToBid">
+        <div class="d-flex flex-column align-items-center py-5 container">
+            <h2 class="mb-3">How it works?</h2>
+            <p class="mb-4">Follow the instruction and waiting for bidding result</p>
+
+            <div class="row g-3 section-body">
+                <div class="col-lg-3 col-md-6 col-sm-6 justify-content-center">
+                    <div class="card text-center">
+                        <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                            <i class="fas fa-file-signature text-primary"></i>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Step 1</h5>
+                            <p class="card-text">
+                                Register to be a bidder
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 justify-content-center">
+                    <div class="card text-center">
+                        <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                            <i class="fas fa-check-square text-success"></i>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Step 2</h5>
+                            <p class="card-text">
+                                Choose your favourite product
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 justify-content-center">
+                    <div class="card text-center">
+                        <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                            <i class="fas fa-gavel text-info"></i>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Step 3</h5>
+                            <p class="card-text">
+                                Bid them with a appropriate price
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 justify-content-center">
+                    <div class="card text-center">
+                        <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                            <i class="fas fa-mug-hot text-warning"></i>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Step 4</h5>
+                            <p class="card-text">
+                                Take a nap and wait for the result
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{! Top 5 products are due }}
+    <div class="section container-fluid">
+        <div class="container py-5" id="topDue">
+            <h2 class="mb-3 text-center">Top due products</h2>
+            <p class="mb-4 text-center">Hurry up, choose a product and start bidding</p>
+            <div class="d-flex section-body containner h-auto">
+                <div class="owl-carousel owl-theme">
+                    {{#each products.topDue}}
+                        <div class="card product-card">
+                            <div
+                                class="bg-image hover-overlay ripple p-3"
+                                data-mdb-ripple-color="light"
+                            >
+                                <img
+                                    src="https://cdn.pixabay.com/photo/2018/08/16/19/56/wedding-rings-3611277_960_720.jpg"
+                                    class="img-fluid"
+                                />
+                                <a href="#">
+                                    <div class="mask"></div>
+                                </a>
+                            </div>
+                            <div class="card-body p-4 d-flex flex-column justify-content-between">
+                                <h4 class="card-title">Ring With Clear Stone Accents</h4>
+                                <div class="card-info mb-3 d-flex align-items-center bid">
+                                    <i class="fas fa-gavel text-success"></i>
+                                    <span class="text-success">Current Bid</span>
+                                    <span class="flex-grow-1 text-end">1.000.000 VND</span>
+                                </div>
+                                <div class="card-info mb-3 d-flex align-items-center">
+                                    <i class="fas fa-dollar-sign text-danger"></i>
+                                    <span class="text-danger">Buy Now</span>
+                                    <span class="flex-grow-1 text-end">1.000.000 VND</span>
+                                </div>
+                                <div class="card-info mb-3 d-flex align-items-center">
+                                    <i class="fas fa-crown text-warning"></i>
+                                    <span class="text-warning">Top Bidder:</span>
+                                    <span class="flex-grow-1 text-end">*****Khoa</span>
+                                </div>
+                                <div
+                                    class="card-info mb-3 d-flex align-items-center timer timer-danger"
+                                >
+                                    <span class="timer-danger fw-bolder">0d : 1h : 16m : 59s</span>
+                                    <span class="flex-grow-1 text-end">30 Bids</span>
+                                </div>
+                                <button type="button" class="btn btn-primary btn-block">
+                                    <i class="fas fa-gavel me-2"></i>
+                                    Bid Now
+                                </button>
+                            </div>
+                            <div class="card-footer text-center p-3">
+                                <p class="m-0 verical-align-middle">2 days ago</p>
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{! Top 5 products most bidded }}
+    <div class="section container-fluid">
+        <div class="container py-5" id="topBidded">
+            <h2 class="mb-3 text-center">Most bidded</h2>
+            <p class="mb-4 text-center">Let's bid and bring them home</p>
+            <div class="d-flex section-body containner h-auto">
+                <div class="owl-carousel owl-theme">
+                    {{#each products.topBidded}}
+                        <div class="card product-card">
+                            <div
+                                class="bg-image hover-overlay ripple p-3"
+                                data-mdb-ripple-color="light"
+                            >
+                                <img
+                                    src="https://cdn.pixabay.com/photo/2018/08/16/19/56/wedding-rings-3611277_960_720.jpg"
+                                    class="img-fluid"
+                                />
+                                <a href="#">
+                                    <div class="mask"></div>
+                                </a>
+                            </div>
+                            <div class="card-body p-4 d-flex flex-column justify-content-between">
+                                <h4 class="card-title">Ring With Clear Stone Accents</h4>
+                                <div class="card-info mb-3 d-flex align-items-center bid">
+                                    <i class="fas fa-gavel text-success"></i>
+                                    <span class="text-success">Current Bid</span>
+                                    <span class="flex-grow-1 text-end">1.000.000 VND</span>
+                                </div>
+                                <div class="card-info mb-3 d-flex align-items-center">
+                                    <i class="fas fa-dollar-sign text-danger"></i>
+                                    <span class="text-danger">Buy Now</span>
+                                    <span class="flex-grow-1 text-end">1.000.000 VND</span>
+                                </div>
+                                <div class="card-info mb-3 d-flex align-items-center">
+                                    <i class="fas fa-crown text-warning"></i>
+                                    <span class="text-warning">Top Bidder:</span>
+                                    <span class="flex-grow-1 text-end">*****Khoa</span>
+                                </div>
+                                <div
+                                    class="card-info mb-3 d-flex align-items-center timer timer-danger"
+                                >
+                                    <span class="timer-danger fw-bolder">0d : 1h : 16m : 59s</span>
+                                    <span class="flex-grow-1 text-end">30 Bids</span>
+                                </div>
+                                <button type="button" class="btn btn-primary btn-block">
+                                    <i class="fas fa-gavel me-2"></i>
+                                    Bid Now
+                                </button>
+                            </div>
+                            <div class="card-footer text-center p-3">
+                                <p class="m-0 verical-align-middle">2 days ago</p>
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{! Top 5 products highest }}
+    <div class="section container-fluid">
+        <div class="container py-5" id="topHighest">
+            <h2 class="mb-3 text-center">Most highest</h2>
+            <p class="mb-4 text-center">Price is not a problem, try your luck once!</p>
+
+            <div class="d-flex section-body containner h-auto">
+                <div class="owl-carousel owl-theme">
+                    {{#each products.topHighest}}
+                        <div class="card product-card">
+                            <div
+                                class="bg-image hover-overlay ripple p-3"
+                                data-mdb-ripple-color="light"
+                            >
+                                <img
+                                    src="https://cdn.pixabay.com/photo/2018/08/16/19/56/wedding-rings-3611277_960_720.jpg"
+                                    class="img-fluid"
+                                />
+                                <a href="#">
+                                    <div class="mask"></div>
+                                </a>
+                            </div>
+
+                            <div class="card-body p-4 d-flex flex-column justify-content-between">
+                                <h4 class="card-title">Ring With Clear Stone Accents</h4>
+
+                                <div class="card-info mb-3 d-flex align-items-center bid">
+                                    <i class="fas fa-gavel text-success"></i>
+                                    <span class="text-success">Current Bid</span>
+                                    <span class="flex-grow-1 text-end">1.000.000 VND</span>
+                                </div>
+
+                                <div class="card-info mb-3 d-flex align-items-center">
+                                    <i class="fas fa-dollar-sign text-danger"></i>
+                                    <span class="text-danger">Buy Now</span>
+                                    <span class="flex-grow-1 text-end">1.000.000 VND</span>
+                                </div>
+
+                                <div class="card-info mb-3 d-flex align-items-center">
+                                    <i class="fas fa-crown text-warning"></i>
+                                    <span class="text-warning">Top Bidder:</span>
+                                    <span class="flex-grow-1 text-end">*****Khoa</span>
+                                </div>
+
+                                <div
+                                    class="card-info mb-3 d-flex align-items-center timer timer-danger"
+                                >
+                                    <span class="timer-danger fw-bolder">0d : 1h : 16m : 59s</span>
+                                    <span class="flex-grow-1 text-end">30 Bids</span>
+                                </div>
+
+                                <button type="button" class="btn btn-primary btn-block">
+                                    <i class="fas fa-gavel me-2"></i>
+                                    Bid Now
+                                </button>
+                            </div>
+
+                            <div class="card-footer text-center p-3">
+                                <p class="m-0 verical-align-middle">2 days ago</p>
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{#section "js"}}
+    <script src="owlcarousel/owl.carousel.min.js"></script>
+{{/section}}
