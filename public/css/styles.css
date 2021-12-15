@@ -1,0 +1,192 @@
+a {
+    color: #4154f1;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #717ff5;
+    text-decoration: none;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+body {
+    scroll-behavior: smooth;
+}
+
+:root {
+    --main-color: #6963ff;
+    --secondary-color: #f82b89;
+    --main-text-color: #000000;
+    --secondary-text-color: #0000008c;
+}
+
+/* Navbar start */
+.header .navbar {
+    padding: 0.75rem 0;
+    box-shadow: none;
+    transition: padding 0.2s ease;
+}
+
+.header .navbar.navbar-scrolled {
+    box-shadow: 0 4px 12px 0 rgb(0 0 0 / 7%), 0 2px 4px rgb(0 0 0 / 5%);
+    padding: 0.74rem 0;
+}
+
+.header .navbar-wrapper .logo img {
+    width: 200px;
+    height: 100%;
+}
+
+.header .navbar-wrapper .nav-item {
+    font-weight: 500;
+    display: block;
+    border-radius: 5px;
+}
+
+.header .navbar-wrapper .nav-item:not(:last-child) {
+    margin-right: 4px;
+}
+
+.header .navbar-wrapper .nav-item.active,
+.header .navbar-wrapper .nav-item:hover {
+    background-color: var(--main-color);
+}
+
+.header .navbar-wrapper .nav-item#login {
+    background-color: var(--secondary-color);
+}
+
+.header .navbar-wrapper .nav-item#login .nav-link {
+    color: #fff;
+}
+
+.header .navbar-wrapper .nav-item#login:hover {
+    background-color: #e41a78;
+}
+
+.header .navbar-wrapper .nav-item .nav-link {
+    padding: 0.5rem 1.25rem;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+}
+
+.header .navbar-wrapper .nav-item.active .nav-link,
+.header .navbar-wrapper .nav-item:hover .nav-link {
+    color: #fff;
+}
+
+/* Navbar profile dropdown */
+.header .navbar-wrapper .profile-dropdown > a::after {
+    border: none;
+}
+
+.header .navbar-wrapper .profile-dropdown > a {
+    color: var(--secondary-text-color);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.header .navbar-wrapper .profile-dropdown > a > span > i {
+    font-size: 12px;
+}
+
+.header .navbar-wrapper .profile-dropdown .dropdown-menu {
+    top: 120%;
+    padding: 8px 0px;
+    border-radius: 5px;
+    background-color: #fcfcfc;
+}
+
+.header .navbar-wrapper .profile-dropdown .dropdown-menu::before {
+    position: absolute;
+    content: "";
+
+    top: -5%;
+    right: 15%;
+    display: inline-block;
+
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid #0028641f;
+    border-left: 5px solid transparent;
+    border-bottom-color: #00000033;
+}
+
+.header .navbar-wrapper .profile-dropdown .dropdown-menu::after {
+    position: absolute;
+    content: "";
+
+    top: -5%;
+    right: 15%;
+    display: inline-block;
+
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid #fcfcfc;
+    border-left: 5px solid transparent;
+}
+
+.header .navbar-wrapper .profile-dropdown .dropdown-menu > li:first-child .dropdown-item,
+.header .navbar-wrapper .profile-dropdown .dropdown-menu > li:last-child .dropdown-item {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.header .navbar-wrapper .profile-dropdown .dropdown-menu .dropdown-item:hover {
+    color: var(--main-color);
+    background-color: #f7f7ff;
+}
+
+.header .navbar-wrapper .profile-dropdown .dropdown-menu .dropdown-item i {
+    color: var(--main-color);
+}
+
+/* Banner */
+.banner {
+    background-image: url("/images/banner-bg.jpg");
+    height: 400px;
+    margin-top: 58px;
+}
+
+.banner .mask {
+    background: linear-gradient(to right, #3ba3ff80, #6963ff80);
+}
+
+.banner .mask .btn {
+    background-color: var(--secondary-color);
+    color: #fff;
+    box-shadow: none;
+}
+
+.banner .mask .btn i {
+    font-size: 20px;
+    transform-origin: 0% 100%;
+}
+
+.banner .mask .btn:hover i {
+    transform: rotate(25deg);
+    transition: all 0.1s ease;
+}
+
+/* Footer */
+.newsletter-form button {
+    background-color: var(--secondary-color);
+    color: #fff;
+}
+
+.newsletter-form button:hover {
+    color: #fff;
+}
+
+.footer {
+    background-color: var(--main-color);
+}
+
+.footer img {
+    width: 100%;
+}
