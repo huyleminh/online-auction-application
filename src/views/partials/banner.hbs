@@ -2,13 +2,15 @@
     <div class="mask">
         <div class="d-flex justify-content-center align-items-center h-100">
             <div class="text-white">
-                <h1 class="mb-3 text-uppercase">Online Auction</h1>
-                <h4 class="mb-3 fw-lighter text-white">Are You Ready To Bid?</h4>
+                <h1 class="mb-3 text-uppercase">{{title}}</h1>
+                <h4 class="mb-3 fw-lighter text-white">{{subTitle}}</h4>
 
-                <a class="btn btn-lg" href="#" role="button">
-                    <i class="fas fa-gavel me-2"></i>
-                    Bid now
-                </a>
+                {{#if extra}}
+                    <a class="btn btn-lg" href="/menu/categories/all" role="button">
+                        <i class="fas fa-gavel me-2"></i>
+                        Bid now
+                    </a>
+                {{/if}}
             </div>
         </div>
     </div>
