@@ -18,6 +18,10 @@ body {
     scroll-behavior: smooth;
 }
 
+* {
+    font-size: 15px;
+}
+
 :root {
     --main-color: #6963ff;
     --secondary-color: #f82b89;
@@ -174,6 +178,9 @@ body {
 }
 
 /* Footer */
+.newsletter-form-container {
+    background-color: #f6f7fb;
+}
 .newsletter-form button {
     background-color: var(--secondary-color);
     color: #fff;
@@ -189,4 +196,119 @@ body {
 
 .footer img {
     width: 100%;
+}
+
+/* Back to top button */
+.back-to-top {
+    position: fixed;
+    right: 20px;
+    bottom: -60px;
+    z-index: 10;
+
+    background-color: #9253ff;
+    color: #fff;
+    width: 45px;
+    height: 45px;
+
+    border-radius: 50%;
+    box-shadow: 0 4px 12px 0 #0000001a, 0 2px 4px #0000000d;
+    transition: all 0.3s ease;
+    outline: none;
+    border: none;
+}
+
+.back-to-top:hover {
+    color: #fff;
+    background-color: #8345f0;
+}
+
+.back-to-top.showbtn {
+    right: 20px;
+    bottom: 20px;
+}
+
+/* Product card */
+.product-card .card-image {
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: relative;
+}
+
+.product-card .card-image .mask {
+    background-color: #807bfd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: all 0.3s ease;
+    opacity: 0;
+    visibility: hidden;
+
+    height: 30px;
+    top: unset;
+}
+
+.product-card .card-image:hover .mask {
+    opacity: 1;
+    visibility: visible;
+}
+
+.product-card .card-image .mask span {
+    color: #fff;
+    font-size: 1.25rem;
+}
+
+.product-card .card-body .card-info i {
+    font-size: 1rem;
+    margin-right: 8px;
+    width: 35px;
+    text-align: center;
+}
+
+.product-card .card-body .card-info.bid i {
+    font-size: 1.5rem;
+}
+
+.product-card .card-body .card-info.bid span {
+    font-size: 1.15rem;
+}
+
+.product-card .card-body .card-info.bid > span:first-child {
+    max-width: 45%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    margin-left: 5px;
+}
+
+.product-card .card-body .card-info.timer > span:first-child {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 1rem;
+}
+
+.product-card .card-body .card-info.timer > span:first-child.timer-danger {
+    background-color: #f93154;
+}
+
+.product-card .card-body .card-info.timer > span:first-child.timer-warning {
+    background-color: #ffa900;
+}
+
+.product-card .card-body .card-info.timer > span:first-child.timer-success {
+    background-color: #00b74a;
+}
+
+.product-card .card-body button {
+    background-color: var(--main-color);
+    padding: 10px 20px;
+    font-size: 15px;
+}
+
+/* Pagination */
+.pagination-container .pagination .page-item.active .page-link {
+    background-color: var(--main-color);
 }

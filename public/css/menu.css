@@ -1,0 +1,74 @@
+.top-menu-container {
+    background-color: #f6f7fb;
+}
+
+.menu-container {
+    min-height: 100vh;
+    height: auto;
+}
+
+.menu-container .filter-sidebar {
+    z-index: 1000;
+}
+
+.menu-container .card-header[aria-expanded="false"] i::before {
+    content: "\f054";
+}
+
+.menu-container .card-header {
+    background-color: var(--main-color);
+    color: #fff;
+}
+
+.menu-container .card-header h6,
+.menu-container .card-header i {
+    font-weight: 600;
+}
+
+.menu-container .categories-group .categories-item {
+    cursor: pointer;
+    position: relative;
+    font-size: 14px;
+}
+
+.menu-container .categories-group .categories-item::after {
+    position: absolute;
+    content: "";
+    top: 0;
+    bottom: 0;
+    left: 100%;
+    width: 3%;
+}
+
+.menu-container .categories-group .categories-item > a {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #4f4f4f;
+}
+
+.menu-container .categories-group .categories-item > a i {
+    font-size: 0.75rem;
+}
+
+.menu-container .categories-group .categories-item:hover {
+    background-color: #f7f7ff;
+}
+
+.menu-container .categories-group .categories-item:hover > a {
+    color: var(--main-color);
+}
+
+.menu-container .categories-group .categories-item .categories-subgroup {
+    position: absolute;
+    left: 103%;
+    top: 0;
+    min-width: max-content;
+    display: none;
+}
+
+.menu-container .categories-group .categories-item:hover .categories-subgroup {
+    display: block;
+    box-shadow: 0 4px 12px 0 rgb(0 0 0 / 7%), 0 2px 4px rgb(0 0 0 / 5%);
+}

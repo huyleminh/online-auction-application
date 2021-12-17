@@ -4,6 +4,10 @@
     <link rel="stylesheet" href="owlcarousel/assets/owl.theme.default.min.css" />
 {{/section}}
 
+{{#section "banner"}}
+    {{> banner title="Online Auction" subTitle="Are You Ready To Bid?" extra=true}}
+{{/section}}
+
 <section class="main">
     {{! How to bid section start }}
     <div class="section" id="howToBid">
@@ -76,48 +80,52 @@
             <div class="d-flex section-body containner h-auto">
                 <div class="owl-carousel owl-theme">
                     {{#each products.topDue}}
-                        <div class="card product-card">
-                            <div
-                                class="bg-image hover-overlay ripple p-3"
-                                data-mdb-ripple-color="light"
-                            >
-                                <img
-                                    src="https://cdn.pixabay.com/photo/2018/08/16/19/56/wedding-rings-3611277_960_720.jpg"
-                                    class="img-fluid"
-                                />
-                                <a href="#">
-                                    <div class="mask"></div>
+                        <div class="card product-card border">
+                            <div class="p-3">
+                                <a href="#" class="card-image">
+                                    <img
+                                        src="https://cdn.pixabay.com/photo/2018/08/16/19/56/wedding-rings-3611277_960_720.jpg"
+                                        class="img-fluid"
+                                    />
+                                    <div class="mask">
+                                        <span><i class="fas fa-search-plus me-1"></i>View details</span>
+                                    </div>
                                 </a>
                             </div>
-                            <div class="card-body p-4 d-flex flex-column justify-content-between">
-                                <h4 class="card-title">Ring With Clear Stone Accents</h4>
-                                <div class="card-info mb-3 d-flex align-items-center bid">
+
+                            <div class="card-body p-3 d-flex flex-column justify-content-between">
+                                <h5 class="card-title">Ring With Clear Stone Accents</h4>
+
+                                <div class="card-info mb-2 d-flex align-items-center bid">
                                     <i class="fas fa-gavel text-success"></i>
                                     <span class="text-success">Current Bid</span>
                                     <span class="flex-grow-1 text-end">1.000.000 VND</span>
                                 </div>
-                                <div class="card-info mb-3 d-flex align-items-center">
+
+                                <div class="card-info mb-2 d-flex align-items-center">
                                     <i class="fas fa-dollar-sign text-danger"></i>
                                     <span class="text-danger">Buy Now</span>
                                     <span class="flex-grow-1 text-end">1.000.000 VND</span>
                                 </div>
-                                <div class="card-info mb-3 d-flex align-items-center">
+
+                                <div class="card-info mb-2 d-flex align-items-center">
                                     <i class="fas fa-crown text-warning"></i>
-                                    <span class="text-warning">Top Bidder:</span>
+                                    <span class="text-warning">Top Bidder</span>
                                     <span class="flex-grow-1 text-end">*****Khoa</span>
                                 </div>
-                                <div
-                                    class="card-info mb-3 d-flex align-items-center timer timer-danger"
-                                >
+
+                                <div class="card-info mb-2 d-flex align-items-center timer timer-danger">
                                     <span class="timer-danger fw-bolder">0d : 1h : 16m : 59s</span>
                                     <span class="flex-grow-1 text-end">30 Bids</span>
                                 </div>
+
                                 <button type="button" class="btn btn-primary btn-block">
                                     <i class="fas fa-gavel me-2"></i>
                                     Bid Now
                                 </button>
                             </div>
-                            <div class="card-footer text-center p-3">
+
+                            <div class="card-footer text-center px-3 py-2">
                                 <p class="m-0 verical-align-middle">2 days ago</p>
                             </div>
                         </div>
@@ -148,7 +156,7 @@
                                     <div class="mask"></div>
                                 </a>
                             </div>
-                            <div class="card-body p-4 d-flex flex-column justify-content-between">
+                            <div class="card-body p-3 d-flex flex-column justify-content-between">
                                 <h4 class="card-title">Ring With Clear Stone Accents</h4>
                                 <div class="card-info mb-3 d-flex align-items-center bid">
                                     <i class="fas fa-gavel text-success"></i>
@@ -209,7 +217,7 @@
                                 </a>
                             </div>
 
-                            <div class="card-body p-4 d-flex flex-column justify-content-between">
+                            <div class="card-body p-3 d-flex flex-column justify-content-between">
                                 <h4 class="card-title">Ring With Clear Stone Accents</h4>
 
                                 <div class="card-info mb-3 d-flex align-items-center bid">
@@ -256,4 +264,5 @@
 
 {{#section "js"}}
     <script src="owlcarousel/owl.carousel.min.js"></script>
+    <script src="/js/home.js"></script>
 {{/section}}
