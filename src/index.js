@@ -66,10 +66,25 @@ class AppServer {
         });
     }
 
+    initializeOutMiddlewares() {
+        this.app.use("/403", function (req, res) {
+            res.render("pages/errors/403", { layout: false });
+        });
+        this.app.use(function (req, res, next) {
+            res.render("pages/errors/404", { layout: false });
+        });
+
+        this.app.use(function (err, req, res, next) {
+            console.error(err.stack);
+            res.render("pages/errors/500", { layout: false });
+        });
+    }
+
     start() {
         this.initializeGlobalMiddlewares();
         this.initializeViewEngine();
         this.initializeControllers();
+        this.initializeOutMiddlewares();
 
         this.app.listen(this.port, () => {
             console.log(`Server is listening on http://localhost:${this.port}`);
