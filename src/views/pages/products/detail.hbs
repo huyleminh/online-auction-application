@@ -1,0 +1,384 @@
+{{#section "css"}}
+    <link rel="stylesheet" href="/css/menu.css" />
+    <link rel="stylesheet" href="/css/ckcontent-styles.min.css" />
+    <link rel="stylesheet" href="/owlcarousel/assets/owl.carousel.min.css" />
+    <link rel="stylesheet" href="/owlcarousel/assets/owl.theme.default.min.css" />
+{{/section}}
+
+<section class="container-fluid bg-light menu-container" id="top-menu-container">
+    <div class="container pt-4">
+        <h3>Product Detail</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Products</a></li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    Product with id
+                    {{productId}}
+                </li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="container pb-5">
+        {{! Product detail - start }}
+        <div class="row mb-4">
+            <div class="col-lg-7 col-sm-12">
+                <div class="card border shadow-0 product-images">
+                    <div class="card-body card-body-images">
+                        <div class="card-images-main">
+                            <img
+                                src="https://cdn.pixabay.com/photo/2018/08/16/19/56/wedding-rings-3611277_960_720.jpg"
+                                alt="product image"
+                                class="img-fluid img-thumbnail p-0 border-0 rounded"
+                            />
+                        </div>
+
+                        <div class="card-images-preview owl-carousel owl-theme mt-4">
+                            <div class="card-sub-images-item">
+                                <img
+                                    src="https://cdn.pixabay.com/photo/2018/08/16/19/56/wedding-rings-3611277_960_720.jpg"
+                                    alt="product image"
+                                />
+                            </div>
+
+                            <div class="card-sub-images-item">
+                                <img
+                                    src="https://cdn.pixabay.com/photo/2018/08/16/19/56/wedding-rings-3611277_960_720.jpg"
+                                    alt="product image"
+                                />
+                            </div>
+
+                            <div class="card-sub-images-item">
+                                <img
+                                    src="https://cdn.pixabay.com/photo/2018/08/16/19/56/wedding-rings-3611277_960_720.jpg"
+                                    alt="product image"
+                                />
+                            </div>
+
+                            <div class="card-sub-images-item">
+                                <img
+                                    src="https://cdn.pixabay.com/photo/2018/08/16/19/56/wedding-rings-3611277_960_720.jpg"
+                                    alt="product image"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5 col-sm-12 d-flex flex-column justify-content-between">
+                <div class="card border shadow-0 mb-3 product-details">
+                    <div class="card-body card-body-info">
+                        <h2 class="card-title mb-3">Ring With Clear Stone Accents</h2>
+                        <div class="d-flex flex-column">
+                            <div class="card-body-info-item d-flex align-items-center mt-4">
+                                <div class="me-3 left">
+                                    <span class="">Current Bid</span>
+                                </div>
+                                <div class="flex-grow-1 d-flex flex-column right bidprice">
+                                    <span class="text-success">
+                                        1.000.000
+                                        <span>VND</span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="card-body-info-item d-flex align-items-center mt-4">
+                                <div class="me-3 left">
+                                    <span class="">Buy Now</span>
+                                </div>
+                                <div class="flex-grow-1 d-flex flex-column right">
+                                    <span class="text-danger">
+                                        1.000.000
+                                        <span>VND</span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="card-body-info-item d-flex align-items-center mt-4">
+                                <div class="me-3 left">
+                                    <span class="">Total bid(s)</span>
+                                </div>
+                                <div class="flex-grow-1 d-flex flex-column right">
+                                    <span class="">
+                                        <i class="fas fa-users me-2 text-secondary"></i>
+                                        30
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="card-body-info-item d-flex align-items-center mt-4">
+                                <div class="align-self-start me-3 left">
+                                    <span class="">Top Bidder</span>
+                                </div>
+                                <div class="flex-grow-1 d-flex right">
+                                    <span class="me-2">
+                                        <i class="me-2 fas fa-crown text-warning"></i>
+                                        *****Khoa
+                                    </span>
+                                    <span class="ps-2 border-start">
+                                        <i class="me-2 far fa-thumbs-up text-primary"></i>
+                                        80
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="card-body-info-item d-flex align-items-center mt-4">
+                                <div class="align-self-start me-3 left">
+                                    <span class="">Posted by</span>
+                                </div>
+                                <div class="flex-grow-1 d-flex right">
+                                    <span class="me-2">
+                                        <i class="me-2 fas fa-user-check text-secondary"></i>
+                                        Khoa Ngo
+                                    </span>
+
+                                    <span class="ps-2 border-start">
+                                        <i class="me-2 far fa-thumbs-up text-primary"></i>
+                                        80
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="card-body-info-item d-flex align-items-center mt-4">
+                                <div class="me-3 left">
+                                    <span class="">Remaining time</span>
+                                </div>
+
+                                <div class="timer timer-danger right">
+                                    <span class="fw-bolder text-white">0d : 1h : 16m : 59s</span>
+                                </div>
+                            </div>
+
+                            <div class="card-btn-group d-flex mt-4">
+                                <button
+                                    class="btn btn-outline-danger me-3 p-3"
+                                    title="Add to wishlist"
+                                    id="add-wishlist"
+                                >
+                                    <i class="fas fa-heart"></i>
+                                </button>
+
+                                <button
+                                    class="btn btn-primary"
+                                    id="btn-share"
+                                    data-mdb-toggle="modal"
+                                    data-mdb-target="#shareLinkModal"
+                                >
+                                    <i class="fas fa-share-alt me-2"></i>
+                                    Share
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-0 border product-submit">
+                    <div class="card-body card-btn-group">
+                        <p class="text-center"><a href="#" class="fw-bolder">
+                            Learn how automatic bidding works<i class="fas fa-question ms-1"></i></a></p>
+                        <form action="">
+                            <div class="input-group mb-3">
+                                <input
+                                    min="0"
+                                    type="number"
+                                    style="height: unset;"
+                                    class="form-control"
+                                    placeholder="Input your money"
+                                    aria-label="Input your money"
+                                    aria-describedby="btn-bid"
+                                    name="money"
+                                />
+                                <button class="btn" type="submit" id="btn-bid">
+                                    Hit a bid
+                                </button>
+                            </div>
+                        </form>
+
+                        <div class="d-flex justify-content-center"><span>Or</span></div>
+
+                        <form action="" class="mb-0 mt-3">
+                            <input type="hidden" name="productId" />
+                            <button type="submit" class="btn btn-block" id="btn-buynow">Buy now</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{! Product detail - end }}
+
+        {{! Product description & history - start }}
+        <div class="card border shadow-0 product-extra">
+            <!-- Tabs navs -->
+            <div class="card-body">
+                <ul
+                    class="nav nav-tabs mb-3 d-flex justify-content-center"
+                    id="myTab0"
+                    role="tablist"
+                >
+                    <li class="nav-item" role="presentation">
+                        <button
+                            class="nav-link active"
+                            id="description-tab0"
+                            data-mdb-toggle="tab"
+                            data-mdb-target="#description"
+                            type="button"
+                            role="tab"
+                            aria-controls="description"
+                            aria-selected="true"
+                        >
+                            Description
+                        </button>
+                    </li>
+
+                    <li class="nav-item" role="presentation">
+                        <button
+                            class="nav-link"
+                            id="history-tab0"
+                            data-mdb-toggle="tab"
+                            data-mdb-target="#history0"
+                            type="button"
+                            role="tab"
+                            aria-controls="history"
+                            aria-selected="false"
+                        >
+                            Auction History
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="myTabContent0">
+                    <div
+                        class="tab-pane fade show active"
+                        id="description"
+                        role="tabpanel"
+                        aria-labelledby="description-tab0"
+                    >
+                        <div class="ck-content">
+                            <h2>The three greatest things you learn from traveling</h2>
+                            <p>Like all the great things on earth traveling teaches us by example.
+                                Here are some of the most precious lessons Ive learned over the
+                                years of traveling.
+                            </p>
+                            <h3>Appreciation of diversity</h3>
+                            <p>Getting used to an entirely different culture can be challenging.
+                                While it's also nice to learn about cultures online or from books,
+                                nothing comes close to experiencing cultural diversity in person.
+                                You learn to appreciate each and every single one of the differences
+                                while you become more culturally fluid.
+                            </p>
+                            <blockquote><p>The real voyage of discovery consists not in seeking new
+                                    landscapes, but having new eyes.</p><p><strong>Marcel Proust</strong></p>
+                            </blockquote>
+                            <h3>Improvisation</h3>
+                            <p>Life doesn't allow us to execute every single plan perfectly. This
+                                especially seems to be the case when you travel. You plan it down to
+                                every minute with a big checklist; but when it comes to executing
+                                it, something always comes up and you're left with your improvising
+                                skills. You learn to adapt as you go. Here's how my travel checklist
+                                looks now:
+                            </p>
+                            <h3>Confidence</h3>
+                            <p>Going to a new place can be quite terrifying. While change and
+                                uncertainty makes us scared, traveling teaches us how ridiculous it
+                                is to be afraid of something before it happens. The moment you face
+                                your fear and see there was nothing to be afraid of, is the moment
+                                you discover bliss.
+                            </p>
+                        </div>
+                    </div>
+                    <div
+                        class="tab-pane fade"
+                        id="history0"
+                        role="tabpanel"
+                        aria-labelledby="history-tab0"
+                    >
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Bidder</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Bid date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td>****Khoa</td>
+                                    <td>6,000,000</td>
+                                    <td>1/11/2019 10:43</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">2</th>
+                                    <td>****Quang</td>
+                                    <td>5,900,000</td>
+                                    <td>1/11/2019 9:43</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">3</th>
+                                    <td>****Tuấn</td>
+                                    <td>5,800,000</td>
+                                    <td>1/11/2019 8:43</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">4</th>
+                                    <td>****Minh</td>
+                                    <td>5,700,000</td>
+                                    <td>1/11/2019 7:43</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        {{! Product description & history - end }}
+    </div>
+</section>
+
+{{! Copy link modal }}
+<div
+    class="modal fade"
+    id="shareLinkModal"
+    tabindex="-1"
+    aria-labelledby="shareLinkModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h5 class="mb-3">Here is your link</h5>
+
+                <div class="input-group mb-3">
+                    <input
+                        type="text"
+                        class="form-control"
+                        aria-label="Input your money"
+                        aria-describedby="btn-copy"
+                        id="shareLinkHolder"
+                    />
+                    <button class="btn btn-primary" type="submit" id="btn-copy">
+                        <i class="far fa-copy me-2"></i>
+                        Copy link
+                    </button>
+                </div>
+
+                <p class="text-success" id="copy-text"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{#section "js"}}
+    <script src="/owlcarousel/owl.carousel.min.js"></script>
+    <script src="/js/menu.js"></script>
+{{/section}}
