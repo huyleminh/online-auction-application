@@ -179,7 +179,7 @@ body {
 
 /* Footer */
 .newsletter-form-container {
-    background-color: #f6f7fb;
+    background-color: #fff;
 }
 .newsletter-form button {
     background-color: var(--secondary-color);
@@ -302,7 +302,7 @@ body {
     background-color: #00b74a;
 }
 
-.product-card .card-body button {
+.product-card .card-body a.bidnow {
     background-color: var(--main-color);
     padding: 10px 20px;
     font-size: 15px;
@@ -311,4 +311,9 @@ body {
 /* Pagination */
 .pagination-container .pagination .page-item.active .page-link {
     background-color: var(--main-color);
+}
+
+/* Bread crumb */
+.breadcrumb-item > a {
+    color: #000;
 }

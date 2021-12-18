@@ -11,7 +11,7 @@ function initActiveLink() {
     // console.log(location);
     const activeHref = location.pathname + location.hash;
 
-    const navItems = document.querySelectorAll(".nav-item");
+    const navItems = document.querySelectorAll(".nav-item.nav-item-header");
     navItems.forEach(function (item) {
         const navLink = item.children[0];
         const href = navLink.attributes["href"];
