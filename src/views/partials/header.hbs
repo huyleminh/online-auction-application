@@ -38,7 +38,10 @@
                                 </div>
 
                                 <div class="col-3">
-                                    <button type="submit" class="btn btn-primary px-2">Search</button>
+                                    <button
+                                        type="submit"
+                                        class="btn btn-primary px-2"
+                                    >Search</button>
                                 </div>
                             </form>
                         </div>
@@ -48,12 +51,23 @@
                         <a class="nav-link" href="/">Home</a>
                     </li>
 
-                    <li class="nav-item nav-item-header">
-                        <a class="nav-link" href="/#howToBid">About</a>
-                    </li>
-
-                    <li class="nav-item nav-item-header">
-                        <a class="nav-link" href="/#topBidded">Most bidded</a>
+                    <li class="nav-item nav-item-header dropdown">
+                        <a
+                            class="nav-link dropdown-toggle"
+                            type="button"
+                            id="aboutDropdown"
+                            data-mdb-toggle="dropdown"
+                            aria-expanded="false"
+                            href="/about"
+                        >
+                            About
+                        </a>
+                        <ul class="dropdown-menu rounded" aria-labelledby="aboutDropdown">
+                            <li><a class="dropdown-item" href="/about">About Us</a></li>
+                            <li><a class="dropdown-item" href="/about/#whath2a">What is H2A Bid?</a></li>
+                            <li><a class="dropdown-item" href="/about/#whyh2a">Why H2A Bid?</a></li>
+                            <li><a class="dropdown-item" href="/about/#learn_automation">Automation Bidding</a></li>
+                        </ul>
                     </li>
 
                     <li class="nav-item nav-item-header">

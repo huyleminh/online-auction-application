@@ -30,6 +30,7 @@ export default class ProductController extends AppController {
 
         res.render("pages/products/detail", {
             productId,
+            relatedProducts: [1, 2, 3, 4, 5],
         });
     }
 }

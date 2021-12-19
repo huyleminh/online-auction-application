@@ -1,5 +1,9 @@
 {{#section "css"}}
     <link rel="stylesheet" href="/css/menu.css" />
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
 {{/section}}
 
 {{#section "banner"}}
@@ -22,15 +26,32 @@
 <section class="container-fluid bg-light menu-container">
     <div class="container py-5">
         <div class="row">
-            <div class="col-xl-3 d-xl-block d-none filter-sidebar">
+            <div class="col-xl-3 col-lg-4 d-lg-block filter-sidebar d-none">
                 {{> filterbar}}
             </div>
 
-            {{!-- Product list section --}}
-            <div class="col-xl-9 col-12">
+            {{! Product list section }}
+            <div class="col-xl-9 col-lg-8 col-12">
+                <div class="px-4 mb-4 filter-hidden">
+                    <div class="card border shadow-0 rounded">
+                        <div class="card-body p-3">
+                            <span
+                                class="me-3"
+                                id="toggle-filter-btn"
+                                title="Toggle filter"
+                                type="button"
+                                class="btn btn-primary"
+                            >
+                                <i class="fas fa-filter"></i>
+                            </span>
+                            <span class="fw-bolder">Showing 7 of 50 entries</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row g-4 px-4">
-                    {{#each productList }}
-                        <div class="col-lg-4 col-md-6">
+                    {{#each productList}}
+                        <div class="col-xl-4 col-lg-6 col-md-6">
                             <div class="card product-card border">
                                 <div class="p-3">
                                     <a href="/menu/products/1" class="card-image">
@@ -39,12 +60,15 @@
                                             class="img-fluid"
                                         />
                                         <div class="mask">
-                                            <span><i class="fas fa-search-plus me-1"></i>View details</span>
+                                            <span><i class="fas fa-search-plus me-1"></i>View
+                                                details</span>
                                         </div>
                                     </a>
                                 </div>
 
-                                <div class="card-body p-3 d-flex flex-column justify-content-between">
+                                <div
+                                    class="card-body p-3 d-flex flex-column justify-content-between"
+                                >
                                     <h5 class="card-title">Ring With Clear Stone Accents</h5>
 
                                     <div class="card-info mb-2 d-flex align-items-center bid">
@@ -65,12 +89,18 @@
                                         <span class="flex-grow-1 text-end">*****Khoa</span>
                                     </div>
 
-                                    <div class="card-info mb-2 d-flex align-items-center timer timer-danger">
+                                    <div
+                                        class="card-info mb-2 d-flex align-items-center timer timer-danger"
+                                    >
                                         <span class="timer-danger fw-bolder">0d : 1h : 16m : 59s</span>
                                         <span class="flex-grow-1 text-end">30 Bids</span>
                                     </div>
 
-                                    <a href="/menu/products/1" type="button" class="btn btn-primary btn-block bidnow">
+                                    <a
+                                        href="/menu/products/1"
+                                        type="button"
+                                        class="btn btn-primary btn-block bidnow"
+                                    >
                                         <i class="fas fa-gavel me-2"></i>
                                         Bid Now
                                     </a>
@@ -83,10 +113,36 @@
                         </div>
                     {{/each}}
                 </div>
-                {{!-- Product list section - end --}}
+                {{! Product list section - end }}
 
                 {{> pagination}}
             </div>
         </div>
     </div>
 </section>
+
+{{!-- Filter modal --}}
+<div
+    class="filter-modal"
+    id="filterModal"
+>
+    <div class="m-0 animate__animated animate__slideInLeft" id="filterModalDialog">
+        <div class="modal-content rounded-0" id="filterModalContent">
+            <div class="modal-header">
+                <h4 class="mb-0">Filter bar</h4>
+                <button
+                    type="button"
+                    class="btn-close"
+                    id="btn-close-modal"
+                ></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 filter-sidebar">
+                        {{> filterbar}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

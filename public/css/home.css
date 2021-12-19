@@ -19,6 +19,31 @@
 .owl-stage {
     display: flex;
 }
-.owl-item {
-    margin: 0px 20px;
+
+#whath2a .section-body > div > div > i {
+    font-size: 3rem;
+}
+
+#whath2a .section-body > div > div > p {
+    font-size: 1.25rem;
+    word-break: keep-all;
+    hyphens: auto;
+}
+
+#whyh2a .section-body .section-body-why-item {
+    height: 100%;
+}
+
+#whyh2a .section-body .section-body-why-item i {
+    font-size: 3rem;
+    color: var(--main-color);
+}
+
+#whyh2a .section-body .section-body-why-item h5 {
+    /* flex-grow: 1; */
+    margin-bottom: 0;
+}
+
+#learn_automation .section-body p {
+    font-size: 1.25rem;
 }

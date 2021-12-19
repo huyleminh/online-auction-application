@@ -141,12 +141,12 @@ body {
     border-bottom-right-radius: 0;
 }
 
-.header .navbar-wrapper .profile-dropdown .dropdown-menu .dropdown-item:hover {
+.header .navbar-wrapper .dropdown-menu .dropdown-item:hover {
     color: var(--main-color);
     background-color: #f7f7ff;
 }
 
-.header .navbar-wrapper .profile-dropdown .dropdown-menu .dropdown-item i {
+.header .navbar-wrapper .dropdown-menu .dropdown-item i {
     color: var(--main-color);
 }
 
@@ -161,7 +161,8 @@ body {
     background: linear-gradient(to right, #3ba3ff80, #6963ff80);
 }
 
-.banner .mask .btn {
+.banner .mask .btn,
+#about_btn {
     background-color: var(--secondary-color);
     color: #fff;
     box-shadow: none;
@@ -203,7 +204,7 @@ body {
     position: fixed;
     right: 20px;
     bottom: -60px;
-    z-index: 10;
+    z-index: 1056;
 
     background-color: #9253ff;
     color: #fff;

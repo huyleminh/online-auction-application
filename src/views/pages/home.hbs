@@ -12,10 +12,10 @@
     {{! How to bid section start }}
     <div class="section" id="howToBid">
         <div class="d-flex flex-column align-items-center py-5 container">
-            <h2 class="mb-3">How it works?</h2>
+            <h2 class="mb-3">Getting started</h2>
             <p class="mb-4">Follow the instruction and waiting for bidding result</p>
 
-            <div class="row g-3 section-body">
+            <div class="row g-3 section-body mb-4">
                 <div class="col-lg-3 col-md-6 col-sm-6 justify-content-center">
                     <div class="card text-center">
                         <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
@@ -24,11 +24,12 @@
                         <div class="card-body">
                             <h5 class="card-title">Step 1</h5>
                             <p class="card-text">
-                                Register to be a bidder
+                                <a href="/signup" class="text-body">Register to be a bidder</a>
                             </p>
                         </div>
                     </div>
                 </div>
+
                 <div class="col-lg-3 col-md-6 col-sm-6 justify-content-center">
                     <div class="card text-center">
                         <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
@@ -37,11 +38,12 @@
                         <div class="card-body">
                             <h5 class="card-title">Step 2</h5>
                             <p class="card-text">
-                                Choose your favourite product
+                                <a href="/menu/categories/all" class="text-body">Choose your favourite product</a>
                             </p>
                         </div>
                     </div>
                 </div>
+
                 <div class="col-lg-3 col-md-6 col-sm-6 justify-content-center">
                     <div class="card text-center">
                         <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
@@ -49,12 +51,13 @@
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">Step 3</h5>
-                            <p class="card-text">
+                            <p class="card-text text-body">
                                 Bid them with a appropriate price
                             </p>
                         </div>
                     </div>
                 </div>
+
                 <div class="col-lg-3 col-md-6 col-sm-6 justify-content-center">
                     <div class="card text-center">
                         <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
@@ -62,13 +65,18 @@
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">Step 4</h5>
-                            <p class="card-text">
+                            <p class="card-text text-body">
                                 Take a nap and wait for the result
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <a class="btn btn-lg" id="about_btn" href="/about/#learn_automation">
+                How it works
+                <i class="fas fa-arrow-right ms-2"></i>
+            </a>
         </div>
     </div>
 
@@ -82,7 +90,7 @@
                     {{#each products.topDue}}
                         <div class="card product-card border">
                             <div class="p-3">
-                                <a href="#" class="card-image">
+                                <a href="/menu/products/1" class="card-image">
                                     <img
                                         src="https://cdn.pixabay.com/photo/2018/08/16/19/56/wedding-rings-3611277_960_720.jpg"
                                         class="img-fluid"
@@ -119,10 +127,10 @@
                                     <span class="flex-grow-1 text-end">30 Bids</span>
                                 </div>
 
-                                <button type="button" class="btn btn-primary btn-block">
+                                <a href="/menu/products/1" type="button" class="btn btn-primary btn-block bidnow">
                                     <i class="fas fa-gavel me-2"></i>
                                     Bid Now
-                                </button>
+                                </a>
                             </div>
 
                             <div class="card-footer text-center px-3 py-2">
@@ -144,18 +152,18 @@
                 <div class="owl-carousel owl-theme">
                     {{#each products.topBidded}}
                         <div class="card product-card">
-                            <div
-                                class="bg-image hover-overlay ripple p-3"
-                                data-mdb-ripple-color="light"
-                            >
-                                <img
-                                    src="https://cdn.pixabay.com/photo/2018/08/16/19/56/wedding-rings-3611277_960_720.jpg"
-                                    class="img-fluid"
-                                />
-                                <a href="#">
-                                    <div class="mask"></div>
+                            <div class="p-3">
+                                <a href="/menu/products/1" class="card-image">
+                                    <img
+                                        src="https://cdn.pixabay.com/photo/2018/08/16/19/56/wedding-rings-3611277_960_720.jpg"
+                                        class="img-fluid"
+                                    />
+                                    <div class="mask">
+                                        <span><i class="fas fa-search-plus me-1"></i>View details</span>
+                                    </div>
                                 </a>
                             </div>
+
                             <div class="card-body p-3 d-flex flex-column justify-content-between">
                                 <h4 class="card-title">Ring With Clear Stone Accents</h4>
                                 <div class="card-info mb-3 d-flex align-items-center bid">
@@ -179,10 +187,10 @@
                                     <span class="timer-danger fw-bolder">0d : 1h : 16m : 59s</span>
                                     <span class="flex-grow-1 text-end">30 Bids</span>
                                 </div>
-                                <button type="button" class="btn btn-primary btn-block">
+                                <a href="/menu/products/1" type="button" class="btn btn-primary btn-block bidnow">
                                     <i class="fas fa-gavel me-2"></i>
                                     Bid Now
-                                </button>
+                                </a>
                             </div>
                             <div class="card-footer text-center p-3">
                                 <p class="m-0 verical-align-middle">2 days ago</p>
@@ -204,18 +212,17 @@
                 <div class="owl-carousel owl-theme">
                     {{#each products.topHighest}}
                         <div class="card product-card">
-                            <div
-                                class="bg-image hover-overlay ripple p-3"
-                                data-mdb-ripple-color="light"
-                            >
-                                <img
-                                    src="https://cdn.pixabay.com/photo/2018/08/16/19/56/wedding-rings-3611277_960_720.jpg"
-                                    class="img-fluid"
-                                />
-                                <a href="#">
-                                    <div class="mask"></div>
-                                </a>
-                            </div>
+                            <div class="p-3">
+                                    <a href="/menu/products/1" class="card-image">
+                                        <img
+                                            src="https://cdn.pixabay.com/photo/2018/08/16/19/56/wedding-rings-3611277_960_720.jpg"
+                                            class="img-fluid"
+                                        />
+                                        <div class="mask">
+                                            <span><i class="fas fa-search-plus me-1"></i>View details</span>
+                                        </div>
+                                    </a>
+                                </div>
 
                             <div class="card-body p-3 d-flex flex-column justify-content-between">
                                 <h4 class="card-title">Ring With Clear Stone Accents</h4>
@@ -245,10 +252,10 @@
                                     <span class="flex-grow-1 text-end">30 Bids</span>
                                 </div>
 
-                                <button type="button" class="btn btn-primary btn-block">
+                                <a href="/menu/products/1" type="button" class="btn btn-primary btn-block bidnow">
                                     <i class="fas fa-gavel me-2"></i>
                                     Bid Now
-                                </button>
+                                </a>
                             </div>
 
                             <div class="card-footer text-center p-3">
