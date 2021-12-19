@@ -14,7 +14,7 @@ $(document).ready(function () {
         pullDrag: true,
         freeDrag: false,
 
-        margin: 0,
+        margin: 25,
         stagePadding: 0,
         merge: false,
         mergeFit: true,

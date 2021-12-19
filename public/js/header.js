@@ -7,8 +7,6 @@ $(document).ready(function () {
 });
 
 function initActiveLink() {
-    // const activeHref = location.href.replace(location.origin, "");
-    // console.log(location);
     const activeHref = location.pathname + location.hash;
 
     const navItems = document.querySelectorAll(".nav-item.nav-item-header");

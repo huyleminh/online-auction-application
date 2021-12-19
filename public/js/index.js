@@ -28,4 +28,35 @@ $(document).ready(function () {
         if (scrollY > 500) $(".back-to-top").addClass("showbtn");
         else $(".back-to-top").removeClass("showbtn");
     });
+
+    $("#toggle-filter-btn").on("click", function () {
+        // Show modal
+        $(".custom-modal-backdrop").addClass("show");
+        $("#filterModal").addClass("show");
+    });
+
+    $("#filterModalDialog").on("click", function (e) {
+        const clientX = e.clientX;
+        const contentWidth = $("#filterModalContent").width();
+
+        if (clientX <= contentWidth) {
+            return;
+        }
+
+        closeFilterModal();
+    });
+
+    $("#btn-close-modal").on("click", function () {
+        closeFilterModal();
+    });
+
+    function closeFilterModal() {
+        $("#filterModalDialog").addClass("animate__slideOutLeft");
+        $(".custom-modal-backdrop").removeClass("show");
+
+        setTimeout(() => {
+            $("#filterModal").removeClass("show");
+            $("#filterModalDialog").removeClass("animate__slideOutLeft");
+        }, 500);
+    }
 });

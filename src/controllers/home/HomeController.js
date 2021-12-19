@@ -8,6 +8,7 @@ export default class HomeController extends AppController {
 
     init() {
         this._router.get("/", this.renderHome);
+        this._router.get("/about", this.renderAbout);
     }
 
     renderHome(req, res) {
@@ -17,6 +18,16 @@ export default class HomeController extends AppController {
                 topBidded: [1, 2, 3, 4, 5, 6, 7],
                 topHighest: [1, 2, 3, 4, 5, 6, 7],
             },
+        });
+    }
+
+    renderAbout(req, res) {
+        const { tab } = req.query;
+
+        console.log(tab);
+
+        res.render("pages/about", {
+            tabname: tab,
         });
     }
 }
