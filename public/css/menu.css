@@ -235,19 +235,3 @@
 .filter-modal.show {
     display: block;
 }
-.custom-modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1054;
-    width: 100vw;
-    height: 100vh;
-    background-color: #000;
-    visibility: hidden;
-    opacity: 0;
-}
-
-.custom-modal-backdrop.show {
-    opacity: 0.5;
-    visibility: visible;
-}
