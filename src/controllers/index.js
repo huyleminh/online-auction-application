@@ -2,12 +2,14 @@ import AuthController from "./auth/AuthController.js";
 import HomeController from "./home/HomeController.js";
 import ProductController from "./products/ProductController.js";
 import UserController from "./user/UserController.js";
+import BidderController from "./user/BidderController.js";
 
 const AppControllers = [
     new HomeController(),
     new AuthController(),
     new ProductController(),
-    new UserController()
+    new UserController(),
+    new BidderController()
 ];
 
 export default AppControllers;

@@ -9,6 +9,7 @@ export default class UserController extends AppController {
 
     init() {
         this._router.get("/user/account", this.renderProfilePage);
+        this._router.post("/user/account", this.changeProfile);
 
         this._router.get("/user/account/email", this.renderChangeEmail);
         this._router.post("/user/account/email/send", this.sendOTPChangeEmail);
@@ -23,6 +24,12 @@ export default class UserController extends AppController {
         res.render("pages/user/index", {
             layout: "profile",
         });
+    }
+
+    changeProfile(req, res) {
+        const body = req.body;
+        console.log(body);
+        res.redirect("/user/account");
     }
 
     renderChangeEmail(req, res) {

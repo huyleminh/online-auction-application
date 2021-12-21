@@ -1,0 +1,52 @@
+.table.table-custom {
+    vertical-align: middle;
+}
+
+.table.table-custom.table-striped tbody tr:nth-of-type(odd) td {
+    background-color: #fafaff;
+    --mdb-table-accent-bg: unset;
+}
+
+.table.table-custom.table-striped tbody tr:hover td {
+    background-color: #fafaff;
+    --mdb-table-accent-bg: unset;
+}
+
+.table.table-custom thead th,
+.table.table-custom tbody td {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    overflow: hidden;
+
+    white-space: nowrap;
+    text-align: center;
+    text-overflow: ellipsis;
+
+    min-width: 45px;
+    max-width: 250px;
+    font-size: 1rem;
+}
+
+.table.table-custom thead th {
+    background-color: #fbfbfb;
+}
+
+.table.table-custom tbody td[scope="row"] {
+    font-weight: bolder;
+}
+
+.table.table-custom .tag {
+    display: inline-block;
+    color: #fff;
+    padding: 5px 15px;
+    border-radius: 3px;
+    font-weight: 500;
+}
+
+.table.table-custom .tag.tag-success {
+    background-color: #00b74a;
+}
+
+.table.table-custom .tag.tag-danger {
+    background-color: #f93154;
+}
