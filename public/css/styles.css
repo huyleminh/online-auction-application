@@ -336,3 +336,17 @@ body {
     opacity: 0.5;
     visibility: visible;
 }
+
+/* Custom button */
+.btn.btn-custom,
+.btn.btn-custom:hover {
+    color: #fff;
+}
+
+.btn.btn-custom.btn-custom-main {
+    background-color: var(--main-color);
+}
+
+.btn.btn-custom.btn-custom-secondary {
+    background-color: var(--secondary-color);
+}

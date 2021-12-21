@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    activeProfileBar();
     $("#toggle-profile-btn").on("click", function () {
         // Show modal
         $(".custom-modal-backdrop").addClass("show");
@@ -61,6 +62,43 @@ $(document).ready(function () {
 
         $("#updatePassForm").off("submit").submit();
     });
+
+    // Submit profile form
+    // $("#profileForm").on("submit", function (e) {
+    //     e.preventDefault();
+
+    //     const dob = $("#dob").val();
+    //     $("#dob").val(moment(dob, "DD-MM-YYYY").format("YYYY-MM-DD"));
+
+    //     $("#profileForm").off("submit").submit();
+    // });
+
+    // Init dob datepicker
+    // Need to fix
+    // if (document.querySelector("#dob")) {
+    //     const dobDialog = new mdDateTimePicker.default({
+    //         type: "date",
+    //     });
+
+    //     dobDialog.trigger = document.querySelector("#dob");
+
+    //     document.querySelector("#dob").addEventListener("onOk", function () {
+    //         // Detail format option here: https://momentjs.com/docs/#/displaying/format/
+    //         this.value = dobDialog.time.format("DD/MM/YYYY");
+    //         // Hide backdrop
+    //         $(".custom-modal-backdrop").removeClass("show");
+    //     });
+
+    //     document.querySelector("#dob").addEventListener("onCancel", function () {
+    //         // Detail format option here: https://momentjs.com/docs/#/displaying/format/
+    //         // Hide backdrop
+    //         $(".custom-modal-backdrop").removeClass("show");
+    //     });
+
+    //     $("#dob").on("click", function () {
+    //         toggleDatepickerDialog(dobDialog);
+    //     });
+    // }
 });
 
 function closeProfileModal() {
@@ -71,4 +109,26 @@ function closeProfileModal() {
         $("#profileModal").removeClass("show");
         $("#profileModalDialog").removeClass("animate__slideOutLeft");
     }, 500);
+}
+
+function toggleDatepickerDialog(dialog) {
+    dialog.toggle();
+    // Show backdrop
+    $(".custom-modal-backdrop").addClass("show");
+}
+
+function activeProfileBar() {
+    const activeHref = location.pathname + location.hash;
+
+    const navItems = document.querySelectorAll(".profile-bar-item");
+    navItems.forEach(function (item) {
+        const navLink = item.children[0];
+        const href = navLink.attributes["href"];
+
+        if (activeHref === href.value) {
+            item.classList.add("active");
+        } else {
+            item.classList.remove("active");
+        }
+    });
 }

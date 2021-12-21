@@ -1,0 +1,65 @@
+{{#section "banner"}}
+    {{> banner title="Your Profile" subTitle="Manage your profile and explore more things"}}
+{{/section}}
+
+{{#section "breadcrumb"}}
+    <h3>User profile</h3>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="javascript:void(0)">User</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Upgrade request</li>
+        </ol>
+    </nav>
+{{/section}}
+
+<div class="card border shadow-0">
+    <div class="card-header">
+        <h3 class="mb-0">Upgrade request</h3>
+    </div>
+
+    <div class="card-body">
+        <div class="d-flex flex-column align-items-center">
+            <div class="text-center mb-3">
+                <i class="fas fa-info-circle text-info" style="font-size: 5rem;"></i>
+            </div>
+
+            <div class="text-center mb-3 fs-3">
+                Before you request
+            </div>
+
+            <div class="mb-3">
+                <p class="mb-2">After click
+                    <b>Submit request</b>
+                    button, you have to wait until the admin confirm your request.
+                </p>
+
+                <p class="mb-2">At the time that the admin confirm your request, you will be notify
+                    via your contact email and you will be a seller in the next
+                    <b>7 days</b>.
+                </p>
+
+                <p class="mb-2">You can
+                    <a href="/user/account/email">visit here</a>
+                    to ensure your current email is the right one.
+                </p>
+
+                <p class="mb-2">As a seller, you can:</p>
+
+                <ul>
+                    <li>- Post new and edit currently posted product for auction.</li>
+                    <li>- View a list of products that are currently posted and are still available
+                        for auction.</li>
+                    <li>- View a list of products auction winner.</li>
+                    <li></li>
+                </ul>
+            </div>
+
+            <div class="d-flex justify-content-center">
+                <form action="" method="post">
+                    <button class="btn btn-custom btn-custom-main btn-lg">Submit request</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
