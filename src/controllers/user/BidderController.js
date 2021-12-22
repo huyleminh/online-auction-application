@@ -10,8 +10,9 @@ export default class BidderController extends AppController {
         this._router.get("/bidder/bidding", this.renderBiddingProducts);
 
         this._router.get("/bidder/account/upgrade", this.renderUpgradeRequest);
-
         this._router.post("/bidder/account/upgrade", this.upgradeRequest);
+
+        this._router.get("/bidder/won", this.renderWonList);
     }
 
     renderBiddingProducts(req, res) {
@@ -28,5 +29,11 @@ export default class BidderController extends AppController {
 
     upgradeRequest(req, res) {
         res.redirect("/user/account");
+    }
+
+    renderWonList(req, res) {
+        res.render("pages/user/bidder/wonlist", {
+            layout: "profile",
+        });
     }
 }

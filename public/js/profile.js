@@ -99,6 +99,32 @@ $(document).ready(function () {
     //         toggleDatepickerDialog(dobDialog);
     //     });
     // }
+    $(".remove-wishlist-item").on("click", function () {
+        const key = $(".remove-wishlist-item").data("removekey");
+        $("#itemId").val(key);
+        $("#deleteWishlistItem").submit();
+    });
+
+    $(".feedback-btn").on("click", function () {
+        $("#feedbackModal").modal("toggle");
+        $("#ratedId").val(this.dataset.ratedId)
+    });
+
+    $("#positive").on("click", function () {
+        $("#thumbsup").removeClass("far");
+        $("#thumbsup").addClass("fas");
+
+        $("#thumbsdown").removeClass("fas");
+        $("#thumbsdown").addClass("far");
+    });
+
+    $("#negative").on("click", function () {
+        $("#thumbsdown").removeClass("far");
+        $("#thumbsdown").addClass("fas");
+
+        $("#thumbsup").removeClass("fas");
+        $("#thumbsup").addClass("far");
+    });
 });
 
 function closeProfileModal() {
