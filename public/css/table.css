@@ -15,7 +15,6 @@
 .table.table-custom thead th,
 .table.table-custom tbody td {
     padding: 0.75rem 1rem;
-    cursor: pointer;
     overflow: hidden;
 
     white-space: nowrap;
@@ -38,7 +37,8 @@
 .table.table-custom .tag {
     display: inline-block;
     color: #fff;
-    padding: 5px 15px;
+    padding: 4px 15px;
+    font-size: 13px;
     border-radius: 3px;
     font-weight: 500;
 }

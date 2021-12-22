@@ -1,0 +1,217 @@
+{{#section "banner"}}
+    {{> banner title="Your Profile" subTitle="Manage your profile and explore more things"}}
+{{/section}}
+
+{{#section "breadcrumb"}}
+    <h3>User profile</h3>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="javascript:void(0)">User</a></li>
+            <li class="breadcrumb-item active" aria-current="page">My won list</li>
+        </ol>
+    </nav>
+{{/section}}
+
+{{#section "css"}}
+    <link rel="stylesheet" href="/css/table.css" />
+{{/section}}
+
+<div class="card border shadow-0">
+    <div class="card-header">
+        <h3 class="mb-0">My won list</h3>
+    </div>
+
+    <div class="card-body">
+        <form action="/user/wishlist/delete" method="post" id="deleteWishlistItem">
+            <input type="hidden" name="itemId" id="itemId">
+        </form>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped mb-0 table-custom">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Product name</th>
+                        <th scope="col">Bidding price</th>
+                        <th scope="col">Winning price</th>
+                        <th scope="col">End time</th>
+                        <th scope="col">Seller</th>
+                        <th scope="col">Seller points</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td scope="row">1</td>
+                        <td>Product 1 with long content Product 1</td>
+                        <td>11,000,000</td>
+                        <td>10,800,000</td>
+                        <td>1/12/2019 10:43</td>
+                        <td>Khoa</td>
+                        <td>80</td>
+                        <td>
+                            <div class="action">
+                                <button
+                                    class="btn btn-custom btn-custom-main btn-sm shadow-0 feedback-btn"
+                                    title="Feedback"
+                                    data-mdb-toggle="tooltip"
+                                    data-rated-id="1"
+                                >
+                                    <i class="fas fa-comments"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td scope="row">2</td>
+                        <td>Product 2</td>
+                        <td>11,000,000</td>
+                        <td>10,800,000</td>
+                        <td>1/12/2019 10:43</td>
+                        <td>Khoa</td>
+                        <td>80</td>
+                        <td>
+                            <div class="action">
+                                <button
+                                    class="btn btn-custom btn-custom-main btn-sm shadow-0 feedback-btn"
+                                    title="Feedback"
+                                    data-mdb-toggle="tooltip"
+                                    data-rated-id="2"
+                                >
+                                    <i class="fas fa-comments"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td scope="row">3</td>
+                        <td>Product 3</td>
+                        <td>11,000,000</td>
+                        <td>10,800,000</td>
+                        <td>1/12/2019 10:43</td>
+                        <td>Khoa</td>
+                        <td>80</td>
+                        <td>
+                            <div class="action">
+                                <button
+                                    class="btn btn-custom btn-custom-main btn-sm shadow-0 feedback-btn"
+                                    title="Feedback"
+                                    data-mdb-toggle="tooltip"
+                                    data-rated-id="3"
+                                >
+                                    <i class="fas fa-comments"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td scope="row">4</td>
+                        <td>Product 4</td>
+                        <td>11,000,000</td>
+                        <td>10,800,000</td>
+                        <td>1/12/2019 10:43</td>
+                        <td>Khoa</td>
+                        <td>80</td>
+                        <td>
+                            <div class="action">
+                                <button
+                                    class="btn btn-custom btn-custom-main btn-sm shadow-0 feedback-btn"
+                                    title="Feedback"
+                                    data-mdb-toggle="tooltip"
+                                    data-rated-id="4"
+                                >
+                                    <i class="fas fa-comments"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td scope="row">5</td>
+                        <td>Product 5</td>
+                        <td>11,000,000</td>
+                        <td>10,800,000</td>
+                        <td>1/12/2019 10:43</td>
+                        <td>Khoa</td>
+                        <td>80</td>
+                        <td>
+                            <div class="action">
+                                <button
+                                    class="btn btn-custom btn-custom-main btn-sm shadow-0 feedback-btn"
+                                    title="Feedback"
+                                    data-mdb-toggle="tooltip"
+                                    data-rated-id="5"
+                                >
+                                    <i class="fas fa-comments"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div
+    class="modal fade"
+    id="feedbackModal"
+    tabindex="-1"
+    aria-labelledby="feedbackModal"
+    aria-hidden="true"
+    >
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="feedbackModal">Feedback to seller</h5>
+            <button
+            type="button"
+            class="btn-close"
+            data-mdb-dismiss="modal"
+            aria-label="Close"
+            ></button>
+        </div>
+
+        <div class="modal-body">
+            <form action="/user/feedback" method="post" id="feedbackForm">
+                <h4 class="text-center">Please give a rate</h4>
+                <div class="feedback d-flex justify-content-center mb-4">
+                    <div class="position-relative">
+                        <label for="positive" class="form-label mb-0" title="Like" data-mdb-toggle="tooltip"
+                        data-rated-id="1">
+                            <i class="far fa-thumbs-up text-primary" id="thumbsup"></i>
+                        </label>
+                        <input type="radio" name="isPositive" id="positive" class="position-absolute" value="true" required>
+                    </div>
+
+                    <div class="text-center">Or</div>
+
+                    <div class="position-relative">
+                        <label for="negative" class="form-label mb-0" title="Dislike" data-mdb-toggle="tooltip"
+                        data-rated-id="1">
+                            <i class="far fa-thumbs-down text-primary" id="thumbsdown"></i>
+                        </label>
+                        <input type="radio" name="isPositive" id="negative" class="position-absolute" value="false" required>
+                    </div>
+                </div>
+
+                <div class="form-outline mb-4">
+                    <textarea name="feedback" id="feedback" cols="30" rows="5" class="form-control" required></textarea>
+                    <label for="feedback" class="form-label">Your comment</label>
+                </div>
+
+                <input type="hidden" name="ratedId" id="ratedId">
+
+                <div class="d-flex justify-content-center">
+                    <button class="btn btn-custom btn-custom-main shadow-0" type="submit">Send feedback</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                Close
+            </button>
+        </div>
+        </div>
+    </div>
+</div>

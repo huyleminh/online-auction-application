@@ -59,4 +59,11 @@ $(document).ready(function () {
             $("#filterModalDialog").removeClass("animate__slideOutLeft");
         }, 500);
     }
+
+    document.querySelectorAll(`[data-mdb-toggle="tooltip"]`).forEach((t) => {
+        new mdb.Tooltip(t, {
+            container: "body",
+            placement: "bottom",
+        });
+    });
 });

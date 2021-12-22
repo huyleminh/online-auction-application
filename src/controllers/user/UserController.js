@@ -17,6 +17,11 @@ export default class UserController extends AppController {
 
         this._router.get("/user/account/password", this.renderChangePassword);
         this._router.post("/user/account/password", this.changePassword);
+
+        this._router.get("/user/wishlist", this.renderWishlist);
+        this._router.post("/user/wishlist/delete", this.removeWishlistItem);
+
+        this._router.post("/user/feedback", this.postFeedback);
     }
 
     renderProfilePage(req, res) {
@@ -58,5 +63,25 @@ export default class UserController extends AppController {
         const body = req.body;
         console.log({ body });
         res.redirect("/user/account");
+    }
+
+    renderWishlist(req, res) {
+        res.render("pages/user/wishlist", {
+            layout: "profile",
+        });
+    }
+
+    removeWishlistItem(req, res) {
+        const body = req.body;
+        console.log(body);
+        // Remove in section + remove in db
+        res.redirect("/user/wishlist");
+    }
+
+    postFeedback(req, res) {
+        const body = req.body;
+        console.log(body);
+
+        res.redirect(req.headers.referer);
     }
 }

@@ -74,3 +74,21 @@
 .profile-modal.show {
     display: block;
 }
+
+/* Feedback form */
+#feedbackForm .feedback > div {
+    width: 25px;
+}
+
+#feedbackForm .feedback > div > .form-label > i {
+    font-size: 1.75rem;
+    width: 30px;
+    height: 100%;
+    cursor: pointer;
+}
+
+#feedbackForm .feedback > div > input {
+    left: 0;
+    top: 0;
+    z-index: -1;
+}
