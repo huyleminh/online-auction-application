@@ -1,211 +1,243 @@
 <body class="signup-body">
-    <div class="containner containner-signup h-100">
-        <div class="row align-items-center justify-content-center h-100">
-            <div class="col-xl-8 col-lg-10 col-md-9 justify-content-center row signup-wrapper">
-                <div class="col-lg-6 d-none d-lg-block signup-image"></div>
-
-                <div class="col-lg-6 col-md-10 ps-lg-5 pe-lg-5 signup-form">
-                    <h2 class="text-center mb-3">Đăng ký</h3>
+    <div class="containner containner-signup">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-xl-6 col-md-10 col-12 justify-content-center row signup-wrapper">
+                <div class="col-md-10 col-12 signup-form">
+                    <h2 class="text-center mb-3">Register</h2>
 
                     <form action="/signup" method="post" id="signupForm">
-                        <div class="row mb-4">
-                            <div class="col">
+                        <div class="row gx-3 mb-3">
+                            <div class="col-12 col-sm-6 mb-3 mb-sm-0">
                                 <div class="form-outline">
                                     <i class="fas fa-user trailing"></i>
-                                    <input type="text" id="firstname" class="form-control form-icon-trailing" name="firstname" required />
-                                    <label class="form-label" for="firstname">Tên</label>
+                                    <input
+                                        type="text"
+                                        id="firstname"
+                                        class="form-control form-icon-trailing"
+                                        name="firstname"
+                                        required
+                                    />
+                                    <label class="form-label" for="firstname">Firstname</label>
                                 </div>
+
                             </div>
 
-                            <div class="col">
+                            <div class="col-12 col-sm-6">
                                 <div class="form-outline">
                                     <i class="fas fa-user trailing"></i>
-                                    <input type="text" id="lastname" class="form-control form-icon-trailing" name="lastname" required />
-                                    <label class="form-label" for="lastname">Họ</label>
+                                    <input
+                                        type="text"
+                                        id="lastname"
+                                        class="form-control form-icon-trailing"
+                                        name="lastname"
+                                        required
+                                    />
+                                    <label class="form-label" for="lastname">Lastname</label>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="form-outline mb-4">
-                            <i class="fas fa-map-marker-alt trailing"></i>
-                            <input
-                                type="text"
-                                id="address"
-                                name="address"
-                                class="form-control form-icon-trailing"
-                            />
-                            <label class="form-label" for="address">Địa chỉ</label>
+                        <div class="row gx-3 mb-3">
+                            <div class="col-12 col-sm-6 mb-3 mb-sm-0">
+                                <div class="form-outline">
+                                    <i class="fas fa-map-marked-alt trailing"></i>
+                                    <input
+                                        type="text"
+                                        name="province"
+                                        id="province"
+                                        list="provinceList"
+                                        class="form-control form-icon-trailing"
+                                        required
+                                    />
+                                    <label class="form-label" for="province">Province/City</label>
+                                    <datalist id="provinceList"></datalist>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-outline">
+                                    <i class="fas fa-map-marked-alt trailing"></i>
+                                    <input
+                                        type="text"
+                                        name="district"
+                                        id="district"
+                                        list="districtList"
+                                        class="form-control form-icon-trailing"
+                                        required
+                                    />
+                                    <label class="form-label" for="district">District</label>
+                                    <datalist id="districtList"></datalist>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="form-outline mb-4">
+                        <div class="row gx-3 mb-3">
+                            <div class="col-12 col-sm-6 mb-3 mb-sm-0">
+                                <div class="form-outline">
+                                    <i class="fas fa-map-marked-alt trailing"></i>
+                                    <input
+                                        type="text"
+                                        name="ward"
+                                        id="ward"
+                                        list="wardList"
+                                        class="form-control form-icon-trailing"
+                                        required
+                                    />
+                                    <label class="form-label" for="ward">Ward</label>
+                                    <datalist id="wardList"></datalist>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-outline">
+                                    <i class="fas fa-address-card trailing"></i>
+                                    <input
+                                        type="text"
+                                        name="addressDetail"
+                                        id="addressDetail"
+                                        class="form-control form-icon-trailing"
+                                        required
+                                    />
+                                    <label class="form-label" for="addressDetail">Address</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-outline">
                             <i class="fas fa-user trailing"></i>
                             <input
                                 type="text"
                                 id="username"
                                 name="username"
                                 class="form-control form-icon-trailing"
+                                aria-describedby="usernameText"
                                 required
                             />
-                            <label class="form-label" for="username">Tên đăng nhập</label>
+                            <label class="form-label" for="username">Username</label>
                         </div>
+                        <div class="form-text text-danger mb-3" id="usernameText"></div>
 
-                        <div class="row mb-4">
-                            <div class="col">
+                        <div class="row gx-3 mb-3">
+                            <div class="col-12 col-sm-6 mb-3 mb-sm-0">
                                 <div class="form-outline">
-                                    <i class="fas fa-lock trailing"></i>
+                                    <i class="fas fa-key trailing"></i>
                                     <input
                                         type="password"
                                         id="password"
                                         name="password"
                                         class="form-control form-icon-trailing"
+                                        aria-describedby="passwordText"
                                         required
                                     />
-                                    <label class="form-label" for="password">Mật khẩu</label>
+                                    <label class="form-label" for="password">Password</label>
                                 </div>
+                                <div class="form-text" id="passwordText">Password must have at least
+                                    6 character</div>
                             </div>
 
-                            <div class="col">
+                            <div class="col-12 col-sm-6">
                                 <div class="form-outline">
-                                    <i class="fas fa-lock trailing"></i>
+                                    <i class="fas fa-key trailing"></i>
                                     <input
                                         type="password"
                                         id="confirmPassword"
-                                        name="confirmPassword"
                                         class="form-control form-icon-trailing"
                                         required
                                     />
-                                    <label class="form-label" for="confirmPassword">Xác nhận mật khẩu</label>
+                                    <label class="form-label" for="confirmPassword">Confirm password</label>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="form-outline mb-4">
-                            <i class="fas fa-user trailing"></i>
+                        <div class="input-group" id="emailGroup">
                             <input
                                 type="email"
                                 id="email"
                                 name="email"
-                                class="form-control form-icon-trailing"
+                                class="form-control"
+                                placeholder="Contact email"
+                                aria-describedby="emailtext"
                                 required
                             />
-                            <label class="form-label" for="email">Email liên lạc</label>
+                            <button class="btn btn-primary" type="button" id="getOTPBtn">
+                                Get OTP
+                            </button>
                         </div>
 
-                        <!-- Modal -->
-                        <input type="hidden" id="otpBtn" role="button" data-mdb-toggle="modal" data-mdb-target="#staticBackdrop"></input>
+                        <div class="form-text mb-3" id="emailtext"></div>
+
+                        <div class="form-outline">
+                            <input
+                                type="text"
+                                id="otpCode"
+                                name="otpCode"
+                                class="form-control"
+                                aria-describedby="otpText"
+                                disabled
+                                required
+                            />
+                            <label class="form-label" for="otpCode">OTP code</label>
+                        </div>
+                        {{#if error.otp}}
+                            <div class="form-text text-danger mb-3" id="otpText">{{error.otp}}</div>
+                        {{else}}
+                            <div class="form-text text-danger mb-3" id="otpText"></div>
+                        {{/if}}
+
                         <div
-                            class="modal fade"
-                            id="staticBackdrop"
-                            data-mdb-backdrop="static"
-                            data-mdb-keyboard="false"
-                            tabindex="-1"
-                            aria-labelledby="staticBackdropLabel"
-                            aria-hidden="true"
-                        >
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="staticBackdropLabel">Xác thực email</h5>
-                                    </div>
-
-                                    <div class="modal-body">
-                                        <p>Mã xác thực đã được gửi, vui lòng nhập mã vào đây</p>
-
-                                        <div class="form-outline mb-4">
-                                            <i class="fas fa-key trailing"></i>
-                                            <input type="text" id="otpCode" class="form-control form-icon-trailing" name="otpCode" />
-                                            <label class="form-label" for="otpCode">OTP</label>
-                                        </div>
-
-                                        {{!-- Recaptcha --}}
-                                        <div class="d-flex justify-content-center mb-4 g-recaptcha" data-sitekey="6LcUfn0dAAAAANmwZGCM1UKPKYIF-vRl3xse6-HU"></div>
-
-                                        <div class="d-grid gap-2">
-                                            <button type="button" class="btn btn-success">Xác thực</button>
-                                            <button type="button" class="btn btn-danger" data-mdb-dismiss="modal">Hủy</button>
-                                        </div>
-
-                                        <div class="divider mt-4 mb-4">
-                                            <span class="text-center" style="width: 200px; font-size: 14px;">Không nhận được OTP?</span>
-                                        </div>
-
-                                        <button type="button" class="btn btn-primary btn-block">Gửi lại</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                            aria-describedby="recaptchaText"
+                            class="d-flex justify-content-center g-recaptcha"
+                            data-sitekey="6LcUfn0dAAAAANmwZGCM1UKPKYIF-vRl3xse6-HU"
+                        ></div>
+                        {{#if error.recaptcha}}
+                            <div
+                                class="form-text text-danger mb-3"
+                                id="recaptchaText"
+                            >{{error.recaptcha}}</div>
+                        {{else}}
+                            <div class="form-text text-danger mb-3" id="recaptchaText"></div>
+                        {{/if}}
 
                         <div class="row">
-                            <button type="submit" class="btn btn-primary col" style="margin: 0px 12px">Đăng kí</button>
+                            <button
+                                type="submit"
+                                class="btn btn-primary col"
+                                style="margin: 0px 12px"
+                            >Register</button>
                         </div>
 
                         <div class="divider mt-4 mb-4">
-                            <span class="text-center">Hoặc</span>
+                            <span class="text-center">Or</span>
                         </div>
 
-                        <a role="button" href="/signup/google" type="button" class="btn btn-block" style="background-color: #dd4b39; color: #fff;">
+                        <a
+                            role="button"
+                            href="/signup/google"
+                            type="button"
+                            class="btn btn-block"
+                            style="background-color: #dd4b39; color: #fff;"
+                        >
                             <i class="fab fa-google me-1"></i>
-                            Đăng nhập với google
+                            Login with Google
                         </a>
 
-                        <p class="mt-4 mb-4 text-center">Đã có tài khoản? <a href="/login">Đăng nhập</a></p>
+                        <p class="mt-4 mb-4 text-center">Already have an account?
+                            <a href="/login">Login here</a></p>
                         <p class="mt-4 mb-4 text-center home-navigation">
                             <a href="/" class="btn btn-info">
                                 <i class="fas fa-arrow-left me-1"></i>
-                                Trang chủ
+                                Home
                             </a>
                         </p>
 
                     </form>
                 </div>
             </div>
-
         </div>
     </div>
+
 </body>
 
 {{#section "preJs"}}
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-{{/section}}
-
-{{#section "js"}}
-    <script>
-        document.querySelectorAll(".form-outline").forEach((formOutline) => {
-            new mdb.Input(formOutline).init();
-        });
-
-        {{!-- Submit action --}}
-        $("#signupForm").on("submit", function(e) {
-            e.preventDefault();
-
-            const passwordValidationStatus = validatePassword();
-
-            if (!passwordValidationStatus) {
-                alert("Mật khẩu và xác nhận không khớp nhau.");
-                return;
-            }
-
-            {{!-- Validate recaptcha first --}}
-            $("#otpBtn").click();
-
-
-            {{!-- Kiểm tra OTP --}}
-            {{!-- Submit -> kiểm tra reCaptcha -> submit --}}
-        })
-
-        function validatePassword() {
-            const password = $("#password").val();
-            const confirm = $("#confirmPassword").val();
-
-            if (!password.trim() || !confirm.trim()) {
-                return false;
-            }
-
-            if (password !== confirm) {
-                return false;
-            }
-
-            return true;
-        }
-    </script>
 {{/section}}
