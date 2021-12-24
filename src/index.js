@@ -8,6 +8,9 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 import AppControllers from "./controllers/index.js";
 import AppConstant from "./shared/AppConstant.js";
+import flash from "connect-flash";
+import LocalsMiddlewares from "./middlewares/LocalsMiddlewares.js";
+import HbsHelper from "./utils/helpers/HbsHelper.js";
 
 class AppServer {
     constructor() {
@@ -43,6 +46,9 @@ class AppServer {
         //passport
         this.app.use(passport.initialize());
         this.app.use(passport.session());
+        this.app.use(flash());
+
+        LocalsMiddlewares.getAll().forEach((mdw) => this.app.use(mdw));
     }
 
     initializeViewEngine() {
@@ -51,6 +57,9 @@ class AppServer {
             partialsDir: `${this.__dirname}/views/partials`,
             defaultLayout: "main",
             extname: "hbs",
+            helpers: {
+                ...HbsHelper.getAll(),
+            },
         });
 
         HandlebarsSection(handlebars);

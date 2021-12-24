@@ -12,10 +12,10 @@ export default class UserAccountModel {
         });
     }
 
-    static verifyExistsValueInColumn(column, value) {
+    static getByColumn(column, value) {
         return new Promise(async function (resolve, reject) {
             try {
-                const response = await KnexConnection.select(column)
+                const response = await KnexConnection.select()
                     .from("user_account")
                     .where({
                         [column]: value,
