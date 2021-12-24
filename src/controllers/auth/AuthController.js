@@ -1,14 +1,14 @@
 import axios from "axios";
+import bcrypt from "bcrypt";
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { Strategy as LocalStrategy } from "passport-local";
 import GoogleConfig from "../../config/GoogleConfig.js";
 import UserAccountModel from "../../models/UserAccountModel.js";
 import EmailService from "../../services/EmailService.js";
-import Authenticator from "../../utils/Authenticatior.js";
 import EmailTemplate from "../../shared/template/EmailTemplate.js";
+import Authenticator from "../../utils/Authenticatior.js";
 import AppController from "../AppController.js";
-import bcrypt from "bcrypt";
 
 passport.serializeUser((user, done) => {
     done(null, user);
@@ -33,9 +33,32 @@ passport.use(
 );
 
 passport.use(
-    new LocalStrategy(function (username, password, done) {
-        console.log({ username, password });
-        done(null, "user_login_normal");
+    new LocalStrategy(async function (username, password, done) {
+        // Verify username and password here
+        try {
+            const userList = await UserAccountModel.getByColumn("username", username);
+            if (userList.length === 0) {
+                return done(null, false, { message: "Invalid username or password" });
+            }
+
+            const currPassword = userList[0].password;
+            const isValidPassword = bcrypt.compareSync(password, currPassword);
+
+            if (!isValidPassword) {
+                return done(null, false, { message: "Invalid username or password" });
+            }
+
+            return done(null, {
+                isAuth: true,
+                username: userList[0].username,
+                role: userList[0].role,
+                fullname: `${userList[0].first_name} ${userList[0].last_name}`,
+                userType: "NORMAL",
+            });
+        } catch (error) {
+            console.log(error);
+            return done(error);
+        }
     })
 );
 
@@ -82,11 +105,20 @@ export default class AuthController extends AppController {
         this._router.post("/forget-pwd/verify", this.verifyForgetPwdOTP);
         this._router.get("/forget-pwd/reset-pwd", this.resetPwdPage);
         this._router.post("/forget-pwd/reset-pwd", this.postResetPwd);
+
+        // Logout
+        this._router.post("/logout", this.handleLogout);
     }
 
     loginPage(req, res) {
+        const { flash } = req.session;
+        delete req.session.flash;
+
         res.render("pages/auth/login", {
             layout: "auth.hbs",
+            error: {
+                message: flash?.error ? flash.error[0] : null,
+            },
         });
     }
 
@@ -98,7 +130,6 @@ export default class AuthController extends AppController {
 
     async postSignup(req, res) {
         const body = req.body;
-        console.log(body);
 
         const recaptchaRes = await axios.post(
             `https://www.google.com/recaptcha/api/siteverify?secret=${GoogleConfig.RECAPTCHA_SECRET}&response=${body["g-recaptcha-response"]}`
@@ -156,7 +187,7 @@ export default class AuthController extends AppController {
 
         // Verify existed email
         try {
-            const emailRes = await UserAccountModel.verifyExistsValueInColumn("email", email);
+            const emailRes = await UserAccountModel.getByColumn("email", email);
             if (emailRes.length !== 0) {
                 return res.json({ status: 400, message: "Email existed" });
             }
@@ -175,7 +206,6 @@ export default class AuthController extends AppController {
                 `OTP verification`,
                 EmailTemplate.OTPTemplate(token)
             );
-            console.log(emailRes);
             // delete old secret here
             delete req.session.otpTempSecret;
             req.session.otpTempSecret = secret;
@@ -191,10 +221,7 @@ export default class AuthController extends AppController {
         const newUsername = req.params.username;
 
         try {
-            const usernameList = await UserAccountModel.verifyExistsValueInColumn(
-                "username",
-                newUsername
-            );
+            const usernameList = await UserAccountModel.getByColumn("username", newUsername);
             if (usernameList.length === 0) {
                 res.json({ status: 200 });
             } else {
@@ -256,5 +283,10 @@ export default class AuthController extends AppController {
 
         // Check otp status, expired date, email, ...
         res.redirect("/login");
+    }
+
+    handleLogout(req, res) {
+        req.logout();
+        res.redirect(req.headers.referer || "/");
     }
 }

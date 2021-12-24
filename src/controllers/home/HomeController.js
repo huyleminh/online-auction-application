@@ -22,12 +22,6 @@ export default class HomeController extends AppController {
     }
 
     renderAbout(req, res) {
-        const { tab } = req.query;
-
-        console.log(tab);
-
-        res.render("pages/about", {
-            tabname: tab,
-        });
+        res.render("pages/about");
     }
 }

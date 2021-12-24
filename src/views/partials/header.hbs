@@ -65,96 +65,107 @@
                         <ul class="dropdown-menu rounded" aria-labelledby="aboutDropdown">
                             <li><a class="dropdown-item" href="/about/#whath2a">What is H2A Bid?</a></li>
                             <li><a class="dropdown-item" href="/about/#whyh2a">Why H2A Bid?</a></li>
-                            <li><a class="dropdown-item" href="/about/#learn_automation">Automation Bidding</a></li>
+                            <li><a class="dropdown-item" href="/about/#learn_automation">Automation
+                                    Bidding</a></li>
                         </ul>
                     </li>
 
                     <li class="nav-item nav-item-header">
                         <a class="nav-link" href="/menu/categories/all">Products</a>
                     </li>
-                    <li class="nav-item nav-item-header" id="login">
-                        <a class="nav-link" href="/login">Join now</a>
-                    </li>
+                    {{#unless localUser.isAuth}}
+                        <li class="nav-item nav-item-header" id="login">
+                            <a class="nav-link" href="/login">Join now</a>
+                        </li>
+                    {{/unless}}
                 </ul>
 
-                <div class="d-flex align-items-center">
-                    <a
-                        href="/user/wishlist"
-                        type="button"
-                        class="text-reset me-3"
-                        data-mdb-toggle="tooltip"
-                        data-mdb-placement="bottom"
-                        title="Wishlist"
-                    >
-                        <i class="fas fa-heart text-danger text-lg"></i>
-                    </a>
-
-                    <div class="dropdown profile-dropdown">
+                {{#if localUser.isAuth}}
+                    <div class="d-flex align-items-center">
                         <a
-                            class="dropdown-toggle d-flex align-items-center"
-                            href="javascript:void(0)"
-                            id="headerNavbarProfile"
-                            role="button"
-                            data-mdb-toggle="dropdown"
-                            aria-expanded="false"
+                            href="/user/wishlist"
+                            type="button"
+                            class="text-reset me-3"
+                            data-mdb-toggle="tooltip"
+                            data-mdb-placement="bottom"
+                            title="Wishlist"
                         >
-                            <img
-                                src="/images/default-avatar.png"
-                                class="rounded-circle"
-                                height="35"
-                                alt="Portrait of a User"
-                                loading="lazy"
-                            />
-
-                            <span class="ms-2">
-                                Welcome User
-                                <i class="fas fa-chevron-down ms-1"></i>
-                            </span>
+                            <i class="fas fa-heart text-danger text-lg"></i>
                         </a>
 
-                        <ul
-                            class="dropdown-menu dropdown-menu-end"
-                            aria-labelledby="headerNavbarProfile"
-                        >
-                            <li>
-                                <a class="dropdown-item" href="/user/account">
-                                    <i class="fas fa-user me-2"></i>
-                                    My profile
-                                </a>
-                            </li>
+                        <div class="dropdown profile-dropdown">
+                            <a
+                                class="dropdown-toggle d-flex align-items-center"
+                                href="javascript:void(0)"
+                                id="headerNavbarProfile"
+                                role="button"
+                                data-mdb-toggle="dropdown"
+                                aria-expanded="false"
+                            >
+                                <img
+                                    src="/images/default-avatar.png"
+                                    class="rounded-circle"
+                                    height="35"
+                                    alt="Portrait of a User"
+                                    loading="lazy"
+                                />
 
-                            <li>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-tachometer-alt me-2"></i>
-                                    My dashboard
-                                </a>
-                            </li>
+                                <span class="ms-2">
+                                    {{ localUser.fullname }}
+                                    <i class="fas fa-chevron-down ms-1"></i>
+                                </span>
+                            </a>
 
-                            <li>
-                                <a class="dropdown-item" href="/bidder/bidding">
-                                    <i class="fas fa-gavel me-2"></i>
-                                    My bidding products
-                                </a>
-                            </li>
+                            <ul
+                                class="dropdown-menu dropdown-menu-end"
+                                aria-labelledby="headerNavbarProfile"
+                            >
+                                <li>
+                                    <a class="dropdown-item" href="/user/account">
+                                        <i class="fas fa-user me-2"></i>
+                                        My profile
+                                    </a>
+                                </li>
 
-                            <li>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list me-2"></i>
-                                    My selling products
-                                </a>
-                            </li>
+                                {{#if (isEqual localUser.role 1)}}
+                                    <li>
+                                        <a class="dropdown-item" href="#">
+                                            <i class="fas fa-tachometer-alt me-2"></i>
+                                            My dashboard
+                                        </a>
+                                    </li>
+                                {{/if}}
 
-                            <li><hr class="dropdown-divider" /></li>
+                                <li>
+                                    <a class="dropdown-item" href="/bidder/bidding">
+                                        <i class="fas fa-gavel me-2"></i>
+                                        My bidding products
+                                    </a>
+                                </li>
 
-                            <li>
-                                <a class="dropdown-item text-danger" href="/logout">
-                                    <i class="fas fa-power-off me-2 text-danger"></i>
-                                    Logout
-                                </a>
-                            </li>
-                        </ul>
+                                <li>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fas fa-list me-2"></i>
+                                        My selling products
+                                    </a>
+                                </li>
+
+                                <li><hr class="dropdown-divider" /></li>
+
+                                <li>
+                                    <form action="/logout" method="post" id="logoutForm" class="mb-0">
+                                        <button class="dropdown-item text-danger" type="submit">
+                                            <i class="fas fa-power-off me-2 text-danger"></i>
+                                            Logout
+                                        </button>
+                                    </form>
+
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
+                {{/if}}
+
             </div>
 
         </div>

@@ -115,6 +115,27 @@ $(document).ready(function () {
 
         getAllWardByDistrictCode(code);
     });
+
+    // Login
+    $("#loginForm").on("submit", function (e) {
+        e.preventDefault();
+
+        const username = $("#usernameLogin").val();
+        if (!username.trim()) {
+            $("#usernameLoginText").addClass("text-danger");
+            $("#usernameLoginText").html("Tên đăng nhập không được bỏ trống");
+            return;
+        }
+
+        const password = $("#passwordLogin").val();
+        if (!password.trim() || password.length < 6) {
+            $("#passwordLoginText").addClass("text-danger");
+            $("#passwordLoginText").html("Mật khẩu phải có ít nhất 6 kí tự");
+            return;
+        }
+
+        $("#loginForm").off("submit").submit();
+    });
 });
 
 function validatePassword() {
