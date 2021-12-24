@@ -1,3 +1,4 @@
+import AuthMiddlewares from "../../middlewares/AuthMiddlewares.js";
 import AppController from "../AppController.js";
 
 export default class UserController extends AppController {
@@ -8,20 +9,40 @@ export default class UserController extends AppController {
     }
 
     init() {
-        this._router.get("/user/account", this.renderProfilePage);
-        this._router.post("/user/account", this.changeProfile);
+        this._router.get("/user/account", AuthMiddlewares.authorizeUser, this.renderProfilePage);
+        this._router.post("/user/account", AuthMiddlewares.authorizeUser, this.changeProfile);
 
-        this._router.get("/user/account/email", this.renderChangeEmail);
-        this._router.post("/user/account/email/send", this.sendOTPChangeEmail);
-        this._router.post("/user/account/email", this.changeEmail);
+        this._router.get(
+            "/user/account/email",
+            AuthMiddlewares.authorizeUser,
+            this.renderChangeEmail
+        );
+        this._router.post(
+            "/user/account/email/send",
+            AuthMiddlewares.authorizeUser,
+            this.sendOTPChangeEmail
+        );
+        this._router.post("/user/account/email", AuthMiddlewares.authorizeUser, this.changeEmail);
 
-        this._router.get("/user/account/password", this.renderChangePassword);
-        this._router.post("/user/account/password", this.changePassword);
+        this._router.get(
+            "/user/account/password",
+            AuthMiddlewares.authorizeUser,
+            this.renderChangePassword
+        );
+        this._router.post(
+            "/user/account/password",
+            AuthMiddlewares.authorizeUser,
+            this.changePassword
+        );
 
-        this._router.get("/user/wishlist", this.renderWishlist);
-        this._router.post("/user/wishlist/delete", this.removeWishlistItem);
+        this._router.get("/user/wishlist", AuthMiddlewares.authorizeUser, this.renderWishlist);
+        this._router.post(
+            "/user/wishlist/delete",
+            AuthMiddlewares.authorizeUser,
+            this.removeWishlistItem
+        );
 
-        this._router.post("/user/feedback", this.postFeedback);
+        this._router.post("/user/feedback", AuthMiddlewares.authorizeUser, this.postFeedback);
     }
 
     renderProfilePage(req, res) {

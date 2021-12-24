@@ -1,3 +1,4 @@
+import AuthMiddlewares from "../../middlewares/AuthMiddlewares.js";
 import AppController from "../AppController.js";
 
 export default class BidderController extends AppController {
@@ -7,12 +8,24 @@ export default class BidderController extends AppController {
     }
 
     init() {
-        this._router.get("/bidder/bidding", this.renderBiddingProducts);
+        this._router.get(
+            "/bidder/bidding",
+            AuthMiddlewares.authorizeUser,
+            this.renderBiddingProducts
+        );
 
-        this._router.get("/bidder/account/upgrade", this.renderUpgradeRequest);
-        this._router.post("/bidder/account/upgrade", this.upgradeRequest);
+        this._router.get(
+            "/bidder/account/upgrade",
+            AuthMiddlewares.authorizeUser,
+            this.renderUpgradeRequest
+        );
+        this._router.post(
+            "/bidder/account/upgrade",
+            AuthMiddlewares.authorizeUser,
+            this.upgradeRequest
+        );
 
-        this._router.get("/bidder/won", this.renderWonList);
+        this._router.get("/bidder/won", AuthMiddlewares.authorizeUser, this.renderWonList);
     }
 
     renderBiddingProducts(req, res) {

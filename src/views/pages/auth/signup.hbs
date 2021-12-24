@@ -142,10 +142,13 @@
                                         type="password"
                                         id="confirmPassword"
                                         class="form-control form-icon-trailing"
+                                        aria-describedby="confirmPasswordText"
                                         required
                                     />
                                     <label class="form-label" for="confirmPassword">Confirm password</label>
                                 </div>
+                                <div class="form-text" id="confirmPasswordText">Confirm password must match
+                                    input password</div>
                             </div>
                         </div>
 
@@ -212,7 +215,7 @@
 
                         <a
                             role="button"
-                            href="/signup/google"
+                            href="/login/google"
                             type="button"
                             class="btn btn-block"
                             style="background-color: #dd4b39; color: #fff;"

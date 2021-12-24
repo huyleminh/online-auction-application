@@ -10,7 +10,7 @@ create table if not exists `user_account` (
 	`username` varchar(40) not null,
     `password` varchar(255) not null,
     `email` varchar(40) not null,
-    `address` nvarchar(100) not null, -- a string contains of all information of an address
+    `address` nvarchar(100), -- a string contains of all information of an address
 	`dob` date,
     `role` tinyint(1) not null default 0,
     `first_name` nvarchar(20) not null,

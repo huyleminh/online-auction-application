@@ -49,4 +49,8 @@ export default class AppConstant {
         }
         return process.env.MYSQL_PASSWORD;
     }
+
+    static get GOOGLE_SECRET_PASSWORD_KEY() {
+        return process.env.GOOGLE_SECRET_TOKEN;
+    }
 }
