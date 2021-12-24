@@ -1,5 +1,7 @@
 $(document).ready(function () {
-    fetchAllProvince();
+    if (window.location.pathname === "/signup") {
+        fetchAllProvince();
+    }
 
     document.querySelectorAll(".form-outline").forEach((formOutline) => {
         new mdb.Input(formOutline).init();
@@ -22,47 +24,12 @@ $(document).ready(function () {
     $("#signupForm").on("submit", function (e) {
         e.preventDefault();
 
-        // Validate username
-        // $.get(`/api/signup/verify/${$("#username").val()}`, function (data) {
-        //     if (data.status === 200) {
-        //         $("#usernameText").html("");
-
-        //         const passwordValidationStatus = validatePassword();
-        //         if (!passwordValidationStatus) {
-        //             alert("Password is not valid");
-        //             return;
-        //         }
-
-        //         const email = $("#email").val();
-        //         if (!email) {
-        //             alert("Please input contact email");
-        //             return;
-        //         }
-
-        //         // Verify username
-        //         $("#signupForm").off("submit").submit();
-        //     } else if (data.status === 400) {
-        //         $("#usernameText").html("Username has been chosen");
-        //         return;
-        //     } else if (data.status === 500) {
-        //         alert("Something went wrong");
-        //         return;
-        //     }
-        // });
-
-        const passwordValidationStatus = validatePassword();
-        if (!passwordValidationStatus) {
-            alert("Password is not valid");
-            return;
-        }
-
-        const email = $("#email").val();
-        if (!email) {
-            alert("Please input contact email");
-            return;
-        }
-
-        // Verify username
+        validatePassword();
+        // const email = $("#email").val();
+        // if (!email) {
+        //     alert("Please input contact email");
+        //     return;
+        // }
         $("#signupForm").off("submit").submit();
     });
 
@@ -142,19 +109,18 @@ function validatePassword() {
     const password = $("#password").val();
     const confirm = $("#confirmPassword").val();
 
-    if (!password.trim() || !confirm.trim()) {
-        return false;
+    if (!password.trim() || password.length < 6) {
+        $("#passwordText").addClass("text-danger");
+        return;
     }
 
-    if (password.length < 6) {
-        return false;
+    if (!confirm.trim() || password !== confirm) {
+        $("#confirmPasswordText").addClass("text-danger");
+        return;
     }
 
-    if (password !== confirm) {
-        return false;
-    }
-
-    return true;
+    $("#passwordText").removeClass("text-danger");
+    $("#confirmPasswordText").removeClass("text-danger");
 }
 
 function fetchAllProvince() {

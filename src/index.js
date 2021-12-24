@@ -1,3 +1,5 @@
+import flash from "connect-flash";
+import KnexStoreFn from "connect-session-knex";
 import express from "express";
 import { create } from "express-handlebars";
 import HandlebarsSection from "express-handlebars-sections";
@@ -7,10 +9,10 @@ import passport from "passport";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import AppControllers from "./controllers/index.js";
-import AppConstant from "./shared/AppConstant.js";
-import flash from "connect-flash";
 import LocalsMiddlewares from "./middlewares/LocalsMiddlewares.js";
+import AppConstant from "./shared/AppConstant.js";
 import HbsHelper from "./utils/helpers/HbsHelper.js";
+import knex from "./utils/KnexConnection.js";
 
 class AppServer {
     constructor() {
@@ -31,15 +33,25 @@ class AppServer {
             )
         );
 
+        const KnexStore = new KnexStoreFn(session);
+        const store = new KnexStore({
+            knex,
+            tablename: "sessions",
+        });
+
+        this.app.set("trust proxy", 1);
         this.app.use(
             session({
                 secret: AppConstant.COOKIE_KEY,
                 resave: false,
-                saveUninitialized: true,
+                saveUninitialized: false,
                 cookie: {
                     secure: AppConstant.PROD,
                     maxAge: AppConstant.COOKIE_KEY_MAX_AGE,
                 },
+                // *BUG: does not sync session - solved
+                // TODO: check this bug in production
+                store: store,
             })
         );
 
