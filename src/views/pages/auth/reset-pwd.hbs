@@ -3,135 +3,56 @@
         <div class="row align-items-center justify-content-center h-100">
             <div class="col-xl-8 col-lg-8 col-md-8 justify-content-center row login-wrapper">
                 <div class="col-xl-8 col-lg-10 col-md-10 ps-lg-5 pe-lg-5 login-form">
-                    <h2 class="text-center mb-3">Tạo mật khẩu mới</h3>
+                    <h2 class="text-center mb-3">Create new password</h3>
 
                     <form action="/forget-pwd/reset-pwd" method="post" id="resetPwdForm">
-                        <div class="form-outline mb-4">
-                            <i class="fas fa-lock trailing"></i>
+                        <div class="form-outline">
+                            <i class="fas fa-key trailing"></i>
                             <input
                                 type="password"
                                 id="password"
                                 name="password"
-                                class="form-control form-control-lg form-icon-trailing"
+                                class="form-control form-icon-trailing"
+                                aria-describedby="passwordText"
                                 autofocus
                                 required
                             />
-                            <label class="form-label" for="password">Mật khẩu mới</label>
+                            <label class="form-label" for="password">New password</label>
                         </div>
+                        <div class="form-text mb-3" id="passwordText">Password must have at least 6 character</div>
 
-                        <div class="form-outline mb-4">
-                            <i class="fas fa-lock trailing"></i>
+                        <div class="form-outline">
+                            <i class="fas fa-key trailing"></i>
                             <input
                                 type="password"
                                 id="confirmPassword"
-                                name="confirmPassword"
-                                class="form-control form-control-lg form-icon-trailing"
-                                autofocus
+                                class="form-control form-icon-trailing"
+                                aria-describedby="confirmPasswordText"
                                 required
                             />
-                            <label class="form-label" for="confirmPassword">Xác nhận mật khẩu mới</label>
+                            <label class="form-label" for="confirmPassword">Confirm new password</label>
                         </div>
+                        <div class="form-text mb-3" id="confirmPasswordText">Confirm password must match input password</div>
 
-                        <div class="row">
-                            <button
-                                type="submit"
-                                class="btn btn-primary btn-lg col"
-                                style="margin: 0px 12px;"
-                            >
-                                Đổi mật khẩu
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success" >
+                                Create
                             </button>
                         </div>
 
-                        <p class="mt-4 mb-4 text-center home-navigation">
-                            <a href="/login" class="btn btn-info">
+                        <p class="mt-3 mb-3 text-center home-navigation">
+                            <a href="/login" class="btn btn-outline-info">
                                 <i class="fas fa-arrow-left me-1"></i>
-                                Về trang đăng nhập
+                                Login
+                            </a>
+                            <a href="/" class="btn btn-info">
+                                <i class="fas fa-home"></i>
+                                Home
                             </a>
                         </p>
-
                     </form>
-
-
-                    {{#if sendOtpOk }}
-                        <script type="text/javascript">
-                            $(function () {
-                                $("#confirmOTP").modal('show');
-                            });
-                        </script>
-                    {{/if}}
-
-                    <div
-                        class="modal fade"
-                        id="confirmOTP"
-                        data-mdb-backdrop="static"
-                        data-mdb-keyboard="false"
-                        tabindex="-1"
-                        aria-labelledby="confirmOTPLabel"
-                        aria-hidden="true"
-                    >
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="confirmOTPLabel">Xác thực email</h5>
-                                </div>
-
-                                <div class="modal-body">
-                                    <p class="text-center">Mã xác thực đã được gửi, vui lòng nhập OTP vào đây</p>
-
-                                    <form action="/forget-pwd/verify" method="post">
-                                        <div class="form-outline mb-4">
-                                            <i class="fas fa-key trailing"></i>
-                                            <input type="text" id="otpCode" class="form-control form-icon-trailing" name="otpCode" />
-                                            <label class="form-label" for="otpCode">OTP</label>
-                                        </div>
-
-                                        <div class="d-grid gap-2">
-                                            <button type="submit" class="btn btn-success">Xác thực</button>
-                                            <button type="button" class="btn btn-danger" data-mdb-dismiss="modal">Hủy</button>
-                                        </div>
-                                    </form>
-
-                                    <div class="divider mt-4 mb-4">
-                                        <span class="text-center" style="width: 200px; font-size: 14px;">Không nhận được OTP?</span>
-                                    </div>
-
-                                    <button type="button" class="btn btn-primary btn-block">Gửi lại</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 </body>
-
-{{#section "js"}}
-    <script>
-        document.querySelectorAll('.form-outline').forEach((formOutline) => {
-            new mdb.Input(formOutline).init();
-        });
-    </script>
-
-    <script>
-        $("#resetPwdForm").on("submit", function(e) {
-            e.preventDefault();
-
-            const password = $("#password").val();
-            const confirmPassword = $("#confirmPassword").val();
-
-            if (!password.trim() || !confirmPassword.trim()) {
-                alert("Mật khẩu không gồm toàn khoảng trắng");
-                return;
-            }
-
-            if (password !== confirmPassword) {
-                alert("Mật khẩu không trùng khớp");
-                return;
-            }
-
-            {{!-- Verify ok --}}
-            $("#resetPwdForm").off("submit").submit();
-        })
-    </script>
-{{/section}}
