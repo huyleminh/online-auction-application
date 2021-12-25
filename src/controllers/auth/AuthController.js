@@ -103,6 +103,7 @@ passport.use(
             const isValidPassword = PasswordHelper.verifyHash(password, userList[0].password);
 
             if (!isValidPassword) {
+                console.log("login failed");
                 return done(null, false, { message: "Invalid username or password" });
             }
 
@@ -144,17 +145,33 @@ export default class AuthController extends AppController {
             }
         );
 
-        this._router.post(
-            "/login",
-            passport.authenticate("local", { failureRedirect: "/login", failureFlash: true }),
-            function (req, res) {
-                const { returnUrl } = req.session;
-                delete req.session.returnUrl;
-                req.session.save(function () {
-                    res.redirect(returnUrl || "/");
+        this._router.post("/login", function (req, res, next) {
+            passport.authenticate("local", function (err, user, info) {
+                if (err) {
+                    return next(err);
+                }
+                if (!user) {
+                    return res.render("pages/auth/login", {
+                        layout: "auth",
+                        error: {
+                            message: info.message,
+                        },
+                    });
+                }
+
+                req.logIn(user, function (err) {
+                    if (err) {
+                        return next(err);
+                    }
+
+                    const { returnUrl } = req.session;
+                    delete req.session.returnUrl;
+                    req.session.save(function () {
+                        res.redirect(returnUrl || "/");
+                    });
                 });
-            }
-        );
+            })(req, res, next);
+        });
 
         // Register routes
         this._router.get("/signup", this.signupPage);
@@ -165,7 +182,7 @@ export default class AuthController extends AppController {
         // Forget password routes
         this._router.get("/forget-pwd", this.forgetPwdPage);
         this._router.post("/forget-pwd", this.postForgetPwdPage);
-        this._router.post("/forget-pwd/verify", this.verifyForgetPwdOTP);
+        this._router.post("/api/forget-pwd/otp", this.getForgetPwdOTP);
         this._router.get("/forget-pwd/reset-pwd", this.resetPwdPage);
         this._router.post("/forget-pwd/reset-pwd", this.postResetPwd);
 
@@ -263,7 +280,7 @@ export default class AuthController extends AppController {
         try {
             await EmailService.sendEmailWithHTMLContent(
                 email,
-                `OTP verification`,
+                `Register - OTP Verification`,
                 EmailTemplate.OTPTemplate(token)
             );
 
@@ -294,55 +311,105 @@ export default class AuthController extends AppController {
     }
 
     forgetPwdPage(req, res) {
-        // Safety
-        delete req.session.resetPwdEmail;
-
         res.render("pages/auth/forget-pwd", {
             layout: "auth.hbs",
         });
+    }
+
+    async getForgetPwdOTP(req, res) {
+        const { email } = req.body;
+
+        try {
+            // check if username is google username
+            const userList = await UserAccountModel.getUsernameByEmail(email);
+            if (userList.length === 0) {
+                return res.json({ status: 400, message: "Invalid email" });
+            }
+
+            if (userList[0].username.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)) {
+                return res.json({
+                    status: 400,
+                    message: "You do not have permission to reset password of this account",
+                });
+            }
+
+            // Generate OTP
+            const secret = Authenticator.generateSecret(); // base32 encoded hex secret key
+            const token = Authenticator.generate(secret + email);
+
+            await EmailService.sendEmailWithHTMLContent(
+                email,
+                `Forgot Password - OTP Verification`,
+                EmailTemplate.OTPForgotPasswordTemplate(token)
+            );
+
+            // delete old secret here
+            delete req.session.otpTempForgotPwdSecret;
+            req.session.otpTempForgotPwdSecret = secret;
+            req.session.usernameTempForgotPwd = userList[0].username;
+
+            res.json({ status: 200 });
+        } catch (error) {
+            console.log(error);
+            return res.json({ status: 500 });
+        }
     }
 
     postForgetPwdPage(req, res) {
-        // Send OTP to
-        // If OK
-        req.session.resetPwdEmail = req.body.email;
-        // TODO: set epired time
-        req.session.expiredTime = "need to be set";
+        const { email, otpCode } = req.body;
 
-        res.render("pages/auth/forget-pwd", {
-            layout: "auth.hbs",
-            sendOtpOk: true,
+        // Verify OTP
+        const secret = req.session.otpTempForgotPwdSecret;
+        if (!secret) {
+            return res.redirect("/forget-pwd");
+        }
+
+        delete req.session.otpTempForgotPwdSecret;
+
+        const isValid = Authenticator.verify({ token: otpCode, secret: secret + email });
+        if (!isValid) {
+            return res.render("pages/auth/forget-pwd", {
+                layout: "auth",
+                error: {
+                    otp: "Your OTP code is incorrect or expired",
+                },
+            });
+        }
+
+        req.session.isFgPwd = true;
+        req.session.save(() => {
+            res.redirect("/forget-pwd/reset-pwd");
         });
     }
 
-    verifyForgetPwdOTP(req, res) {
-        const body = req.body;
-        console.log({ body });
-
-        console.log(req.session.resetPwdEmail);
-
-        // If OK
-        req.session.isOtpOk = true;
-
-        res.redirect("/forget-pwd/reset-pwd");
-    }
-
     resetPwdPage(req, res) {
-        // Need to check expired time
-        const expiredTime = req.session.expiredTime;
-        console.log(expiredTime);
-
         res.render("pages/auth/reset-pwd", {
             layout: "auth.hbs",
         });
     }
 
-    postResetPwd(req, res) {
-        const body = req.body;
-        console.log(body);
+    async postResetPwd(req, res) {
+        const { usernameTempForgotPwd, isFgPwd } = req.session;
+        if (!usernameTempForgotPwd || !isFgPwd) {
+            return res.redirect("/forget-pwd");
+        }
 
-        // Check otp status, expired date, email, ...
-        res.redirect("/login");
+        delete req.session.emailFgPwd;
+        delete req.session.isFgPwd;
+
+        const { password } = req.body;
+
+        try {
+            await UserAccountModel.updateColumnByUsername(
+                usernameTempForgotPwd,
+                "password",
+                PasswordHelper.generateHashPassword(password)
+            );
+            res.redirect("/login");
+        } catch (error) {
+            console.log("change password error ", error);
+            res.redirect("/forget-pwd");
+        }
     }
 
     handleLogout(req, res) {

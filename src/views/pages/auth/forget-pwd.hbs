@@ -3,103 +3,63 @@
         <div class="row align-items-center justify-content-center h-100">
             <div class="col-xl-8 col-lg-8 col-md-8 justify-content-center row login-wrapper">
                 <div class="col-xl-8 col-lg-10 col-md-10 ps-lg-5 pe-lg-5 login-form">
-                    <h2 class="text-center mb-3">Quên mật khẩu</h3>
+                    <h2 class="text-center mb-3">Forgot pasword</h2>
 
-                    <p class="text-center">Hệ thống sẽ gửi OTP đến email của bạn để xác nhận lấy lại mật khẩu</p>
+                    <p class="text-center">OTP code will be send to your email to confirm seset
+                        password</p>
 
                     <form action="/forget-pwd" method="post" id="fgPwdForm">
-                        <div class="form-outline mb-4">
-                            <i class="fas fa-envelope trailing"></i>
+                        <div class="input-group" id="emailGroup">
                             <input
                                 type="email"
-                                id="email"
+                                id="emailFgPwd"
                                 name="email"
-                                class="form-control form-control-lg form-icon-trailing"
-                                autofocus
+                                class="form-control"
+                                placeholder="Contact email"
+                                aria-describedby="emailTextFgPwd"
                                 required
                             />
-                            <label class="form-label" for="email">Email của bạn</label>
+                            <button class="btn btn-primary" type="button" id="getOTPBtnFgPwd">
+                                Get OTP
+                            </button>
                         </div>
 
-                        <div class="row">
-                            <button
-                                type="submit"
-                                id="submitEmail"
-                                class="btn btn-primary btn-lg col"
-                                style="margin: 0px 12px;"
-                            >
-                                Lấy mã OTP
+                        <div class="form-text mb-3" id="emailTextFgPwd"></div>
+
+                        <div class="form-outline mb-3">
+                            <input
+                                type="text"
+                                id="otpCode"
+                                name="otpCode"
+                                class="form-control"
+                                aria-describedby="otpText"
+                                disabled
+                                required
+                            />
+                            <label class="form-label" for="otpCode">OTP code</label>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" id="submitEmail" class="btn btn-success">
+                                Verify OTP
                             </button>
                         </div>
 
                         <p class="mt-4 mb-4 text-center home-navigation">
-                            <a href="/login" class="btn btn-info">
+                            <a href="/login" class="btn btn-outline-info">
                                 <i class="fas fa-arrow-left me-1"></i>
-                                Về trang đăng nhập
+                                Login
+                            </a>
+                            <a href="/" class="btn btn-info">
+                                <i class="fas fa-home"></i>
+                                Home
                             </a>
                         </p>
 
                     </form>
 
-
-                    {{#if sendOtpOk }}
-                        <script type="text/javascript">
-                            $(function () {
-                                $("#confirmOTP").modal('show');
-                            });
-                        </script>
-                    {{/if}}
-
-                    <div
-                        class="modal fade"
-                        id="confirmOTP"
-                        data-mdb-backdrop="static"
-                        data-mdb-keyboard="false"
-                        tabindex="-1"
-                        aria-labelledby="confirmOTPLabel"
-                        aria-hidden="true"
-                    >
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="confirmOTPLabel">Xác thực email</h5>
-                                </div>
-
-                                <div class="modal-body">
-                                    <p class="text-center">Mã xác thực đã được gửi, vui lòng nhập OTP vào đây</p>
-
-                                    <form action="/forget-pwd/verify" method="post">
-                                        <div class="form-outline mb-4">
-                                            <i class="fas fa-key trailing"></i>
-                                            <input type="text" id="otpCode" class="form-control form-icon-trailing" name="otpCode" />
-                                            <label class="form-label" for="otpCode">OTP</label>
-                                        </div>
-
-                                        <div class="d-grid gap-2">
-                                            <button type="submit" class="btn btn-success">Xác thực</button>
-                                            <button type="button" class="btn btn-danger" data-mdb-dismiss="modal">Hủy</button>
-                                        </div>
-                                    </form>
-
-                                    <div class="divider mt-4 mb-4">
-                                        <span class="text-center" style="width: 200px; font-size: 14px;">Không nhận được OTP?</span>
-                                    </div>
-
-                                    <button type="button" class="btn btn-primary btn-block">Gửi lại</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 </body>
-
-{{#section "js"}}
-    <script>
-        document.querySelectorAll('.form-outline').forEach((formOutline) => {
-            new mdb.Input(formOutline).init();
-        });
-    </script>
-{{/section}}
