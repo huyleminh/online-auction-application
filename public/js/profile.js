@@ -107,7 +107,7 @@ $(document).ready(function () {
 
     $(".feedback-btn").on("click", function () {
         $("#feedbackModal").modal("toggle");
-        $("#ratedId").val(this.dataset.ratedId)
+        $("#ratedId").val(this.dataset.ratedId);
     });
 
     $("#positive").on("click", function () {
@@ -125,6 +125,123 @@ $(document).ready(function () {
         $("#thumbsup").removeClass("fas");
         $("#thumbsup").addClass("far");
     });
+
+    // Catch change event for input image
+    if ($("#detailImages")) {
+        $("#detailImages").on("change", function (e) {
+            const target = e.target;
+            const fileLen = target.files.length;
+
+            if (fileLen <= 0) {
+                return;
+            }
+
+            $("#preview-detail").html("");
+            for (let i = 0; i < fileLen; ++i) {
+                const file = target.files[i];
+                let fileReader = new FileReader();
+
+                fileReader.readAsDataURL(file);
+                fileReader.onload = function () {
+                    const url = fileReader.result;
+
+                    let tmp = $("#preview-detail").html();
+
+                    tmp += `
+                        <div class="image-preview-item">
+                            <img src=${url} alt="upload-image">
+                        </div>
+                    `;
+
+                    $("#preview-detail").html(tmp);
+                };
+            }
+        });
+    }
+
+    if ($("#thumbnailImg")) {
+        $("#thumbnailImg").on("change", function (e) {
+            const target = e.target;
+            const fileLen = target.files.length;
+
+            if (fileLen <= 0) {
+                return;
+            }
+
+            const file = target.files[0];
+            let fileReader = new FileReader();
+
+            fileReader.readAsDataURL(file);
+            fileReader.onload = function () {
+                const url = fileReader.result;
+
+                let tmp = `
+                        <div class="image-preview-item">
+                            <img src=${url} alt="upload-image">
+                        </div>
+                    `;
+
+                $("#preview-thumbnail").html("");
+                $("#preview-thumbnail").html(tmp);
+            };
+        });
+    }
+
+    // Init product expired date datepicker
+    if (document.querySelector("#expiredDate")) {
+        const expiredDateDialog = new mdDateTimePicker.default({
+            type: "date",
+            future: moment().add(10, "year"),
+        });
+
+        expiredDateDialog.trigger = document.querySelector("#expiredDate");
+
+        document.querySelector("#expiredDate").addEventListener("onOk", function () {
+            // Detail format option here: https://momentjs.com/docs/#/displaying/format/
+            this.value = expiredDateDialog.time.format("DD/MM/YYYY");
+            this.focus();
+
+            // Hide backdrop
+            $(".custom-modal-backdrop").removeClass("show");
+        });
+
+        document.querySelector("#expiredDate").addEventListener("onCancel", function () {
+            // Detail format option here: https://momentjs.com/docs/#/displaying/format/
+            // Hide backdrop
+            $(".custom-modal-backdrop").removeClass("show");
+        });
+
+        $("#expiredDate").on("click", function () {
+            toggleDatepickerDialog(expiredDateDialog);
+        });
+    }
+
+    if (document.querySelector("#expiredTime")) {
+        const expiredTimeDialog = new mdDateTimePicker.default({
+            type: "time",
+        });
+
+        expiredTimeDialog.trigger = document.querySelector("#expiredTime");
+
+        document.querySelector("#expiredTime").addEventListener("onOk", function () {
+            // Detail format option here: https://momentjs.com/docs/#/displaying/format/
+            this.value = expiredTimeDialog.time.format("HH:mm:ss");
+            this.focus();
+
+            // Hide backdrop
+            $(".custom-modal-backdrop").removeClass("show");
+        });
+
+        document.querySelector("#expiredTime").addEventListener("onCancel", function () {
+            // Detail format option here: https://momentjs.com/docs/#/displaying/format/
+            // Hide backdrop
+            $(".custom-modal-backdrop").removeClass("show");
+        });
+
+        $("#expiredTime").on("click", function () {
+            toggleDatepickerDialog(expiredTimeDialog);
+        });
+    }
 });
 
 function closeProfileModal() {

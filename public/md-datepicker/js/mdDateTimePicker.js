@@ -516,7 +516,7 @@
 				this._initMinute();
 				this._attachEventHandlers();
 				this._changeM();
-				this._dragDial();
+				// this._dragDial();
 				this._switchToView(hour);
 				this._switchToView(minute);
 				this._addClockEvent();

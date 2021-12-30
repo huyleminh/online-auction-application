@@ -1,0 +1,227 @@
+{{#section "banner"}}
+    {{> banner title="Your Profile" subTitle="Manage your profile and explore more things"}}
+{{/section}}
+
+{{#section "breadcrumb"}}
+    <h3>User profile</h3>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="javascript:void(0)">User</a></li>
+            <li class="breadcrumb-item"><a href="/seller/products">My selling products</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Post new product</li>
+        </ol>
+    </nav>
+{{/section}}
+
+<div class="card border shadow-0">
+    <div class="card-header">
+        <h3 class="mb-0">Post new product</h3>
+    </div>
+
+    <div class="card-body d-flex flex-column align-items-center">
+        <form action="" method="post" class="mb-0">
+            <div class="row mb-3">
+                <div class="col-sm-6 mb-sm-0 mb-3">
+                    <div class="form-outline">
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="prodName"
+                            id="prodName"
+                            required
+                        />
+                        <label for="prodName" class="form-label">Product Name
+                            <span class="text-danger">*</span></label>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-outline">
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="prodCategory"
+                            id="prodCategory"
+                            list="prodCategoryList"
+                            required
+                        />
+                        <datalist id="prodCategoryList">
+                            <option value="Boston">
+                            <option value="Cambridge">
+                        </datalist>
+                        <label for="prodCategory" class="form-label">Choose a category
+                            <span class="text-danger">*</span></label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-sm-6 mb-sm-0 mb-3">
+                    <div class="form-outline">
+                        <input
+                            type="number"
+                            min="0"
+                            class="form-control"
+                            name="startPrice"
+                            id="startPrice"
+                            required
+                        />
+                        <label for="startPrice" class="form-label">Start price
+                            <span class="text-danger">*</span></label>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-outline">
+                        <input
+                            type="number"
+                            min="0"
+                            class="form-control"
+                            name="stepPrice"
+                            id="stepPrice"
+                            required
+                        />
+                        <label for="stepPrice" class="form-label">Step price
+                            <span class="text-danger">*</span></label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-sm-6 col">
+                    <div class="form-outline">
+                        <input
+                            type="number"
+                            min="0"
+                            class="form-control"
+                            name="buynowPrice"
+                            id="buynowPrice"
+                        />
+                        <label for="buynowPrice" class="form-label">Buy now price (optional)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-sm-6 mb-sm-0 mb-3">
+                    <div class="form-outline">
+                        <i class="fas fa-calendar-alt trailing"></i>
+                        <input
+                            type="text"
+                            id="expiredDate"
+                            class="form-control form-icon-trailing"
+                            name="expiredDate"
+                        />
+                        <label class="form-label" for="expiredDate">Expired date
+                            <span class="text-danger">*</span></label>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-outline">
+                        <i class="fas fa-clock trailing"></i>
+                        <input
+                            type="text"
+                            id="expiredTime"
+                            class="form-control form-icon-trailing"
+                            name="expiredTime"
+                        />
+                        <label class="form-label" for="expiredTime">Expired time
+                            <span class="text-danger">*</span></label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-check">
+                <input
+                    class="form-check-input"
+                    type="checkbox"
+                    value="on"
+                    id="autoExtend"
+                    aria-describedby="autoExtendText"
+                />
+                <label class="form-check-label" for="autoExtend">
+                    Auto extend duration
+                </label>
+            </div>
+            <div class="form-text mb-3" id="autoExtendText">If yes, if there is a new auction before
+                the end of 5 minutes, the product automatically renews for another 10 minutes.</div>
+
+            {{! Upload thumbnail }}
+            <div class="mb-3 image-uploads">
+                <label class="form-label text-dark fw-bolder">Upload thumbnail
+                    <span class="text-danger">*</span></label>
+                <div class="image-uploads-item d-flex">
+                    <div class="image-preview mb-2" id="preview-thumbnail"></div>
+                    <label
+                        for="thumbnailImg"
+                        class="d-flex justify-content-center align-items-center"
+                    >
+                        <i class="fas fa-plus"></i>
+                    </label>
+                    <input
+                        type="file"
+                        class="image-uploads-input"
+                        accept="image/*"
+                        name="thumbnailImg"
+                        id="thumbnailImg"
+                    />
+                </div>
+            </div>
+            {{! Upload thumbnail }}
+
+            {{! Upload detail }}
+            <div class="mb-3 image-uploads">
+                <label class="form-label text-dark fw-bolder">Upload detail images (at least 3
+                    images)
+                    <span class="text-danger">*</span></label>
+                <div class="image-uploads-item">
+                    <div class="image-preview mb-2" id="preview-detail"></div>
+                    <label
+                        for="detailImages"
+                        class="d-flex justify-content-center align-items-center"
+                    >
+                        <i class="fas fa-plus"></i>
+                    </label>
+                    <input
+                        type="file"
+                        class="image-uploads-input"
+                        accept="image/*"
+                        name="detailImages"
+                        id="detailImages"
+                        multiple
+                    />
+                </div>
+            </div>
+            {{! Upload detail }}
+
+            <label class="form-label text-dark fw-bolder">Description
+                <span class="text-danger">*</span></label>
+            <textarea class="form-control" id="editor" name="description"></textarea>
+
+            <div class="d-flex justify-content-center mt-3">
+                <button
+                    type="submit"
+                    class="shadow-0 btn btn-custom btn-custom-main me-3"
+                    id="saveProductBtn"
+                >
+                    Save
+                </button>
+
+                <a type="button" class="shadow-0 btn btn-outline-secondary" href="/seller/products">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{{#section "js"}}
+    <script src="/ckeditor/ckeditor.js"></script>
+    <script>
+        ClassicEditor.create( document.querySelector( '#editor' ), { simpleUpload: { types: ["png",
+        "jpeg"], uploadUrl: `/upload`, } } ) .then( editor => { window.editor = editor; } ) .catch(
+        error => { console.error( 'There was a problem initializing the editor.', error ); } );
+    </script>
+{{/section}}
