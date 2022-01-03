@@ -16,226 +16,76 @@
         <div class="card shadow-custom d-flex flex-column">
             <div class="card-body">
                 <div class="card-title mb-3 d-flex justify-content-between">
-                    <h4>Category list</h4>
-                    <div class="d-flex">
-                        <div
-                            class="border border-dark me-2 d-inline-block"
-                            style="width: 50px; background: #fafaff; height: 100%"
-                        ></div>
-                        <span class="align-self-center fw-bolder">Categories - Level 1</span>
-                    </div>
+                    <h4>Root category list</h4>
                 </div>
 
                 <form action="/admin/categories/delete" method="post" id="deleteCatForm">
                     <input type="hidden" name="catId" id="catDeleteId" />
                 </form>
                 <div class="table-responsive">
-                    <table class="table table-bordered mb-0 table-custom">
+                    <table class="table table-bordered table-striped mb-0 table-custom">
                         <thead>
                             <tr>
                                 <th scope="col" style="width: 50px;">#</th>
                                 <th scope="col">Category name</th>
+                                <th scope="col" style="width: 50px;">Total children</th>
                                 <th scope="col" style="width: 50px;">Total products</th>
                                 <th scope="col" style="width: 100px;">Created at</th>
                                 <th scope="col" style="width: 50px;">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="root-level">
-                                <td scope="row">1</td>
-                                <td>Cat father 1</td>
-                                <td>4</td>
-                                <td>1/12/2019 10:43</td>
-                                <td>
-                                    <div class="action">
-                                        <button
-                                            class="btn btn-sm btn-warning shadow-0 ms-1 update-cat"
-                                            data-mdb-toggle="tooltip"
-                                            title="Edit"
-                                            data-updatecat="1"
-                                        >
-                                            <i class="fas fa-edit"></i>
-                                        </button>
+                            {{#each data.catList}}
+                                <tr>
+                                    <td scope="row">{{this.index}}</td>
+                                    <td>{{this.cat_name}}</td>
+                                    <td>{{this.child_count}}</td>
+                                    <td>{{this.product_count}}</td>
+                                    <td>{{formatDate this.created_date}}</td>
+                                    <td>
+                                        <div class="action">
+                                            <a
+                                                href="/admin/categories/{{this.cat_id}}"
+                                                class="btn btn-sm btn-success shadow-0 ms-1"
+                                                data-mdb-toggle="tooltip"
+                                                title="View children"
+                                            >
+                                                <i class="fas fa-eye"></i>
+                                            </a>
 
-                                        <button
-                                            class="btn btn-danger btn-sm shadow-0 ms-1 delete-cat"
-                                            title="Delete"
-                                            data-mdb-toggle="tooltip"
-                                            data-deletecat="1"
-                                        >
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
+                                            <button
+                                                class="btn btn-sm btn-warning shadow-0 ms-1 update-cat"
+                                                data-mdb-toggle="tooltip"
+                                                title="Edit"
+                                                data-updatecat="{{this.cat_id}}"
+                                            >
+                                                <i class="fas fa-edit"></i>
+                                            </button>
 
-                            <tr class="child-1-level">
-                                <td scope="row">1</td>
-                                <td>Cat child 1</td>
-                                <td>4</td>
-                                <td>1/12/2019 10:43</td>
-                                <td>
-                                    <div class="action">
-                                        <button
-                                            class="btn btn-sm btn-warning shadow-0 ms-1 update-cat"
-                                            data-mdb-toggle="tooltip"
-                                            title="Edit"
-                                            data-updatecat="1"
-                                        >
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-
-                                        <button
-                                            class="btn btn-danger btn-sm shadow-0 ms-1 delete-cat"
-                                            title="Delete"
-                                            data-mdb-toggle="tooltip"
-                                            data-deletecat="1"
-                                        >
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <tr class="child-1-level">
-                                <td scope="row">1</td>
-                                <td>Cat child 1</td>
-                                <td>4</td>
-                                <td>1/12/2019 10:43</td>
-                                <td>
-                                    <div class="action">
-                                        <button
-                                            class="btn btn-sm btn-warning shadow-0 ms-1 update-cat"
-                                            data-mdb-toggle="tooltip"
-                                            title="Edit"
-                                            data-updatecat="1"
-                                        >
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-
-                                        <button
-                                            class="btn btn-danger btn-sm shadow-0 ms-1 delete-cat"
-                                            title="Delete"
-                                            data-mdb-toggle="tooltip"
-                                            data-deletecat="1"
-                                        >
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <tr class="root-level">
-                                <td scope="row">1</td>
-                                <td>Cat father 1</td>
-                                <td>4</td>
-                                <td>1/12/2019 10:43</td>
-                                <td>
-                                    <div class="action">
-                                        <button
-                                            class="btn btn-sm btn-warning shadow-0 ms-1 update-cat"
-                                            data-mdb-toggle="tooltip"
-                                            title="Edit"
-                                            data-updatecat="1"
-                                        >
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-
-                                        <button
-                                            class="btn btn-danger btn-sm shadow-0 ms-1 delete-cat"
-                                            title="Delete"
-                                            data-mdb-toggle="tooltip"
-                                            data-deletecat="1"
-                                        >
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <tr class="root-level">
-                                <td scope="row">1</td>
-                                <td>Cat father 1</td>
-                                <td>4</td>
-                                <td>1/12/2019 10:43</td>
-                                <td>
-                                    <div class="action">
-                                        <button
-                                            class="btn btn-sm btn-warning shadow-0 ms-1 update-cat"
-                                            data-mdb-toggle="tooltip"
-                                            title="Edit"
-                                            data-updatecat="1"
-                                        >
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-
-                                        <button
-                                            class="btn btn-danger btn-sm shadow-0 ms-1 delete-cat"
-                                            title="Delete"
-                                            data-mdb-toggle="tooltip"
-                                            data-deletecat="1"
-                                        >
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <tr class="root-level">
-                                <td scope="row">1</td>
-                                <td>Cat father 1</td>
-                                <td>4</td>
-                                <td>1/12/2019 10:43</td>
-                                <td>
-                                    <div class="action">
-                                        <button
-                                            class="btn btn-sm btn-warning shadow-0 ms-1 update-cat"
-                                            data-mdb-toggle="tooltip"
-                                            title="Edit"
-                                            data-updatecat="1"
-                                        >
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-
-                                        <button
-                                            class="btn btn-danger btn-sm shadow-0 ms-1 delete-cat"
-                                            title="Delete"
-                                            data-mdb-toggle="tooltip"
-                                            data-deletecat="1"
-                                        >
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <tr class="root-level">
-                                <td scope="row">1</td>
-                                <td>Cat father 1</td>
-                                <td>4</td>
-                                <td>1/12/2019 10:43</td>
-                                <td>
-                                    <div class="action">
-                                        <button
-                                            class="btn btn-sm btn-warning shadow-0 ms-1 update-cat"
-                                            data-mdb-toggle="tooltip"
-                                            title="Edit"
-                                            data-updatecat="1"
-                                        >
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-
-                                        <button
-                                            class="btn btn-danger btn-sm shadow-0 ms-1 delete-cat"
-                                            title="Delete"
-                                            data-mdb-toggle="tooltip"
-                                            data-deletecat="1"
-                                        >
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
+                                            {{#if (isEqual this.product_count 0)}}
+                                                <button
+                                                    class="btn btn-danger btn-sm shadow-0 ms-1 delete-cat"
+                                                    title="Delete"
+                                                    data-mdb-toggle="tooltip"
+                                                    data-deletecat="{{this.cat_id}}"
+                                                >
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            {{else}}
+                                                <button
+                                                    class="btn btn-danger btn-sm shadow-0 ms-1 delete-cat"
+                                                    title="Delete"
+                                                    data-mdb-toggle="tooltip"
+                                                    data-deletecat="{{this.cat_id}}"
+                                                    disabled
+                                                >
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            {{/if}}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {{/each}}
                         </tbody>
                     </table>
 
@@ -266,27 +116,11 @@
                         </label>
                     </div>
 
-                    <div class="form-outline">
-                        <input
-                            type="text"
-                            class="form-control"
-                            name="superCat"
-                            id="superCat"
-                            list="superCatList"
-                            required
-                        />
-
-                        {{! <datalist id="superCatList">
-                            <option value="Boston">
-                            <option value="Cambridge">
-                        </datalist> }}
-
-                        <label for="superCat" class="form-label">
-                            Choose a super category
-                            <span class="text-danger">*</span>
-                        </label>
+                    <div class="mb-3">
+                        <select class="form-control superCatList" name="superCat">
+                            <option value="">Choose a super category</option>
+                        </select>
                     </div>
-                    <div class="form-text mb-4" id=""></div>
 
                     <div class="text-center">
                         <button
@@ -304,7 +138,7 @@
                     <h4>Update category</h4>
                 </div>
                 <form action="/admin/categories/update" method="post">
-                <input type="hidden" name="catId" id="catUpdateId" />
+                    <input type="hidden" name="catId" id="catUpdateId" />
                     <div class="form-outline mb-3">
                         <input
                             type="text"
@@ -320,7 +154,7 @@
                         </label>
                     </div>
 
-                    <div class="form-outline">
+                    {{! <div class="form-outline">
                         <input
                             type="text"
                             class="form-control"
@@ -331,17 +165,17 @@
                             required
                         />
 
-                        {{! <datalist id="superCatListUpdate">
+                        <datalist id="superCatListUpdate">
                             <option value="Boston">
                             <option value="Cambridge">
-                        </datalist> }}
+                        </datalist>
 
                         <label for="superCatUpdate" class="form-label">
                             Choose a super category
                             <span class="text-danger">*</span>
                         </label>
                     </div>
-                    <div class="form-text mb-4" id=""></div>
+                    <div class="form-text mb-4" id=""></div> }}
 
                     <div class="text-center">
                         <button

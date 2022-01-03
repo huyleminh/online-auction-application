@@ -291,9 +291,9 @@ body {
     height: auto;
     transition: margin-left 0.2s ease;
 
-    /* max-width: calc(100vw - var(--siderbar-width)); */
-    min-width: calc(100vw - var(--siderbar-width));
-    width: calc(100vw - var(--siderbar-width));
+    max-width: calc(100% - var(--siderbar-sm-width));
+    min-width: calc(100% - var(--siderbar-width));
+    width: calc(100% - var(--siderbar-width));
     background-color: #fefefe;
 }
 
