@@ -1,0 +1,67 @@
+<header class="navbar navbar-light header">
+    <button
+        class="border-0 shadow-0 toggle-sidebar px-4"
+        id="toggleBtn"
+        style="background-color: #fff;"
+    >
+        <i class="fas fa-bars fs-3"></i>
+    </button>
+
+    <div class="d-flex justify-content-end">
+        <div class="dropdown profile-dropdown px-4 py-1">
+            <a
+                class="dropdown-toggle d-flex align-items-center"
+                href="javascript:void(0)"
+                id="headerNavbarProfile"
+                role="button"
+                data-mdb-toggle="dropdown"
+                aria-expanded="false"
+            >
+                <img
+                    src="/images/default-avatar.png"
+                    class="rounded-circle"
+                    height="40"
+                    alt="Portrait of a User"
+                    loading="lazy"
+                />
+                <span class="ms-3 d-sm-inline-block d-none">
+                    {{ localUser.fullname }}
+                    <i class="fas fa-chevron-down ms-1"></i>
+                </span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="headerNavbarProfile">
+                <li>
+                    <a class="dropdown-item" href="/user/account">
+                        <i class="fas fa-user me-2"></i>
+                        My profile
+                    </a>
+                </li>
+
+                <li>
+                    <a class="dropdown-item" href="/bidder/bidding">
+                        <i class="fas fa-gavel me-2"></i>
+                        My bidding products
+                    </a>
+                </li>
+
+                <li>
+                    <a class="dropdown-item" href="#">
+                        <i class="fas fa-list me-2"></i>
+                        My selling products
+                    </a>
+                </li>
+
+                <li><hr class="dropdown-divider" /></li>
+
+                <li>
+                    <form action="/logout" method="post" id="logoutForm" class="mb-0">
+                        <button class="dropdown-item text-danger" type="submit">
+                            <i class="fas fa-power-off me-2 text-danger"></i>
+                            Logout
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
