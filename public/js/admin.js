@@ -45,33 +45,33 @@ $(document).ready(function () {
 
     // Manage bidders
     $(".accept-bidder").on("click", function () {
-        const key = $(".accept-bidder").data("acceptkey");
+        const key = $(this).data("acceptkey");
         $("#bidderIdAccept").val(key);
         $("#acceptBidderForm").submit();
     });
 
     $(".deny-bidder").on("click", function () {
-        const key = $(".deny-bidder").data("denykey");
+        const key = $(this).data("denykey");
         $("#bidderIdDeny").val(key);
         $("#denyBidderForm").submit();
     });
 
     // Manage sellers
     $(".downgrade-seller").on("click", function () {
-        const key = $(".downgrade-seller").data("downgradekey");
+        const key = $(this).data("downgradekey");
         $("#sellerIdDowngrade").val(key);
         $("#downgradeSellerForm").submit();
     });
 
     // Manage categories
     $(".delete-cat").on("click", function () {
-        const key = $(".delete-cat").data("deletecat");
+        const key = $(this).data("deletecat");
         $("#catDeleteId").val(key);
         $("#deleteCatForm").submit();
     });
 
     $(".update-cat").on("click", function () {
-        const key = $(".update-cat").data("updatecat");
+        const key = $(this).data("updatecat");
         $("#catUpdateId").val(key);
 
         const currentRow = $(this).closest("tr");
@@ -79,7 +79,7 @@ $(document).ready(function () {
 
         // Enable edit
         $("#catNameUpdate").prop("disabled", false);
-        $("#superCatUpdate").prop("disabled", false);
+        $(".superCatListUpdate").prop("disabled", false);
         $("#saveUpdateCatBtn").prop("disabled", false);
         $("#cancelUpdateCatBtn").prop("disabled", false);
 
@@ -87,17 +87,17 @@ $(document).ready(function () {
         $("#catNameUpdate").focus();
     });
 
-    $("#cancelUpdateCatBtn").on("click", function() {
+    $("#cancelUpdateCatBtn").on("click", function () {
         $("#catUpdateId").val("");
         $("#catNameUpdate").val("");
-        $("#superCatUpdate").val("");
+        $(".superCatListUpdate").val("");
 
         // Disable again
         $("#catNameUpdate").prop("disabled", true);
-        $("#superCatUpdate").prop("disabled", true);
+        $(".superCatListUpdate").prop("disabled", true);
         $("#saveUpdateCatBtn").prop("disabled", true);
         $("#cancelUpdateCatBtn").prop("disabled", true);
-    })
+    });
 
     document.querySelectorAll(`[data-mdb-toggle="tooltip"]`).forEach((t) => {
         new mdb.Tooltip(t, {
@@ -105,6 +105,10 @@ $(document).ready(function () {
             placement: "auto",
         });
     });
+
+    if (location.pathname.match("/admin/categories")) {
+        loadCategoryForDataList();
+    }
 });
 
 function closeAdSidebarModal() {
@@ -157,4 +161,24 @@ function activateSidebar() {
             openSidebar();
             break;
     }
+}
+
+function loadCategoryForDataList() {
+    $.getJSON("/api/admin/categories/datalist", function (data) {
+        if (data.status === 200) {
+            $(".superCatList").empty();
+            $(".superCatListUpdate").empty();
+            const options = data.data.map((d) => {
+                return `<option value="${d.cat_id}">${d.cat_name}</option>`;
+            });
+
+            options.unshift(`<option value="">Choose a super category</option>`);
+
+            $(".superCatList").html(options);
+            $(".superCatListUpdate").html(options);
+        } else if (data.status === 500) {
+            alert("Something went wrong");
+            return;
+        }
+    });
 }
