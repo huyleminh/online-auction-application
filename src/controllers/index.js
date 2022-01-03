@@ -1,3 +1,6 @@
+import ManagCategoryController from "./admin/ManageCategoryController.js";
+import ManageProductController from "./admin/ManageProductController.js";
+import ManageUserController from "./admin/ManageUserController.js";
 import AuthController from "./auth/AuthController.js";
 import HomeController from "./home/HomeController.js";
 import ProductController from "./products/ProductController.js";
@@ -12,6 +15,9 @@ const AppControllers = [
     new UserController(),
     new BidderController(),
     new SellerController(),
+    new ManageUserController(),
+    new ManagCategoryController(),
+    new ManageProductController(),
 ];
 
 export default AppControllers;

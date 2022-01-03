@@ -1,0 +1,369 @@
+<section aria-label="breadcrumb" class="d-flex align-items-center justify-content-between mb-3">
+    <h3 class="mb-0">Manage category</h3>
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item">
+            <a href="javascript:void(0);">
+                <i class="fas fa-tachometer-alt"></i>
+                Dashboard
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Manage category</li>
+    </ol>
+</section>
+
+<div class="row">
+    <div class="col-xl-7 col-12 mb-4 mb-xl-0">
+        <div class="card shadow-custom d-flex flex-column">
+            <div class="card-body">
+                <div class="card-title mb-3 d-flex justify-content-between">
+                    <h4>Category list</h4>
+                    <div class="d-flex">
+                        <div
+                            class="border border-dark me-2 d-inline-block"
+                            style="width: 50px; background: #fafaff; height: 100%"
+                        ></div>
+                        <span class="align-self-center fw-bolder">Categories - Level 1</span>
+                    </div>
+                </div>
+
+                <form action="/admin/categories/delete" method="post" id="deleteCatForm">
+                    <input type="hidden" name="catId" id="catDeleteId" />
+                </form>
+                <div class="table-responsive">
+                    <table class="table table-bordered mb-0 table-custom">
+                        <thead>
+                            <tr>
+                                <th scope="col" style="width: 50px;">#</th>
+                                <th scope="col">Category name</th>
+                                <th scope="col" style="width: 50px;">Total products</th>
+                                <th scope="col" style="width: 100px;">Created at</th>
+                                <th scope="col" style="width: 50px;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="root-level">
+                                <td scope="row">1</td>
+                                <td>Cat father 1</td>
+                                <td>4</td>
+                                <td>1/12/2019 10:43</td>
+                                <td>
+                                    <div class="action">
+                                        <button
+                                            class="btn btn-sm btn-warning shadow-0 ms-1 update-cat"
+                                            data-mdb-toggle="tooltip"
+                                            title="Edit"
+                                            data-updatecat="1"
+                                        >
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+
+                                        <button
+                                            class="btn btn-danger btn-sm shadow-0 ms-1 delete-cat"
+                                            title="Delete"
+                                            data-mdb-toggle="tooltip"
+                                            data-deletecat="1"
+                                        >
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr class="child-1-level">
+                                <td scope="row">1</td>
+                                <td>Cat child 1</td>
+                                <td>4</td>
+                                <td>1/12/2019 10:43</td>
+                                <td>
+                                    <div class="action">
+                                        <button
+                                            class="btn btn-sm btn-warning shadow-0 ms-1 update-cat"
+                                            data-mdb-toggle="tooltip"
+                                            title="Edit"
+                                            data-updatecat="1"
+                                        >
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+
+                                        <button
+                                            class="btn btn-danger btn-sm shadow-0 ms-1 delete-cat"
+                                            title="Delete"
+                                            data-mdb-toggle="tooltip"
+                                            data-deletecat="1"
+                                        >
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr class="child-1-level">
+                                <td scope="row">1</td>
+                                <td>Cat child 1</td>
+                                <td>4</td>
+                                <td>1/12/2019 10:43</td>
+                                <td>
+                                    <div class="action">
+                                        <button
+                                            class="btn btn-sm btn-warning shadow-0 ms-1 update-cat"
+                                            data-mdb-toggle="tooltip"
+                                            title="Edit"
+                                            data-updatecat="1"
+                                        >
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+
+                                        <button
+                                            class="btn btn-danger btn-sm shadow-0 ms-1 delete-cat"
+                                            title="Delete"
+                                            data-mdb-toggle="tooltip"
+                                            data-deletecat="1"
+                                        >
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr class="root-level">
+                                <td scope="row">1</td>
+                                <td>Cat father 1</td>
+                                <td>4</td>
+                                <td>1/12/2019 10:43</td>
+                                <td>
+                                    <div class="action">
+                                        <button
+                                            class="btn btn-sm btn-warning shadow-0 ms-1 update-cat"
+                                            data-mdb-toggle="tooltip"
+                                            title="Edit"
+                                            data-updatecat="1"
+                                        >
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+
+                                        <button
+                                            class="btn btn-danger btn-sm shadow-0 ms-1 delete-cat"
+                                            title="Delete"
+                                            data-mdb-toggle="tooltip"
+                                            data-deletecat="1"
+                                        >
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr class="root-level">
+                                <td scope="row">1</td>
+                                <td>Cat father 1</td>
+                                <td>4</td>
+                                <td>1/12/2019 10:43</td>
+                                <td>
+                                    <div class="action">
+                                        <button
+                                            class="btn btn-sm btn-warning shadow-0 ms-1 update-cat"
+                                            data-mdb-toggle="tooltip"
+                                            title="Edit"
+                                            data-updatecat="1"
+                                        >
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+
+                                        <button
+                                            class="btn btn-danger btn-sm shadow-0 ms-1 delete-cat"
+                                            title="Delete"
+                                            data-mdb-toggle="tooltip"
+                                            data-deletecat="1"
+                                        >
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr class="root-level">
+                                <td scope="row">1</td>
+                                <td>Cat father 1</td>
+                                <td>4</td>
+                                <td>1/12/2019 10:43</td>
+                                <td>
+                                    <div class="action">
+                                        <button
+                                            class="btn btn-sm btn-warning shadow-0 ms-1 update-cat"
+                                            data-mdb-toggle="tooltip"
+                                            title="Edit"
+                                            data-updatecat="1"
+                                        >
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+
+                                        <button
+                                            class="btn btn-danger btn-sm shadow-0 ms-1 delete-cat"
+                                            title="Delete"
+                                            data-mdb-toggle="tooltip"
+                                            data-deletecat="1"
+                                        >
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr class="root-level">
+                                <td scope="row">1</td>
+                                <td>Cat father 1</td>
+                                <td>4</td>
+                                <td>1/12/2019 10:43</td>
+                                <td>
+                                    <div class="action">
+                                        <button
+                                            class="btn btn-sm btn-warning shadow-0 ms-1 update-cat"
+                                            data-mdb-toggle="tooltip"
+                                            title="Edit"
+                                            data-updatecat="1"
+                                        >
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+
+                                        <button
+                                            class="btn btn-danger btn-sm shadow-0 ms-1 delete-cat"
+                                            title="Delete"
+                                            data-mdb-toggle="tooltip"
+                                            data-deletecat="1"
+                                        >
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    {{!-- {{> pagination}} --}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-5 col-12">
+        <div class="card shadow-custom mb-4">
+            <div class="card-body">
+                <div class="card-title mb-3">
+                    <h4>Create new category</h4>
+                </div>
+                <form action="/admin/categories/create" method="post">
+                    <div class="form-outline mb-3">
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="catName"
+                            id="catName"
+                            required
+                        />
+                        <label for="catName" class="form-label">
+                            Category name
+                            <span class="text-danger">*</span>
+                        </label>
+                    </div>
+
+                    <div class="form-outline">
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="superCat"
+                            id="superCat"
+                            list="superCatList"
+                            required
+                        />
+
+                        {{! <datalist id="superCatList">
+                            <option value="Boston">
+                            <option value="Cambridge">
+                        </datalist> }}
+
+                        <label for="superCat" class="form-label">
+                            Choose a super category
+                            <span class="text-danger">*</span>
+                        </label>
+                    </div>
+                    <div class="form-text mb-4" id=""></div>
+
+                    <div class="text-center">
+                        <button
+                            class="btn btn-custom btn-custom-main shadow-0"
+                            type="submit"
+                        >Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card shadow-custom">
+            <div class="card-body">
+                <div class="card-title mb-3">
+                    <h4>Update category</h4>
+                </div>
+                <form action="/admin/categories/update" method="post">
+                <input type="hidden" name="catId" id="catUpdateId" />
+                    <div class="form-outline mb-3">
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="catName"
+                            id="catNameUpdate"
+                            disabled
+                            required
+                        />
+                        <label for="catNameUpdate" class="form-label">
+                            Category name
+                            <span class="text-danger">*</span>
+                        </label>
+                    </div>
+
+                    <div class="form-outline">
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="superCat"
+                            id="superCatUpdate"
+                            list="superCatListUpdate"
+                            disabled
+                            required
+                        />
+
+                        {{! <datalist id="superCatListUpdate">
+                            <option value="Boston">
+                            <option value="Cambridge">
+                        </datalist> }}
+
+                        <label for="superCatUpdate" class="form-label">
+                            Choose a super category
+                            <span class="text-danger">*</span>
+                        </label>
+                    </div>
+                    <div class="form-text mb-4" id=""></div>
+
+                    <div class="text-center">
+                        <button
+                            class="btn btn-custom btn-custom-main shadow-0"
+                            type="submit"
+                            id="saveUpdateCatBtn"
+                            disabled
+                        >
+                            Update
+                        </button>
+
+                        <button
+                            class="btn btn-custom btn-custom-secondary shadow-0"
+                            type="submit"
+                            id="cancelUpdateCatBtn"
+                            disabled
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
