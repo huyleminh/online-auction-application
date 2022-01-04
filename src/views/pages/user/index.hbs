@@ -148,6 +148,15 @@
                         >Update</a>
                     </div>
                 {{/if}}
+
+                {{#if (isEqual localUser.userType 'GOOGLE')}}
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <i class="fs-4 text-muted fas fa-envelope me-lg-3 me-md-2 me-1"></i>
+                        <div class="flex-grow-1">
+                            <span class="text-muted">{{data.userInfo.email}}</span>
+                        </div>
+                    </div>
+                {{/if}}
             </div>
         </div>
     </div>

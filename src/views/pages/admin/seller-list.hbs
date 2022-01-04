@@ -23,121 +23,55 @@
                         <th scope="col">#</th>
                         <th scope="col">Seller name</th>
                         <th scope="col">Email</th>
-                        <th scope="col">Rating point</th>
+                        <th scope="col" style="width: 50px;">Rating point</th>
                         <th scope="col">Expired at</th>
-                        <th scope="col">Action</th>
+                        <th scope="col" style="width: 50px;">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td scope="row">1</td>
-                        <td>Name 1</td>
-                        <td>ctayloe4@amazon.co.jp</td>
-                        <td>80 / 100</td>
-                        <td>
-                            <span class="timer timer-danger">1/12/2019 10:43</span>
-                        </td>
-                        <td>
-                            <div class="action">
-                                <button
-                                    class="btn btn-danger btn-sm shadow-0 downgrade-seller"
-                                    title="Downgrade"
-                                    data-mdb-toggle="tooltip"
-                                    data-downgradekey="1"
-                                >
-                                    <i class="fas fa-angle-double-down"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td scope="row">2</td>
-                        <td>Name 1</td>
-                        <td>ctayloe4@amazon.co.jp</td>
-                        <td>80 / 100</td>
-                        <td>
-                            <span class="timer timer-danger">1/12/2019 10:43</span>
-                        </td>
-                        <td>
-                            <div class="action">
-                                <button
-                                    class="btn btn-danger btn-sm shadow-0 downgrade-seller"
-                                    title="Downgrade"
-                                    data-mdb-toggle="tooltip"
-                                    data-downgradekey="1"
-                                >
-                                    <i class="fas fa-angle-double-down"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td scope="row">3</td>
-                        <td>Name 1</td>
-                        <td>ctayloe4@amazon.co.jp</td>
-                        <td>80 / 100</td>
-                        <td>
-                            <span class="timer timer-danger">1/12/2019 10:43</span>
-                        </td>
-                        <td>
-                            <div class="action">
-                                <button
-                                    class="btn btn-danger btn-sm shadow-0 downgrade-seller"
-                                    title="Downgrade"
-                                    data-mdb-toggle="tooltip"
-                                    data-downgradekey="1"
-                                >
-                                    <i class="fas fa-angle-double-down"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td scope="row">4</td>
-                        <td>Name 1</td>
-                        <td>ctayloe4@amazon.co.jp</td>
-                        <td>80 / 100</td>
-                        <td>
-                            <span class="timer timer-danger">1/12/2019 10:43</span>
-                        </td>
-                        <td>
-                            <div class="action">
-                                <button
-                                    class="btn btn-danger btn-sm shadow-0 downgrade-seller"
-                                    title="Downgrade"
-                                    data-mdb-toggle="tooltip"
-                                    data-downgradekey="1"
-                                >
-                                    <i class="fas fa-angle-double-down"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td scope="row">5</td>
-                        <td>Name 1</td>
-                        <td>ctayloe4@amazon.co.jp</td>
-                        <td>80 / 100</td>
-                        <td>
-                            <span class="timer timer-danger">1/12/2019 10:43</span>
-                        </td>
-                        <td>
-                            <div class="action">
-                                <button
-                                    class="btn btn-danger btn-sm shadow-0 downgrade-seller"
-                                    title="Downgrade"
-                                    data-mdb-toggle="tooltip"
-                                    data-downgradekey="1"
-                                >
-                                    <i class="fas fa-angle-double-down"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+                    {{#each data.sellerList}}
+                        <tr>
+                            <td scope="row">{{this.index}}</td>
+                            <td>{{this.fullname}}</td>
+                            <td>{{this.email}}</td>
+                            <td>{{this.ratingPoint}}</td>
+                            <td>
+                                {{#if (isEqual this.expiredType 0)}}
+                                    <span
+                                        class="timer timer-danger"
+                                    >{{this.sellerExpiredDate}}</span>
+                                {{/if}}
+
+                                {{#if (isEqual this.expiredType 1)}}
+                                    <span
+                                        class="timer timer-warning"
+                                    >{{this.sellerExpiredDate}}</span>
+                                {{/if}}
+
+                                {{#if (isEqual this.expiredType 2)}}
+                                    <span
+                                        class="timer timer-success"
+                                    >{{this.sellerExpiredDate}}</span>
+                                {{/if}}
+                            </td>
+                            <td>
+                                <div class="action">
+                                    <button
+                                        class="btn btn-danger btn-sm shadow-0 downgrade-seller"
+                                        title="Downgrade"
+                                        data-mdb-toggle="tooltip"
+                                        data-downgradekey="{{this.userId}}"
+                                    >
+                                        <i class="fas fa-angle-double-down"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    {{/each}}
                 </tbody>
             </table>
 
-            {{> pagination}}
+            {{!-- {{> pagination}} --}}
         </div>
     </div>
 </div>

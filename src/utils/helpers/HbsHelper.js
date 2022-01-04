@@ -1,6 +1,7 @@
 import moment from "moment";
+import CommonConst from "../../shared/CommonConst";
 
-moment.locale("vi")
+moment.locale("vi");
 export default class HbsHelper {
     static isEqual(left, right) {
         return left === right;
@@ -11,7 +12,7 @@ export default class HbsHelper {
     }
 
     static formatDate(date) {
-        return moment(date).format("DD/MM/YYYY HH:mm:ss");
+        return moment(date).format(CommonConst.MOMENT_BASE_USER_FORMAT);
     }
 
     static getAll() {
