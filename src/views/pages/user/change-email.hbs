@@ -19,63 +19,47 @@
         <h3 class="mb-0">Update your contact email</h3>
     </div>
 
-    <div class="card-body d-flex align-items-center justify-content-center">
-        <form id="updateEmaileForm">
-            <div class="form-outline">
-                <i class="fas fa-envelope trailing"></i>
-                <input type="email" id="email" class="form-control form-icon-trailing" name="email" required />
-                <label class="form-label" for="email">Contact email</label>
-            </div>
-
-            <div id="email" class="form-text mb-3">
-                We'll send an OTP code via this email to verify that it's yours
-            </div>
-
-            <div class="d-flex align-items-center justify-content-center">
-                <button type="submit" class="btn btn-primary btn-block shadow-0">Get otp</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<div
-    class="modal fade"
-    id="confirmOTP"
-    data-mdb-backdrop="static"
-    data-mdb-keyboard="false"
-    tabindex="-1"
-    aria-labelledby="confirmOTPLabel"
-    aria-hidden="true"
->
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmOTPLabel">Verify email</h5>
-            </div>
-
-            <div class="modal-body">
-                <p class="text-center">OTP code has been sent, please type code here</p>
-
-                <form action="" method="post">
-                    <div class="form-outline mb-4">
-                        <i class="fas fa-key trailing"></i>
-                        <input type="text" id="otpCode" class="form-control form-icon-trailing" name="otpCode" required />
-                        <label class="form-label" for="otpCode">OTP</label>
+    <div class="row justify-content-center">
+        <div class="col-xl-8 col-12">
+            <div class="card-body">
+                <form method="post" id="updateEmailForm">
+                    <div class="input-group" id="emailGroup">
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            class="form-control"
+                            placeholder="Contact email"
+                            aria-describedby="emailtext"
+                            required
+                        />
+                        <button class="btn btn-primary" type="button" id="getOTPBtn">
+                            Get OTP
+                        </button>
                     </div>
+                    <div class="form-text mb-3" id="emailtext">We will send an otp code to this email to verify it's yours</div>
 
-                    <input type="hidden" id="newEmail" name="newEmail" />
-
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-success">Verify</button>
-                        <button type="button" class="btn btn-danger" data-mdb-dismiss="modal">Cancel</button>
+                    <div class="form-outline mb-3">
+                        <input
+                            type="text"
+                            id="otpCode"
+                            name="otpCode"
+                            class="form-control"
+                            aria-describedby="otpText"
+                            disabled
+                            required
+                        />
+                        <label class="form-label" for="otpCode">OTP code</label>
+                    </div>
+                    {{#if error.otp}}
+                        <div class="form-text text-danger mb-3" id="otpText">{{error.otp}}</div>
+                    {{else}}
+                        <div class="form-text text-danger mb-3" id="otpText"></div>
+                    {{/if}}
+                    <div class="d-flex align-items-center justify-content-center">
+                        <button type="submit" class="btn btn-primary btn-block shadow-0">Save</button>
                     </div>
                 </form>
-
-                <div class="divider mt-4 mb-4">
-                    <span class="text-center" style="width: 200px; font-size: 14px;">Can't receive OTP?</span>
-                </div>
-
-                <button type="button" class="btn btn-primary btn-block">Resend</button>
             </div>
         </div>
     </div>

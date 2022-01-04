@@ -56,4 +56,17 @@ export default class UserAccountModel {
             }
         });
     }
+
+    static updateByUsername(username, entity) {
+        return new Promise(async function (resolve, reject) {
+            try {
+                const response = await KnexConnection("user_account")
+                    .where({ username })
+                    .update(entity);
+                resolve(response);
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
 }

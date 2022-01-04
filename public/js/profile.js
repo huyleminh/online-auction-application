@@ -21,26 +21,35 @@ $(document).ready(function () {
         closeProfileModal();
     });
 
-    $("#updateEmaileForm").on("submit", async function (e) {
-        e.preventDefault();
-
+    $("#getOTPBtn").on("click", function () {
         const email = $("#email").val();
-
-        const response = await fetch("/user/account/email/send", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: { email },
-        });
-
-        if (response.ok && response.status === 200) {
-            $("#newEmail").val(email);
-            $("#confirmOTP").modal("show");
-        } else {
-            alert("Some thing went wrong, please try again latter");
+        if (!email) {
+            alert("Please input contact email");
+            return;
         }
-        return;
+        $("#emailtext").html("Sending OTP...");
+        $("#emailtext").removeClass("text-danger");
+        $("#emailtext").removeClass("text-success");
+
+        $.post("/user/account/email/send", { email }, function (data) {
+            if (data.status === 200) {
+                $("#otpCode").prop("disabled", false);
+                $("#emailtext").html(
+                    "OTP code has been sent to your email, it will expire soon. Please enter in the input below. If you cannot receive OTP, click GET OTP again"
+                );
+                $("#emailtext").addClass("text-success");
+                $("#emailtext").removeClass("text-danger");
+            } else if (data.status === 400) {
+                $("#otpCode").prop("disabled", true);
+                $("#emailtext").html(data.message);
+                $("#emailtext").addClass("text-danger");
+            } else {
+                console.log(data);
+                $("#otpCode").prop("disabled", true);
+                $("#emailtext").html("Something went wrong, please get OTP code later");
+                $("#emailtext").addClass("text-danger");
+            }
+        });
     });
 
     $("#updatePassForm").on("submit", function (e) {
@@ -63,42 +72,6 @@ $(document).ready(function () {
         $("#updatePassForm").off("submit").submit();
     });
 
-    // Submit profile form
-    // $("#profileForm").on("submit", function (e) {
-    //     e.preventDefault();
-
-    //     const dob = $("#dob").val();
-    //     $("#dob").val(moment(dob, "DD-MM-YYYY").format("YYYY-MM-DD"));
-
-    //     $("#profileForm").off("submit").submit();
-    // });
-
-    // Init dob datepicker
-    // Need to fix
-    // if (document.querySelector("#dob")) {
-    //     const dobDialog = new mdDateTimePicker.default({
-    //         type: "date",
-    //     });
-
-    //     dobDialog.trigger = document.querySelector("#dob");
-
-    //     document.querySelector("#dob").addEventListener("onOk", function () {
-    //         // Detail format option here: https://momentjs.com/docs/#/displaying/format/
-    //         this.value = dobDialog.time.format("DD/MM/YYYY");
-    //         // Hide backdrop
-    //         $(".custom-modal-backdrop").removeClass("show");
-    //     });
-
-    //     document.querySelector("#dob").addEventListener("onCancel", function () {
-    //         // Detail format option here: https://momentjs.com/docs/#/displaying/format/
-    //         // Hide backdrop
-    //         $(".custom-modal-backdrop").removeClass("show");
-    //     });
-
-    //     $("#dob").on("click", function () {
-    //         toggleDatepickerDialog(dobDialog);
-    //     });
-    // }
     $(".remove-wishlist-item").on("click", function () {
         const key = $(".remove-wishlist-item").data("removekey");
         $("#itemId").val(key);
@@ -242,6 +215,60 @@ $(document).ready(function () {
             toggleDatepickerDialog(expiredTimeDialog);
         });
     }
+
+    // Profile information preparation
+    if (window.location.pathname === "/user/account") {
+        fetchAllProvince();
+    }
+
+    $("#province").on("change", function () {
+        const value = this.value;
+        const option = $("#provinceList").find(`option[value="${value}"]`);
+        if (!option) {
+            return;
+        }
+        const code = option.data("code");
+
+        getAllDistrictByProvinceCode(code);
+    });
+
+    $("#district").on("change", function () {
+        const value = this.value;
+        const option = $("#districtList").find(`option[value="${value}"]`);
+        if (!option) {
+            return;
+        }
+        const code = option.data("code");
+
+        getAllWardByDistrictCode(code);
+    });
+
+    if (document.querySelector("#dob")) {
+        const dobDialog = new mdDateTimePicker.default({
+            type: "date",
+        });
+
+        dobDialog.trigger = document.querySelector("#dob");
+
+        document.querySelector("#dob").addEventListener("onOk", function () {
+            // Detail format option here: https://momentjs.com/docs/#/displaying/format/
+            this.value = dobDialog.time.format("DD/MM/YYYY");
+            this.focus();
+
+            // Hide backdrop
+            $(".custom-modal-backdrop").removeClass("show");
+        });
+
+        document.querySelector("#dob").addEventListener("onCancel", function () {
+            // Detail format option here: https://momentjs.com/docs/#/displaying/format/
+            // Hide backdrop
+            $(".custom-modal-backdrop").removeClass("show");
+        });
+
+        $("#dob").on("click", function () {
+            toggleDatepickerDialog(dobDialog);
+        });
+    }
 });
 
 function closeProfileModal() {
@@ -273,5 +300,44 @@ function activeProfileBar() {
         } else {
             item.classList.remove("active");
         }
+    });
+}
+
+function fetchAllProvince() {
+    $.getJSON("https://provinces.open-api.vn/api/?depth=1", function (data) {
+        const provinceList = data;
+        insertOptionsToTarget($("#provinceList"), provinceList);
+    }).fail(function (error) {
+        console.log(error);
+        $("#provinceList").html("<option disabled value='Empty'>");
+    });
+}
+
+function insertOptionsToTarget(target, data) {
+    target.empty();
+    const options = data.map((d) => {
+        return `<option value="${d.name}" data-code="${d.code}">`;
+    });
+
+    target.html(options);
+}
+
+function getAllDistrictByProvinceCode(code) {
+    $.getJSON(`https://provinces.open-api.vn/api/p/${code}?depth=2`, function (res) {
+        const districts = res.districts;
+        insertOptionsToTarget($("#districtList"), districts);
+    }).fail(function (error) {
+        console.log(error);
+        $("#provinceList").html("<option disabled value='Empty'>");
+    });
+}
+
+function getAllWardByDistrictCode(code) {
+    $.getJSON(`https://provinces.open-api.vn/api/d/${code}?depth=2`, function (res) {
+        const wards = res.wards;
+        insertOptionsToTarget($("#wardList"), wards);
+    }).fail(function (error) {
+        console.log(error);
+        $("#provinceList").html("<option disabled value='Empty'>");
     });
 }

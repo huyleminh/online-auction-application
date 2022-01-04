@@ -23,74 +23,98 @@
             <div class="card-body">
                 <form action="" method="post" id="profileForm">
                     <div class="form-group mb-3">
-                        <label class="form-label" for="firstname">First name:</label>
+                        <label class="form-label" for="firstname">
+                            First name:
+                            <span class="text-danger">*</span>
+                        </label>
                         <input
                             type="text"
                             id="firstname"
                             class="form-control"
-                            name="firstname"
+                            name="first_name"
+                            value="{{data.userInfo.firstname}}"
                             required
                         />
                     </div>
 
                     <div class="form-group mb-3">
-                        <label class="form-label" for="lastname">Last name:</label>
+                        <label class="form-label" for="lastname">
+                            Last name:
+                            <span class="text-danger">*</span>
+                        </label>
                         <input
                             type="text"
-                            id="lastname"
+                            id="last_name"
                             class="form-control"
                             name="lastname"
+                            value="{{data.userInfo.lastname}}"
                             required
                         />
                     </div>
 
                     <div class="form-group mb-3">
-                        <label class="form-label" for="dob">Day of birth:</label>
-                        {{!-- <input
+                        <label class="form-label" for="dob">Day of birth: <span class="text-danger">*</span></label>
+                        <input
                             type="text"
                             id="dob"
                             class="form-control"
                             name="dob"
-                            placeholder="Click to pick a date"
-                        /> --}}
-                        <input
-                            type="date"
-                            id="dob"
-                            class="form-control"
-                            name="dob"
+                            value="{{data.userInfo.dob}}"
                             placeholder="Click to pick a date"
                         />
                     </div>
                     <div class="form-group mb-3">
-                        <label class="form-label" for="province">Province/City:</label>
-                        <input type="text" name="province" id="province" list="provinceList" class="form-control">
-                        <datalist id="provinceList">
-                            <option value="Boston">
-                            <option value="Cambridge">
-                        </datalist>
+                        <label class="form-label" for="province">Province/City: <span class="text-danger">*</span></label>
+                        <input
+                            type="text"
+                            name="province"
+                            id="province"
+                            list="provinceList"
+                            class="form-control"
+                            value="{{data.userInfo.province}}"
+                            required
+                        />
+                        <datalist id="provinceList"></datalist>
                     </div>
 
                     <div class="form-group mb-3">
-                        <label class="form-label" for="district">District:</label>
-                        <input type="text" name="district" id="district" list="districtList" class="form-control">
-                        <datalist id="districtList">
-                            <option value="Boston">
-                            <option value="Cambridge">
-                        </datalist>
+                        <label class="form-label" for="district">District: <span class="text-danger">*</span></label>
+                        <input
+                            type="text"
+                            name="district"
+                            id="district"
+                            list="districtList"
+                            class="form-control"
+                            value="{{data.userInfo.district}}"
+                            required
+                        />
+                        <datalist id="districtList"></datalist>
                     </div>
 
                     <div class="form-group mb-3">
-                        <label class="form-label" for="ward">Ward:</label>
-                        <input type="text" name="ward" id="ward" list="wardList" class="form-control">
-                        <datalist id="wardList">
-                            <option value="Boston">
-                            <option value="Cambridge">
-                        </datalist>
+                        <label class="form-label" for="ward">Ward: <span class="text-danger">*</span></label>
+                        <input
+                            type="text"
+                            name="ward"
+                            id="ward"
+                            list="wardList"
+                            class="form-control"
+                            value="{{data.userInfo.ward}}"
+                            required
+                        />
+                        <datalist id="wardList"></datalist>
                     </div>
 
                     <div class="form-group mb-3">
-                        <label class="form-label" for="addressDetail">Address:</label>
-                        <input type="text" name="addressDetail" id="addressDetail" class="form-control">
+                        <label class="form-label" for="addressDetail">Address: <span class="text-danger">*</span></label>
+                        <input
+                            type="text"
+                            name="address"
+                            id="addressDetail"
+                            class="form-control"
+                            value="{{data.userInfo.address}}"
+                            required
+                        />
                     </div>
 
                     <div class="text-center">
@@ -102,21 +126,28 @@
 
         <div class="col-xl-5 col-12">
             <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between mb-3">
-                    <i class="fs-4 text-muted fas fa-envelope me-lg-3 me-md-2 me-1"></i>
-                    <div class="flex-grow-1">
-                        <span class="text-muted">h2ateam.se@gmail.com</sp>
+                {{#if (isEqual localUser.userType 'NORMAL')}}
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <i class="fs-4 text-muted fas fa-envelope me-lg-3 me-md-2 me-1"></i>
+                        <div class="flex-grow-1">
+                            <span class="text-muted">{{data.userInfo.email}}</span>
+                        </div>
+                        <a
+                            href="/user/account/email"
+                            class="btn btn-outline-primary btn-sm shadow-0"
+                        >Update</a>
                     </div>
-                    <a href="/user/account/email" class="btn btn-outline-primary btn-sm shadow-0">Update</a>
-                </div>
-
-                <div class="d-flex align-items-center justify-content-between">
-                    <i class="fs-4 text-muted fas fa-key me-lg-3 me-md-2 me-1"></i>
-                    <div class="flex-grow-1">
-                        <span class="text-muted">Change password</span>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <i class="fs-4 text-muted fas fa-key me-lg-3 me-md-2 me-1"></i>
+                        <div class="flex-grow-1">
+                            <span class="text-muted">Change password</span>
+                        </div>
+                        <a
+                            href="/user/account/password"
+                            class="btn btn-outline-primary btn-sm shadow-0"
+                        >Update</a>
                     </div>
-                    <a href="/user/account/password" class="btn btn-outline-primary btn-sm shadow-0">Update</a>
-                </div>
+                {{/if}}
             </div>
         </div>
     </div>
