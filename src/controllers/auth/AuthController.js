@@ -239,7 +239,12 @@ export default class AuthController extends AppController {
             });
         }
 
-        const address = `${body.addressDetail}, ${body.ward}, ${body.district}, ${body.province}`;
+        const address = JSON.stringify({
+            province: body.province,
+            district: body.district,
+            ward: body.ward,
+            address: body.addressDetail,
+        });
 
         const insertData = {
             username: body.username,

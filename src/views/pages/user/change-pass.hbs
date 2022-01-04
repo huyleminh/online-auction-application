@@ -21,10 +21,15 @@
 
     <div class="card-body d-flex align-items-center justify-content-center">
         <form method="post" action="" id="updatePassForm">
-            <div class="form-outline mb-3">
+            <div class="form-outline">
                 <i class="fas fa-key trailing"></i>
                 <input type="password" id="password" class="form-control form-icon-trailing" name="password" required />
                 <label class="form-label" for="password">Old password</label>
+            </div>
+            <div class="form-text text-danger mb-3" id="passwordText">
+                {{#if error.password}}
+                    {{ error.password }}
+                {{/if}}
             </div>
 
             <div class="form-outline">
@@ -33,7 +38,7 @@
                 <label class="form-label" for="newPassword">New password</label>
             </div>
 
-            <div class="form-text mb-3" id="newPassword">
+            <div class="form-text mb-3" id="newPasswordText">
                 New password must be different from the old one
             </div>
 
