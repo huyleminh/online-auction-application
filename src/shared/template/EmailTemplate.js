@@ -138,4 +138,154 @@ export default class EmailTemplate {
         </div>
         `;
     }
+
+    static upgradeSellerOk() {
+        return `
+        <div style="background-color: #f8f8f8; font-family: sans-serif; padding: 15px">
+            <div style="max-width: 1000px; margin: auto">
+                <div
+                    style="
+                        background-color: #fff;
+                        padding: 10px 30px;
+                        color: #fff;
+                        display: flex;
+                        border-bottom: 1px solid #d4d4d4;
+                    "
+                >
+                    <div style="width: 70px; display: inline-block">
+                        <img
+                            src="https://firebasestorage.googleapis.com/v0/b/the-coffee-shop-gc.appspot.com/o/logo_auction_lite.png?alt=media&token=49ddb9bb-9d1c-4c8d-a2df-e9d4ce878456"
+                            style="height: 45px; object-fit: contain"
+                            class="CToWUd"
+                        />
+                    </div>
+                </div>
+                <div
+                    style="
+                        background-color: #fff;
+                        padding: 5px 20px;
+                        color: #000;
+                        border-radius: 0px 0px 2px 2px;
+                    "
+                >
+                    <div style="padding: 35px 15px">
+                        <p style="font-size: 16px"><b>Hello ,</b></p>
+                        <p style="font-size: 16px">
+                            <b>H2A Bid</b> administrators have
+                            <b style="color: green">confirmed</b> your upgrade to be a seller request.
+                        </p>
+
+                        <p style="font-size: 16px; color: red">
+                            You will be downgraded to bidder again after <b>7 days</b>
+                        </p>
+
+                        <div style="border-top: 1px solid #dcdbdb"></div>
+                        <p style="font-size: 16px">Best regards,</p>
+                        <p style="margin: 0; font-size: 16px"><span class="il">H2A</span> Bid</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `;
+    }
+
+    static upgradeSellerDeny() {
+        return `
+        <div style="background-color: #f8f8f8; font-family: sans-serif; padding: 15px">
+            <div style="max-width: 1000px; margin: auto">
+                <div
+                    style="
+                        background-color: #fff;
+                        padding: 10px 30px;
+                        color: #fff;
+                        display: flex;
+                        border-bottom: 1px solid #d4d4d4;
+                    "
+                >
+                    <div style="width: 70px; display: inline-block">
+                        <img
+                            src="https://firebasestorage.googleapis.com/v0/b/the-coffee-shop-gc.appspot.com/o/logo_auction_lite.png?alt=media&token=49ddb9bb-9d1c-4c8d-a2df-e9d4ce878456"
+                            style="height: 45px; object-fit: contain"
+                            class="CToWUd"
+                        />
+                    </div>
+                </div>
+                <div
+                    style="
+                        background-color: #fff;
+                        padding: 5px 20px;
+                        color: #000;
+                        border-radius: 0px 0px 2px 2px;
+                    "
+                >
+                    <div style="padding: 35px 15px">
+                        <p style="font-size: 16px"><b>Hello ,</b></p>
+                        <p style="font-size: 16px">
+                            <b>H2A Bid</b> administrators have
+                            <b style="color: red">denied</b> your upgrade to be a seller request.
+                        </p>
+
+                        <p style="font-size: 16px; color: red">
+                            You can request again via our application.
+                        </p>
+
+                        <div style="border-top: 1px solid #dcdbdb"></div>
+                        <p style="font-size: 16px">Best regards,</p>
+                        <p style="margin: 0; font-size: 16px"><span class="il">H2A</span> Bid</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `;
+    }
+
+    static downgradeSeller() {
+        return `
+        <div style="background-color: #f8f8f8; font-family: sans-serif; padding: 15px">
+            <div style="max-width: 1000px; margin: auto">
+                <div
+                    style="
+                        background-color: #fff;
+                        padding: 10px 30px;
+                        color: #fff;
+                        display: flex;
+                        border-bottom: 1px solid #d4d4d4;
+                    "
+                >
+                    <div style="width: 70px; display: inline-block">
+                        <img
+                            src="https://firebasestorage.googleapis.com/v0/b/the-coffee-shop-gc.appspot.com/o/logo_auction_lite.png?alt=media&token=49ddb9bb-9d1c-4c8d-a2df-e9d4ce878456"
+                            style="height: 45px; object-fit: contain"
+                            class="CToWUd"
+                        />
+                    </div>
+                </div>
+                <div
+                    style="
+                        background-color: #fff;
+                        padding: 5px 20px;
+                        color: #000;
+                        border-radius: 0px 0px 2px 2px;
+                    "
+                >
+                    <div style="padding: 35px 15px">
+                        <p style="font-size: 16px"><b>Hello ,</b></p>
+                        <p style="font-size: 16px">
+                            <b>H2A Bid</b> administrators have
+                            <b style="color: red">recalled</b> your seller access.
+                        </p>
+
+                        <p style="font-size: 16px;">
+                            You can request to be a seller again via our application.
+                        </p>
+
+                        <div style="border-top: 1px solid #dcdbdb"></div>
+                        <p style="font-size: 16px">Best regards,</p>
+                        <p style="margin: 0; font-size: 16px"><span class="il">H2A</span> Bid</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `;
+    }
 }

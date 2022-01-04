@@ -19,47 +19,113 @@
     </div>
 
     <div class="card-body">
-        <div class="d-flex flex-column align-items-center">
-            <div class="text-center mb-3">
-                <i class="fas fa-info-circle text-info" style="font-size: 5rem;"></i>
+        {{#if data.isSeller}}
+            <div class="d-flex flex-column align-items-center">
+                <div class="text-center mb-3">
+                    <i class="fas fa-info-circle text-info" style="font-size: 5rem;"></i>
+                </div>
+
+                <div class="text-center mb-3 fs-3">
+                    You are seller now
+                    {{data.sendBeforeDate}}
+                </div>
+
+                <div class="text-center mb-3">
+                    You will be downgrade at <b>{{data.sellerExpiredDate}}</b>
+                </div>
             </div>
+        {{else}}
+            {{#if data.isSendBefore}}
+                {{! Already sent }}
+                <div class="d-flex flex-column align-items-center">
+                    <div class="text-center mb-3">
+                        <i class="fas fa-info-circle text-info" style="font-size: 5rem;"></i>
+                    </div>
 
-            <div class="text-center mb-3 fs-3">
-                Before you request
-            </div>
+                    <div class="text-center mb-3 fs-3">
+                        Your request has been send to administrators at
+                        {{data.sendBeforeDate}}
+                    </div>
 
-            <div class="mb-3">
-                <p class="mb-2">After click
-                    <b>Submit request</b>
-                    button, you have to wait until the admin confirm your request.
-                </p>
+                    <div class="mb-3">
+                        <p class="mb-2">When your request is approved, we will send an email to your
+                            contact email.</p>
+                        <p class="mb-2">You can
+                            <a href="/user/account/email">visit here</a>
+                            to ensure your current email is the right one.
+                        </p>
+                    </div>
+                </div>
 
-                <p class="mb-2">At the time that the admin confirm your request, you will be notify
-                    via your contact email and you will be a seller in the next
-                    <b>7 days</b>.
-                </p>
+            {{else}}
+                {{#if data.sendOk}}
+                    <div class="d-flex flex-column align-items-center">
+                        <div class="text-center mb-3">
+                            <i
+                                class="fas fa-check-circle text-success"
+                                style="font-size: 5rem;"
+                            ></i>
+                        </div>
 
-                <p class="mb-2">You can
-                    <a href="/user/account/email">visit here</a>
-                    to ensure your current email is the right one.
-                </p>
+                        <div class="text-center mb-3 fs-3">
+                            Your request has been send to administrators
+                        </div>
 
-                <p class="mb-2">As a seller, you can:</p>
+                        <div class="mb-3">
+                            <p class="mb-2">When your request is approved, we will send an email to
+                                your contact email.</p>
+                            <p class="mb-2">You can
+                                <a href="/user/account/email">visit here</a>
+                                to ensure your current email is the right one.
+                            </p>
+                        </div>
+                    </div>
+                {{else}}
+                    <div class="d-flex flex-column align-items-center">
+                        <div class="text-center mb-3">
+                            <i class="fas fa-info-circle text-info" style="font-size: 5rem;"></i>
+                        </div>
 
-                <ul>
-                    <li>- Post new and edit currently posted product for auction.</li>
-                    <li>- View a list of products that are currently posted and are still available
-                        for auction.</li>
-                    <li>- View a list of products auction winner.</li>
-                    <li></li>
-                </ul>
-            </div>
+                        <div class="text-center mb-3 fs-3">
+                            Before you request
+                        </div>
 
-            <div class="d-flex justify-content-center">
-                <form action="" method="post">
-                    <button class="btn btn-custom btn-custom-main btn-lg">Submit request</button>
-                </form>
-            </div>
-        </div>
+                        <div class="mb-3">
+                            <p class="mb-2">After click
+                                <b>Submit request</b>
+                                button, you have to wait until the admin confirm your request.
+                            </p>
+
+                            <p class="mb-2">At the time that the admin confirm your request, you
+                                will be notify via your contact email and you will be a seller in
+                                the next
+                                <b>7 days</b>.
+                            </p>
+
+                            <p class="mb-2">You can
+                                <a href="/user/account/email">visit here</a>
+                                to ensure your current email is the right one.
+                            </p>
+
+                            <p class="mb-2">As a seller, you can:</p>
+
+                            <ul>
+                                <li>- Post new and edit currently posted product for auction.</li>
+                                <li>- View a list of products that are currently posted and are
+                                    still available for auction.</li>
+                                <li>- View a list of products auction winner.</li>
+                                <li></li>
+                            </ul>
+                        </div>
+
+                        <div class="d-flex justify-content-center">
+                            <form action="" method="post">
+                                <button class="btn btn-custom btn-custom-main btn-lg">Submit request</button>
+                            </form>
+                        </div>
+                    </div>
+                {{/if}}
+            {{/if}}
+        {{/if}}
     </div>
 </div>

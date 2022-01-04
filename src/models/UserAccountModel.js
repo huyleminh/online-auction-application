@@ -69,4 +69,49 @@ export default class UserAccountModel {
             }
         });
     }
+
+    static getWithIdList(list) {
+        return new Promise(async function (resolve, reject) {
+            try {
+                const response = await KnexConnection("user_account")
+                    .whereIn("user_id", list)
+                    .select();
+                resolve(response);
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
+
+    static updateColumnById(id, column, columnVal) {
+        return new Promise(async function (resolve, reject) {
+            try {
+                const response = await KnexConnection("user_account")
+                    .where({ user_id: id })
+                    .update({
+                        [column]: columnVal,
+                    });
+
+                resolve(response);
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
+
+    static getAllActiveSeller() {
+        return new Promise(async function (resolve, reject) {
+            try {
+                const response = await KnexConnection.raw(`
+                    select user_id, email, first_name, last_name, rating_point, seller_expired_date, datediff(seller_expired_date, current_timestamp()) as day_diff
+                    from user_account
+                    where seller_expired_date > current_timestamp();
+                `);
+
+                resolve(response);
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
 }

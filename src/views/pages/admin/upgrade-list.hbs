@@ -32,145 +32,39 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td scope="row">1</td>
-                        <td>Name 1</td>
-                        <td>ctayloe4@amazon.co.jp</td>
-                        <td>80 / 100</td>
-                        <td>1/12/2019 10:43</td>
-                        <td>
-                            <div class="action">
-                                <button
-                                    class="btn btn-success btn-sm shadow-0 accept-bidder"
-                                    title="Accept"
-                                    data-mdb-toggle="tooltip"
-                                    data-acceptkey="1"
-                                >
-                                    <i class="fas fa-angle-double-up"></i>
-                                </button>
-                                <button
-                                    class="btn btn-danger btn-sm shadow-0 deny-bidder"
-                                    title="Deny"
-                                    data-mdb-toggle="tooltip"
-                                    data-denykey="1"
-                                >
-                                    <i class="far fa-times-circle"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td scope="row">2</td>
-                        <td>Name 1</td>
-                        <td>ctayloe4@amazon.co.jp</td>
-                        <td>80 / 100</td>
-                        <td>1/12/2019 10:43</td>
-                        <td>
-                            <div class="action">
-                                <button
-                                    class="btn btn-success btn-sm shadow-0 accept-bidder"
-                                    title="Accept"
-                                    data-mdb-toggle="tooltip"
-                                    data-acceptkey="1"
-                                >
-                                    <i class="fas fa-angle-double-up"></i>
-                                </button>
-                                <button
-                                    class="btn btn-danger btn-sm shadow-0 deny-bidder"
-                                    title="Deny"
-                                    data-mdb-toggle="tooltip"
-                                    data-denykey="1"
-                                >
-                                    <i class="far fa-times-circle"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td scope="row">3</td>
-                        <td>Name 1</td>
-                        <td>ctayloe4@amazon.co.jp</td>
-                        <td>80 / 100</td>
-                        <td>1/12/2019 10:43</td>
-                        <td>
-                            <div class="action">
-                                <button
-                                    class="btn btn-success btn-sm shadow-0 accept-bidder"
-                                    title="Accept"
-                                    data-mdb-toggle="tooltip"
-                                    data-acceptkey="1"
-                                >
-                                    <i class="fas fa-angle-double-up"></i>
-                                </button>
-                                <button
-                                    class="btn btn-danger btn-sm shadow-0 deny-bidder"
-                                    title="Deny"
-                                    data-mdb-toggle="tooltip"
-                                    data-denykey="1"
-                                >
-                                    <i class="far fa-times-circle"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td scope="row">4</td>
-                        <td>Name 1</td>
-                        <td>ctayloe4@amazon.co.jp</td>
-                        <td>80 / 100</td>
-                        <td>1/12/2019 10:43</td>
-                        <td>
-                            <div class="action">
-                                <button
-                                    class="btn btn-success btn-sm shadow-0 accept-bidder"
-                                    title="Accept"
-                                    data-mdb-toggle="tooltip"
-                                    data-acceptkey="1"
-                                >
-                                    <i class="fas fa-angle-double-up"></i>
-                                </button>
-                                <button
-                                    class="btn btn-danger btn-sm shadow-0 deny-bidder"
-                                    title="Deny"
-                                    data-mdb-toggle="tooltip"
-                                    data-denykey="1"
-                                >
-                                    <i class="far fa-times-circle"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td scope="row">5</td>
-                        <td>Name 1</td>
-                        <td>ctayloe4@amazon.co.jp</td>
-                        <td>80 / 100</td>
-                        <td>1/12/2019 10:43</td>
-                        <td>
-                            <div class="action">
-                                <button
-                                    class="btn btn-success btn-sm shadow-0 accept-bidder"
-                                    title="Accept"
-                                    data-mdb-toggle="tooltip"
-                                    data-acceptkey="1"
-                                >
-                                    <i class="fas fa-angle-double-up"></i>
-                                </button>
-                                <button
-                                    class="btn btn-danger btn-sm shadow-0 deny-bidder"
-                                    title="Deny"
-                                    data-mdb-toggle="tooltip"
-                                    data-denykey="1"
-                                >
-                                    <i class="far fa-times-circle"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+                    {{#each data.userList }}
+                        <tr>
+                            <td scope="row">{{this.index}}</td>
+                            <td>{{this.fullname}}</td>
+                            <td>{{this.email}}</td>
+                            <td>{{this.ratingPoint}}</td>
+                            <td>{{this.requestedAt}}</td>
+                            <td>
+                                <div class="action">
+                                    <button
+                                        class="btn btn-success btn-sm shadow-0 accept-bidder"
+                                        title="Accept"
+                                        data-mdb-toggle="tooltip"
+                                        data-acceptkey="{{this.userId}}"
+                                    >
+                                        <i class="fas fa-angle-double-up"></i>
+                                    </button>
+                                    <button
+                                        class="btn btn-danger btn-sm shadow-0 deny-bidder"
+                                        title="Deny"
+                                        data-mdb-toggle="tooltip"
+                                        data-denykey="{{this.userId}}"
+                                    >
+                                        <i class="far fa-times-circle"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    {{/each}}
                 </tbody>
             </table>
 
-            {{> pagination}}
+            {{!-- {{> pagination}} --}}
         </div>
     </div>
 </div>

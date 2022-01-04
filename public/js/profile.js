@@ -219,10 +219,52 @@ $(document).ready(function () {
     // Profile information preparation
     if (window.location.pathname === "/user/account") {
         fetchAllProvince();
+        $.getJSON("https://provinces.open-api.vn/api/?depth=1", function (data) {
+            const provinceList = data;
+            insertOptionsToTarget($("#provinceList"), provinceList);
+
+            // Prefetch district
+            const provinceOption = $("#provinceList").find(
+                `option[value="${$("#province").val()}"]`
+            );
+            if (!provinceOption) {
+                return;
+            }
+            const code = provinceOption.data("code");
+            $.getJSON(`https://provinces.open-api.vn/api/p/${code}?depth=2`, function (res) {
+                const districts = res.districts;
+                insertOptionsToTarget($("#districtList"), districts);
+
+                // Prefetch ward
+                const disOption = $("#districtList").find(
+                    `option[value="${$("#district").val()}"]`
+                );
+                if (!disOption) {
+                    return;
+                }
+                const wardcode = disOption.data("code");
+                $.getJSON(`https://provinces.open-api.vn/api/d/${wardcode}?depth=2`, function (res) {
+                    const wards = res.wards;
+                    insertOptionsToTarget($("#wardList"), wards);
+                }).fail(function (error) {
+                    console.log(error);
+                    $("#provinceList").html("<option disabled value='Empty'>");
+                });
+            }).fail(function (error) {
+                console.log(error);
+                $("#provinceList").html("<option disabled value='Empty'>");
+            });
+        }).fail(function (error) {
+            console.log(error);
+            $("#provinceList").html("<option disabled value='Empty'>");
+        });
     }
 
     $("#province").on("change", function () {
         const value = this.value;
+        if (!value || !value.trim()) {
+            return;
+        }
         const option = $("#provinceList").find(`option[value="${value}"]`);
         if (!option) {
             return;
@@ -234,6 +276,9 @@ $(document).ready(function () {
 
     $("#district").on("change", function () {
         const value = this.value;
+        if (!value || !value.trim()) {
+            return;
+        }
         const option = $("#districtList").find(`option[value="${value}"]`);
         if (!option) {
             return;
