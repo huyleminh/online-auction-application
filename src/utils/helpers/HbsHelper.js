@@ -1,5 +1,5 @@
 import moment from "moment";
-import CommonConst from "../../shared/CommonConst";
+import CommonConst from "../../shared/CommonConst.js";
 
 moment.locale("vi");
 export default class HbsHelper {
