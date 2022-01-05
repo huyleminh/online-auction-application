@@ -25,178 +25,73 @@
     <div class="card-body">
         <form action="/user/wishlist/delete" method="post" id="deleteWishlistItem">
             <input type="hidden" name="itemId" id="itemId">
-        </form>
         <div class="table-responsive">
             <table class="table table-bordered table-striped mb-0 table-custom">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
+                        <th scope="col">Image</th>
                         <th scope="col">Product name</th>
                         <th scope="col">Status</th>
                         <th scope="col">Current price</th>
-                        <th scope="col">Expried time</th>
+                        <th scope="col">Expired time</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td scope="row">1</td>
-                        <td>Product 1 with long content Product 1</td>
-                        <td>
-                            <div>
-                                <span class="tag tag-success">Available</span>
-                            </div>
-                        </td>
-                        <td>10,800,000</td>
-                        <td>1/12/2019 10:43</td>
-                        <td>
-                            <div class="action">
-                                <a
-                                    href="/menu/products/1"
-                                    class="btn btn-custom btn-custom-main btn-sm shadow-0"
-                                    title="View details"
-                                    data-mdb-toggle="tooltip"
-                                >
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <button
-                                    class="btn btn-danger btn-sm shadow-0 remove-wishlist-item"
-                                    title="Remove"
-                                    data-mdb-toggle="tooltip"
-                                    data-removekey="1"
-                                >
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td scope="row">2</td>
-                        <td>Product 2</td>
-                        <td>
-                            <div>
-                                <span class="tag tag-danger">Sold</span>
-                            </div>
-                        </td>
-                        <td>10,800,000</td>
-                        <td>1/12/2019 10:43</td>
-                        <td>
-                            <div class="action">
-                                <a
-                                    href="/menu/products/2"
-                                    class="btn btn-custom btn-custom-main btn-sm shadow-0"
-                                    title="View details"
-                                    data-mdb-toggle="tooltip"
-                                >
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <button
-                                    class="btn btn-danger btn-sm shadow-0 remove-wishlist-item"
-                                    title="Remove"
-                                    data-mdb-toggle="tooltip"
-                                    data-removekey="2"
-                                >
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td scope="row">3</td>
-                        <td>Product 3</td>
-                        <td>
-                            <div>
-                                <span class="tag tag-success">Available</span>
-                            </div>
-                        </td>
-                        <td>10,800,000</td>
-                        <td>1/12/2019 10:43</td>
-                        <td>
-                            <div class="action">
-                                <a
-                                    href="/menu/products/3"
-                                    class="btn btn-custom btn-custom-main btn-sm shadow-0"
-                                    title="View details"
-                                    data-mdb-toggle="tooltip"
-                                >
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <button
-                                    class="btn btn-danger btn-sm shadow-0 remove-wishlist-item"
-                                    title="Remove"
-                                    data-mdb-toggle="tooltip"
-                                    data-removekey="3"
-                                >
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td scope="row">4</td>
-                        <td>Product 4</td>
-                        <td>
-                            <div>
-                                <span class="tag tag-success">Available</span>
-                            </div>
-                        </td>
-                        <td>10,800,000</td>
-                        <td>1/12/2019 10:43</td>
-                        <td>
-                            <div class="action">
-                                <a
-                                    href="/menu/products/4"
-                                    class="btn btn-custom btn-custom-main btn-sm shadow-0"
-                                    title="View details"
-                                    data-mdb-toggle="tooltip"
-                                >
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <button
-                                    class="btn btn-danger btn-sm shadow-0 remove-wishlist-item"
-                                    title="Remove"
-                                    data-mdb-toggle="tooltip"
-                                    data-removekey="4"
-                                >
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td scope="row">5</td>
-                        <td>Product 5</td>
-                        <td>
-                            <div>
-                                <span class="tag tag-success">Available</span>
-                            </div>
-                        </td>
-                        <td>10,800,000</td>
-                        <td>1/12/2019 10:43</td>
-                        <td>
-                            <div class="action">
-                                <a
-                                    href="/menu/products/5"
-                                    class="btn btn-custom btn-custom-main btn-sm shadow-0"
-                                    title="View details"
-                                    data-mdb-toggle="tooltip"
-                                >
-
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <button
-                                    class="btn btn-danger btn-sm shadow-0 remove-wishlist-item"
-                                    title="Remove"
-                                    data-mdb-toggle="tooltip"
-                                    data-removekey="5"
-                                >
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+                    {{#each wishlist.wishlist}}
+                        <tr>
+                            <td scope="row">{{add @index 1}}</td>
+                            <td>
+                                <div>
+                                    <img class="img-fluid rounded" src={{this.thumbnail}} alt={{this.product_name}}></img>
+                                </div>
+                            </td>
+                            <td>{{this.product_name}}</td>
+                            <td>
+                                {{#if this.is_sold}}
+                                    <div>
+                                        <span class="tag tag-success">Available</span>
+                                    </div>
+                                {{else}}
+                                    <div>
+                                        <span class="tag tag-danger">Sold</span>
+                                    </div>
+                                {{/if}}
+                            </td>
+                            <td>{{formatMoney this.current_price}} VND</td>
+                            <td>{{formatDate this.expired_date}}</td>
+                            <td>
+                                <div class="action">
+                                    <form action="/user/wishlist/delete" method="post">
+                                        <a
+                                            href="/menu/products/{{this.product_id}}"
+                                            class="btn btn-custom btn-custom-main btn-sm shadow-0"
+                                            title="View details"
+                                            data-mdb-toggle="tooltip"
+                                        >
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <input name="user" type="hidden" value={{../localUser.username}}></input>
+                                        <input name="id" type="hidden" value={{this.product_id}}></input>
+                                        <button
+                                            class="btn btn-danger btn-sm shadow-0 remove-wishlist-item"
+                                            title="Remove"
+                                            data-mdb-toggle="tooltip"
+                                            data-removekey="1"
+                                            type="submit"
+                                        >
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {{/each}}
                 </tbody>
             </table>
         </div>
+        {{!-- </form> --}}
+
     </div>
 </div>

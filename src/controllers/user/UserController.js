@@ -1,6 +1,7 @@
 import moment from "moment";
 import AuthMiddlewares from "../../middlewares/AuthMiddlewares.js";
 import UserAccountModel from "../../models/UserAccountModel.js";
+import WishlistModel from "../../models/WishlistModel.js";
 import EmailService from "../../services/EmailService.js";
 import EmailTemplate from "../../shared/template/EmailTemplate.js";
 import Authenticator from "../../utils/Authenticatior.js";
@@ -222,11 +223,19 @@ export default class UserController extends AppController {
         });
     }
 
-    removeWishlistItem(req, res) {
-        const body = req.body;
-        console.log(body);
+    async removeWishlistItem(req, res) {
+        const { id, user } = req.body;
         // Remove in section + remove in db
-        res.redirect("/user/wishlist");
+        if (res.locals.wishlist) {
+            const index = res.locals.wishlist.wishlist.findIndex((element) => element.product_id === parseInt(id));
+
+            if (index !== -1) {
+                res.locals.wishlist.wishlist.splice(index, 1);
+                res.locals.wishlist.length = res.locals.wishlist.wishlist.length;
+                await WishlistModel.removeWishlistById(user, id);
+                res.redirect("/user/wishlist");
+            }
+        }
     }
 
     postFeedback(req, res) {
