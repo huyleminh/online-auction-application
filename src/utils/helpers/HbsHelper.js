@@ -28,6 +28,10 @@ export default class HbsHelper {
         return numeral(val).format("0,0");
     }
 
+    static add(left, right) {
+        return left + right;
+    }
+
     static getAll() {
         return {
             isEqual: this.isEqual,
@@ -36,6 +40,7 @@ export default class HbsHelper {
             formatMoney: this.formatMoney,
             isGreaterThan: this.isGreaterThan,
             isLessThan: this.isLessThan,
+            add: this.add
         };
     }
 }

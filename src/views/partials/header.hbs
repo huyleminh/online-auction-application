@@ -79,8 +79,7 @@
                         <ul class="dropdown-menu rounded" aria-labelledby="aboutDropdown">
                             <li><a class="dropdown-item" href="/about/#whath2a">What is H2A Bid?</a></li>
                             <li><a class="dropdown-item" href="/about/#whyh2a">Why H2A Bid?</a></li>
-                            <li><a class="dropdown-item" href="/about/#learn_automation">Automation
-                                    Bidding</a></li>
+                            <li><a class="dropdown-item" href="/about/#learn_automation">Automatic Bidding?</a></li>
                         </ul>
                     </li>
 
@@ -104,7 +103,12 @@
                             data-mdb-placement="bottom"
                             title="Wishlist"
                         >
-                            <i class="fas fa-heart text-danger text-lg"></i>
+                            <i class="fas fa-heart text-danger text-lg fs-5"></i>
+                            {{#if (isGreaterThan wishlist.length 9)}}
+                                <span class="badge rounded-pill badge-notification bg-success">9+</span>
+                            {{else}}
+                                <span class="badge rounded-pill badge-notification bg-success">{{wishlist.length}}</span>
+                            {{/if}}
                         </a>
 
                         <div class="dropdown profile-dropdown">
