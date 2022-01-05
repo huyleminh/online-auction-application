@@ -350,3 +350,20 @@ body {
 .btn.btn-custom.btn-custom-secondary {
     background-color: var(--secondary-color);
 }
+
+/* Skelethon */
+.skeleton {
+    opacity: 0.7;
+    animation: skeleton-loading 1s linear infinite alternate;
+    border-radius: 3px;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-color: hsl(199, 13%, 72%);
+    }
+
+    100% {
+        background-color: hsl(200, 20%, 95%);
+    }
+}
