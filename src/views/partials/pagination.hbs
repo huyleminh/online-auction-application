@@ -1,22 +1,29 @@
 <nav class="pagination-container mt-4">
     <ul class="pagination justify-content-center">
-        <li class="page-item disabled">
+        {{!-- <li class="page-item disabled">
             <span class="page-link">Previous</span>
-        </li>
+        </li> --}}
 
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        {{#each list}}
+            {{#if this.isActive}}
+                <li class="page-item active" aria-current="page">
+                    <span class="page-link page-link-custom">
+                        {{this.key}}
+                        <span class="visually-hidden">(current)</span>
+                    </span>
+                </li>
+            {{else}}
+                <li class="page-item">
+                    <span
+                        class="page-link page-link-custom"
+                        data-href="{{this.key}}"
+                    >{{this.key}}</span>
+                </li>
+            {{/if}}
+        {{/each}}
 
-        <li class="page-item active" aria-current="page">
-            <span class="page-link">
-                2
-                <span class="visually-hidden">(current)</span>
-            </span>
-        </li>
-
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-
-        <li class="page-item">
-            <a class="page-link" href="#">Next</a>
-        </li>
+        {{!-- <li class="page-item">
+            <a class="page-link page-link-custom" href="#">Next</a>
+        </li> --}}
     </ul>
 </nav>

@@ -64,6 +64,19 @@ export default class CategoryModel {
         });
     }
 
+    static getAllChild() {
+        return new Promise(async function (resolve, reject) {
+            try {
+                const dataSet = await KnexConnection("category")
+                    .whereNotNull("super_cat_id")
+                    .select("cat_id", "cat_name", "super_cat_id");
+                resolve(dataSet);
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
+
     static insert(entity) {
         return new Promise(async function (resolve, reject) {
             try {

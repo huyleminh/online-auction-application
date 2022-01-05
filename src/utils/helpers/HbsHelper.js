@@ -12,11 +12,19 @@ export default class HbsHelper {
         return left !== right;
     }
 
+    static isGreaterThan(left, right) {
+        return left > right;
+    }
+
+    static isLessThan(left, right) {
+        return left < right;
+    }
+
     static formatDate(date) {
         return moment(date).format(CommonConst.MOMENT_BASE_USER_FORMAT);
     }
 
-    static formatMoney(money) {
+    static formatMoney(val) {
         return numeral(val).format("0,0");
     }
 
@@ -26,6 +34,8 @@ export default class HbsHelper {
             isNotEqual: this.isNotEqual,
             formatDate: this.formatDate,
             formatMoney: this.formatMoney,
+            isGreaterThan: this.isGreaterThan,
+            isLessThan: this.isLessThan,
         };
     }
 }
