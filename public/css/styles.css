@@ -310,6 +310,9 @@ body {
 }
 
 /* Pagination */
+.pagination-container .pagination .page-item .page-link {
+    cursor: pointer;
+}
 .pagination-container .pagination .page-item.active .page-link {
     background-color: var(--main-color);
 }
@@ -366,4 +369,22 @@ body {
     100% {
         background-color: hsl(200, 20%, 95%);
     }
+}
+
+/* Product tag new */
+.ribbon {
+    position: absolute;
+    background-color: #00b74a;
+    color: #fff;
+    border-radius: 2px;
+
+    font-weight: 500;
+    font-size: 1rem;
+
+    width: 55px;
+    padding: 0.25rem 0;
+    text-align: center;
+    top: 0;
+    left: 0;
+    z-index: 1;
 }

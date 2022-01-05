@@ -66,4 +66,78 @@ $(document).ready(function () {
             placement: "bottom",
         });
     });
+
+    $("#filterProdForm").on("submit", function (e) {
+        e.preventDefault();
+
+        const formValues = $(this).serializeArray();
+        const params = new URLSearchParams(new URL(location.href).search);
+
+        formValues.forEach((field) => {
+            params.set(field.name, field.value);
+        });
+
+        location.assign(`?${params.toString()}`);
+        return;
+    });
+
+    $(".page-link-custom").on("click", function () {
+        const page = $(this).data("href");
+        if (page === undefined) {
+            return;
+        }
+
+        $("#filterPage").val(page);
+        $("#filterProdForm").submit();
+    });
+
+    if (location.pathname.match("/menu/categories")) {
+        loadCatFilter();
+    }
 });
+
+function loadCatFilter() {
+    $.getJSON("/api/menu/categories", function (data) {
+        if (data.status === 200) {
+            const ul = $("#filterCatList");
+
+            const mappedCat = data.data
+                .map((cat) => {
+                    const children = cat.children
+                        .map((child) => {
+                            return `
+                        <li class="list-group-item categories-item">
+                            <a href="${child.cat_id}">
+                                <span>${child.cat_name}</span>
+                            </a>
+                        </li>
+                    `;
+                        })
+                        .join("");
+
+                    return `
+                    <li class="list-group-item border-start-0 border-end-0 categories-item">
+                        <a href="#">
+                            <span>${cat.rootName}</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+
+                        <ul class="list-group rounded-2 categories-subgroup">
+                            ${children}
+                        </ul>
+                    </li>
+                `;
+                })
+                .join("");
+
+            ul.html(`
+                <li class="list-group-item border-start-0 border-end-0 categories-item">
+                    <a href="all">
+                        <span>View all categories</span>
+                    </a>
+                </li>
+                ${mappedCat}
+            `);
+        }
+    });
+}

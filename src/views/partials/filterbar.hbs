@@ -12,147 +12,37 @@
     </div>
 
     <div class="card-body p-0 collapse show" id="collapseCategories">
-        <ul class="list-group rounded-0 border-0 categories-group">
+        <ul class="list-group rounded-0 border-0 categories-group" id="filterCatList">
             <li class="list-group-item border-start-0 border-end-0 categories-item">
-                <a href="#">
-                    <span>Danh mục cha 1</span>
-                    <i class="fas fa-chevron-right"></i>
+                <a href="#" style="height: 30px;">
+                    <span class="skeleton" style="height: 30px; width: 100%"></span>
                 </a>
-
-                <ul class="list-group rounded-2 categories-subgroup">
-                    <li class="list-group-item categories-item">
-                        <a href="#">
-                            <span>Danh mục con 1</span>
-                        </a>
-                    </li>
-
-                    <li class="list-group-item categories-item">
-                        <a href="#">
-                            <span>Danh mục con 1</span>
-                        </a>
-                    </li>
-
-                    <li class="list-group-item categories-item">
-                        <a href="#">
-                            <span>Danh mục con 1</span>
-                        </a>
-                    </li>
-                </ul>
             </li>
 
             <li class="list-group-item border-start-0 border-end-0 categories-item">
-                <a href="#">
-                    <span>Danh mục cha 2</span>
-                    <i class="fas fa-chevron-right"></i>
+                <a href="#" style="height: 30px;">
+                    <span class="skeleton" style="height: 30px; width: 100%"></span>
                 </a>
-
-                <ul class="list-group rounded-2 categories-subgroup">
-                    <li class="list-group-item categories-item">
-                        <a href="#">
-                            <span>Danh mục con 1</span>
-                        </a>
-                    </li>
-
-                    <li class="list-group-item categories-item">
-                        <a href="#">
-                            <span>Danh mục con 1</span>
-                        </a>
-                    </li>
-
-                    <li class="list-group-item categories-item">
-                        <a href="#">
-                            <span>Danh mục con 1</span>
-                        </a>
-                    </li>
-                </ul>
             </li>
 
             <li class="list-group-item border-start-0 border-end-0 categories-item">
-                <a href="#">
-                    <span>Danh mục cha 3</span>
-                    <i class="fas fa-chevron-right"></i>
+                <a href="#" style="height: 30px;">
+                    <span class="skeleton" style="height: 30px; width: 100%"></span>
                 </a>
-
-                <ul class="list-group rounded-2 categories-subgroup">
-                    <li class="list-group-item categories-item">
-                        <a href="#">
-                            <span>Danh mục con 1</span>
-                        </a>
-                    </li>
-
-                    <li class="list-group-item categories-item">
-                        <a href="#">
-                            <span>Danh mục con 1</span>
-                        </a>
-                    </li>
-
-                    <li class="list-group-item categories-item">
-                        <a href="#">
-                            <span>Danh mục con 1</span>
-                        </a>
-                    </li>
-                </ul>
             </li>
 
             <li class="list-group-item border-start-0 border-end-0 categories-item">
-                <a href="#">
-                    <span>Danh mục cha 4</span>
-                    <i class="fas fa-chevron-right"></i>
+                <a href="#" style="height: 30px;">
+                    <span class="skeleton" style="height: 30px; width: 100%"></span>
                 </a>
-
-                <ul class="list-group rounded-2 categories-subgroup">
-                    <li class="list-group-item categories-item">
-                        <a href="#">
-                            <span>Danh mục con 1</span>
-                        </a>
-                    </li>
-
-                    <li class="list-group-item categories-item">
-                        <a href="#">
-                            <span>Danh mục con 1</span>
-                        </a>
-                    </li>
-
-                    <li class="list-group-item categories-item">
-                        <a href="#">
-                            <span>Danh mục con 1</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
-            <li class="list-group-item border-start-0 border-end-0 categories-item">
-                <a href="#">
-                    <span>Danh mục cha 5</span>
-                    <i class="fas fa-chevron-right"></i>
-                </a>
-
-                <ul class="list-group rounded-2 categories-subgroup">
-                    <li class="list-group-item categories-item">
-                        <a href="#">
-                            <span>Danh mục con 1</span>
-                        </a>
-                    </li>
-
-                    <li class="list-group-item categories-item">
-                        <a href="#">
-                            <span>Danh mục con 1</span>
-                        </a>
-                    </li>
-
-                    <li class="list-group-item categories-item">
-                        <a href="#">
-                            <span>Danh mục con 1</span>
-                        </a>
-                    </li>
-                </ul>
             </li>
         </ul>
     </div>
 </div>
 
 <div class="card border shadow-0 mb-3">
-    <form action="">
+    <form action="" method="get" id="filterProdForm">
+        <input type="hidden" name="page" id="filterPage" value="{{page}}" />
         <div
             class="card-header border-0 d-flex justify-content-between"
             type="button"
@@ -172,10 +62,12 @@
                     <input
                         class="form-check-input"
                         type="radio"
-                        name="sortPrice"
+                        name="sort"
                         id="priceAsc"
                         value="price_asc"
-                        checked
+                        {{#if (isEqual sort "price_asc")}}
+                            checked
+                        {{/if}}
                     />
                     <label class="form-check-label" for="priceAsc">Lowest first</label>
                 </div>
@@ -184,9 +76,12 @@
                     <input
                         class="form-check-input"
                         type="radio"
-                        name="sortPrice"
+                        name="sort"
                         id="priceDesc"
                         value="price_desc"
+                        {{#if (isEqual sort "price_desc")}}
+                            checked
+                        {{/if}}
                     />
                     <label class="form-check-label" for="priceDesc">Highest first</label>
                 </div>
@@ -198,10 +93,12 @@
                     <input
                         class="form-check-input"
                         type="radio"
-                        name="sortTime"
+                        name="sort"
                         id="remainLeast"
-                        value="due_asc"
-                        checked
+                        value="time_asc"
+                        {{#if (isEqual sort "time_asc")}}
+                            checked
+                        {{/if}}
                     />
                     <label class="form-check-label" for="remainLeast">Shortest first</label>
                 </div>
@@ -210,16 +107,19 @@
                     <input
                         class="form-check-input"
                         type="radio"
-                        name="sortTime"
+                        name="sort"
                         id="remainMost"
-                        value="due_desc"
+                        value="time_desc"
+                        {{#if (isEqual sort "time_desc")}}
+                            checked
+                        {{/if}}
                     />
                     <label class="form-check-label" for="remainMost">Longest first</label>
                 </div>
             </div>
         </div>
 
-        <div
+        {{! <div
             class="card-header border-0 border-bottom border-top d-flex justify-content-between"
             type="button"
             data-mdb-toggle="collapse"
@@ -238,12 +138,12 @@
                         <input
                             type="number"
                             min="0"
-                            id="minPrice"
+                            id="min_price"
                             class="form-control"
                             placeholder="VND"
-                            name="minPrice"
+                            name="min_price"
                         />
-                        <label class="form-label" for="minPrice">Min price</label>
+                        <label class="form-label" for="min_price">Min price</label>
                     </div>
                 </div>
 
@@ -252,25 +152,32 @@
                         <input
                             type="number"
                             min="0"
-                            id="maxPrice"
+                            id="max_price"
                             class="form-control"
                             placeholder="VND"
-                            name="maxPrice"
+                            name="max_price"
                         />
-                        <label class="form-label" for="maxPrice">Max price</label>
+                        <label class="form-label" for="max_price">Max price</label>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> }}
 
         <div class="card-footer">
             <button
                 type="submit"
                 class="btn btn-block btn-secondary shadow-0"
                 style="font-size: 15px;"
+                id="applyFilterBtn"
             >
                 Apply filter
             </button>
         </div>
     </form>
 </div>
+
+{{#section "js"}}
+    <script>
+
+    </script>
+{{/section}}
