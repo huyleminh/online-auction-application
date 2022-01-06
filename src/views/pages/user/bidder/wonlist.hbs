@@ -31,124 +31,75 @@
                 <thead>
                     <tr>
                         <th scope="col">#</th>
+                        <th scope="col">Image</th>
                         <th scope="col">Product name</th>
-                        <th scope="col">Bidding price</th>
+                        <th scope="col">My price</th>
                         <th scope="col">Winning price</th>
-                        <th scope="col">End time</th>
                         <th scope="col">Seller</th>
                         <th scope="col">Seller points</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td scope="row">1</td>
-                        <td>Product 1 with long content Product 1</td>
-                        <td>11,000,000</td>
-                        <td>10,800,000</td>
-                        <td>1/12/2019 10:43</td>
-                        <td>Khoa</td>
-                        <td>80</td>
-                        <td>
-                            <div class="action">
-                                <button
-                                    class="btn btn-custom btn-custom-main btn-sm shadow-0 feedback-btn"
-                                    title="Feedback"
-                                    data-mdb-toggle="tooltip"
-                                    data-rated-id="1"
-                                >
-                                    <i class="fas fa-comments"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td scope="row">2</td>
-                        <td>Product 2</td>
-                        <td>11,000,000</td>
-                        <td>10,800,000</td>
-                        <td>1/12/2019 10:43</td>
-                        <td>Khoa</td>
-                        <td>80</td>
-                        <td>
-                            <div class="action">
-                                <button
-                                    class="btn btn-custom btn-custom-main btn-sm shadow-0 feedback-btn"
-                                    title="Feedback"
-                                    data-mdb-toggle="tooltip"
-                                    data-rated-id="2"
-                                >
-                                    <i class="fas fa-comments"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td scope="row">3</td>
-                        <td>Product 3</td>
-                        <td>11,000,000</td>
-                        <td>10,800,000</td>
-                        <td>1/12/2019 10:43</td>
-                        <td>Khoa</td>
-                        <td>80</td>
-                        <td>
-                            <div class="action">
-                                <button
-                                    class="btn btn-custom btn-custom-main btn-sm shadow-0 feedback-btn"
-                                    title="Feedback"
-                                    data-mdb-toggle="tooltip"
-                                    data-rated-id="3"
-                                >
-                                    <i class="fas fa-comments"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td scope="row">4</td>
-                        <td>Product 4</td>
-                        <td>11,000,000</td>
-                        <td>10,800,000</td>
-                        <td>1/12/2019 10:43</td>
-                        <td>Khoa</td>
-                        <td>80</td>
-                        <td>
-                            <div class="action">
-                                <button
-                                    class="btn btn-custom btn-custom-main btn-sm shadow-0 feedback-btn"
-                                    title="Feedback"
-                                    data-mdb-toggle="tooltip"
-                                    data-rated-id="4"
-                                >
-                                    <i class="fas fa-comments"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td scope="row">5</td>
-                        <td>Product 5</td>
-                        <td>11,000,000</td>
-                        <td>10,800,000</td>
-                        <td>1/12/2019 10:43</td>
-                        <td>Khoa</td>
-                        <td>80</td>
-                        <td>
-                            <div class="action">
-                                <button
-                                    class="btn btn-custom btn-custom-main btn-sm shadow-0 feedback-btn"
-                                    title="Feedback"
-                                    data-mdb-toggle="tooltip"
-                                    data-rated-id="5"
-                                >
-                                    <i class="fas fa-comments"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+                    {{#each data.list}}
+                        <tr>
+                            <td scope="row">{{calcNo @index ../data.page}}</td>
+                            <td>
+                                <div>
+                                    <img class="img-fluid rounded" src={{this.thumbnail}} alt={{this.product_name}}></img>
+                                </div>
+                            </td>
+                            <td>{{this.product_name}}</td>
+                            <td>{{formatMoney this.tolerable_price}} VND</td>
+                            <td>{{formatMoney this.current_price}} VND</td>
+                            <td>{{this.seller_name}}</td>
+                            <td>{{this.seller_rating_point}}</td>
+                            <td>
+                                <div class="action">
+                                    <button
+                                        class="btn btn-custom btn-custom-main btn-sm shadow-0 feedback-btn"
+                                        title="Feedback"
+                                        data-mdb-toggle="tooltip"
+                                        data-rated-id={{this.seller_id}}
+                                    >
+                                        <i class="fas fa-comments"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    {{/each}}
                 </tbody>
             </table>
         </div>
+        <form action="" method="get">
+            <nav class="pagination-container mt-4">
+                <ul class="pagination justify-content-center">
+                    {{#if (isEqual data.page 1)}}
+                        <li class="page-item disabled" aria-current="page">
+                            <a class="page-link page-link-custom" href=""></a>
+                        </li>
+                    {{else}}
+                        <li class="page-item" aria-current="page">
+                            <a class="page-link page-link-custom" href="?page={{subtract data.page 1}}">{{subtract data.page 1}}</a>
+                        </li>
+                    {{/if}}
+                    <li class="page-item active" aria-current="page">
+                        <a class="page-link page-link-custom" href="?page={{data.page}}">
+                            {{data.page}}
+                        </a>
+                    </li>
+                    {{#if data.hasNext}}
+                        <li class="page-item" aria-current="page">
+                            <a class="page-link page-link-custom" href="?page={{add data.page 1}}">{{add data.page 1}}</a>
+                        </li>
+                    {{else}}
+                        <li class="page-item disabled" aria-current="page">
+                            <a class="page-link page-link-custom" href=""></a>
+                        </li>
+                    {{/if}}
+                </ul>
+            </nav>
+        </form>
     </div>
 </div>
 
@@ -173,7 +124,7 @@
 
         <div class="modal-body">
             <form action="/user/feedback" method="post" id="feedbackForm">
-                <h4 class="text-center">Please give a rate</h4>
+                <h4 class="text-center">How do you feel?</h4>
                 <div class="feedback d-flex justify-content-center mb-4">
                     <div class="position-relative">
                         <label for="positive" class="form-label mb-0" title="Like" data-mdb-toggle="tooltip"

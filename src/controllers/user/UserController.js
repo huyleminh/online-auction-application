@@ -1,5 +1,6 @@
 import moment from "moment";
 import AuthMiddlewares from "../../middlewares/AuthMiddlewares.js";
+import RatingModel from "../../models/RatingModel.js";
 import UserAccountModel from "../../models/UserAccountModel.js";
 import WishlistModel from "../../models/WishlistModel.js";
 import EmailService from "../../services/EmailService.js";
@@ -224,24 +225,56 @@ export default class UserController extends AppController {
     }
 
     async removeWishlistItem(req, res) {
-        const { id, user } = req.body;
-        // Remove in section + remove in db
-        if (res.locals.wishlist) {
-            const index = res.locals.wishlist.wishlist.findIndex((element) => element.product_id === parseInt(id));
+        const { id } = req.body;
 
-            if (index !== -1) {
-                res.locals.wishlist.wishlist.splice(index, 1);
-                res.locals.wishlist.length = res.locals.wishlist.wishlist.length;
-                await WishlistModel.removeWishlistById(user, id);
-                res.redirect("/user/wishlist");
+        try {
+            const user = await UserAccountModel.getByColumn('username', req.user.username);
+            if (user === undefined) {
+                req.logout();
+                return req.session.save(() => {
+                    res.redirect("/login");
+                });
             }
+
+            if (res.locals.wishlist) {
+                const index = res.locals.wishlist.wishlist.findIndex((element) => element.product_id === parseInt(id));
+
+                if (index !== -1) {
+                    res.locals.wishlist.wishlist.splice(index, 1);
+                    res.locals.wishlist.length = res.locals.wishlist.wishlist.length;
+                    await WishlistModel.removeWishlistById(user[0].user_id, id);
+                    res.redirect("/user/wishlist");
+                }
+            }
+        } catch (err) {
+            res.redirect("/user/wishlist");
         }
     }
 
-    postFeedback(req, res) {
+    async postFeedback(req, res) {
         const body = req.body;
-        console.log(body);
 
-        res.redirect(req.headers.referer);
+        try {
+            const user = await UserAccountModel.getByColumn('username', req.user.username);
+            if (user === undefined) {
+                req.logout();
+                return req.session.save(() => {
+                    res.redirect("/login");
+                });
+            }
+            const feedback = {
+                rated_user_id: body.ratedId,
+                evaluator_id: user[0].user_id,
+                is_positive: body.isPositive === 'true' ? true : false,
+                feedback: body.feedback
+            }
+
+            await RatingModel.insertFeedback(feedback);
+
+            res.redirect(req.headers.referer);
+        } catch (err) {
+            res.redirect(req.headers.referer);
+        }
+
     }
 }

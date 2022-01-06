@@ -1,5 +1,8 @@
 import moment from "moment";
 import AuthMiddlewares from "../../middlewares/AuthMiddlewares.js";
+import BiddingHistoryModel from "../../models/BiddingHistoryModel.js";
+import JoinBidderModel from "../../models/JoinBidderModel.js";
+import ProductModel from "../../models/ProductModal.js";
 import UpgradeRequestModel from "../../models/UpgradeRequestModel.js";
 import UserAccountModel from "../../models/UserAccountModel.js";
 import CommonConst from "../../shared/CommonConst.js";
@@ -32,10 +35,67 @@ export default class BidderController extends AppController {
         this._router.get("/bidder/won", AuthMiddlewares.authorizeUser, this.renderWonList);
     }
 
-    renderBiddingProducts(req, res) {
-        res.render("pages/user/bidder/bidding", {
-            layout: "profile",
-        });
+    async renderBiddingProducts(req, res) {
+        const page = parseInt(req.query.page || 1);
+        if (isNaN(page)) {
+            res.redirect("/bidder/bidding");
+        }
+
+        try {
+            const user = await UserAccountModel.getByColumn('username', req.user.username);
+            if (user === undefined) {
+                req.logout();
+                return req.session.save(() => {
+                    res.redirect("/login");
+                });
+            }
+
+            let data = await JoinBidderModel.getJoinBidderByUsernameWithPage(user[0].user_id, page);
+
+            if (data === undefined) {
+                res.render("pages/user/bidder/bidding", {
+                    layout: "profile",
+                    data: {
+                        list: [],
+                        hasNext: false,
+                        page: 1
+                    }
+                });
+            }
+
+            if (data.data.length === 0) {
+                res.redirect("/bidder/bidding");
+            }
+
+            const promises = data.data.map((element) => {
+                return BiddingHistoryModel.getTolerablePriceAndBidDate(user[0].user_id, element.product_id)
+            })
+            const additionalInfo = await Promise.all(promises);
+
+            let result = data.data.map((element, index) => {
+                element.tolerable_price = additionalInfo[index][0][0].tolerable_price;
+                element.bid_date = additionalInfo[index][0][0].bid_date;
+                return element;
+            });
+
+            res.render("pages/user/bidder/bidding", {
+                layout: "profile",
+                data: {
+                    list: result,
+                    hasNext: data.hasNext,
+                    page: page
+                }
+            });
+        } catch (err) {
+            res.render("pages/user/bidder/bidding", {
+                layout: "profile",
+                data: {
+                    list: [],
+                    hasNext: false,
+                    page: 1
+                }
+            });
+        }
     }
 
     async renderUpgradeRequest(req, res) {
@@ -121,9 +181,68 @@ export default class BidderController extends AppController {
         }
     }
 
-    renderWonList(req, res) {
-        res.render("pages/user/bidder/wonlist", {
-            layout: "profile",
-        });
+    async renderWonList(req, res) {
+        const page = parseInt(req.query.page || 1);
+        if (isNaN(page)) {
+            res.redirect("/bidder/won");
+        }
+
+        try {
+            const user = await UserAccountModel.getByColumn('username', req.user.username);
+            if (user === undefined) {
+                req.logout();
+                return req.session.save(() => {
+                    res.redirect("/login");
+                });
+            }
+
+            let data = await ProductModel.getWonProductsByUserId(user[0].user_id, page);
+
+            if (data === undefined) {
+                res.render("pages/user/bidder/wonlist", {
+                    layout: "profile",
+                    data: {
+                        list: [],
+                        hasNext: false,
+                        page: 1
+                    }
+                });
+            }
+
+            if (data.data.length === 0) {
+                res.redirect("/bidder/won");
+            }
+
+            const promises = data.data.map((element) => {
+                return BiddingHistoryModel.getTolerablePriceAndBidDate(user[0].user_id, element.product_id)
+            })
+            const additionalInfo = await Promise.all(promises);
+
+            let result = data.data.map((element, index) => {
+                element.tolerable_price = additionalInfo[index][0][0].tolerable_price;
+                return element;
+            });
+
+            res.render("pages/user/bidder/wonlist", {
+                layout: "profile",
+                data: {
+                    list: result,
+                    hasNext: data.hasNext,
+                    page: page
+                }
+            });
+        } catch (err) {
+            res.render("pages/user/bidder/wonlist", {
+                layout: "profile",
+                data: {
+                    list: [],
+                    hasNext: false,
+                    page: 1
+                }
+            });
+        }
+        // res.render("pages/user/bidder/wonlist", {
+        //     layout: "profile",
+        // });
     }
 }
