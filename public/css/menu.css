@@ -84,12 +84,15 @@
     display: flex;
 }
 
+.card-images-preview .card-sub-images-item img {
+    border: 1px solid #cfcfcf;
+    border-radius: 5px;
+}
+
 /* .product-images .card-images-preview .owl-item,
 .product-related .owl-item {
     margin: 0px 10px;
 } */
-
-.product-related
 
 /* Product information - details */
 .product-details .card-body.card-body-info .card-body-info-item .left {

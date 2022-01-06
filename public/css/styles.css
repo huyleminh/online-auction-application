@@ -283,7 +283,7 @@ body {
     margin-left: 5px;
 }
 
-.product-card .card-body .card-info.timer > span:first-child {
+.timer > span:first-child {
     display: inline-block;
     padding: 2px 6px;
     border-radius: 4px;
@@ -291,15 +291,15 @@ body {
     font-size: 1rem;
 }
 
-.product-card .card-body .card-info.timer > span:first-child.timer-danger {
+.timer > span:first-child.timer-danger {
     background-color: #f93154;
 }
 
-.product-card .card-body .card-info.timer > span:first-child.timer-warning {
+.timer > span:first-child.timer-warning {
     background-color: #ffa900;
 }
 
-.product-card .card-body .card-info.timer > span:first-child.timer-success {
+.timer > span:first-child.timer-success {
     background-color: #00b74a;
 }
 

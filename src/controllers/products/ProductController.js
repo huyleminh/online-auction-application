@@ -1,7 +1,10 @@
 import moment from "moment";
 import numeral from "numeral";
 import CategoryModel from "../../models/CategoryModel.js";
+import ProdcutDetailModel from "../../models/ProductDetailModel.js";
 import ProductModel from "../../models/ProductModal.js";
+import UserAccountModel from "../../models/UserAccountModel.js";
+import CommomUtils from "../../utils/CommonUtils.js";
 import AppController from "../AppController.js";
 
 const DEFAULT_PAGE_SIZE = 12;
@@ -80,7 +83,7 @@ export default class ProductController extends AppController {
                 totalRows = await ProductModel.countTotalProductByCat(catId);
             }
 
-            const productListMap = sortProductUtil(productList[0], sort).map((item) => {
+            const productListMap = CommomUtils.sortProductUtil(productList[0], sort).map((item) => {
                 const createdDate = moment(item.created_date).locale("en").fromNow();
                 const minDiff = -1 * moment().diff(moment(item.expired_date), "minutes");
 
@@ -127,16 +130,91 @@ export default class ProductController extends AppController {
         }
     }
 
-    renderProductDetail(req, res) {
+    async renderProductDetail(req, res) {
         const { productId } = req.params;
-        console.log({ productId });
 
-        // Get product detail here
+        try {
+            const [[product], [detail]] = await Promise.all([
+                ProductModel.getById(productId),
+                ProdcutDetailModel.getlById(productId),
+            ]);
 
-        res.render("pages/products/detail", {
-            productId,
-            relatedProducts: [1, 2, 3, 4, 5],
-        });
+            if (!product || !detail) {
+                return res.render("pages/products/detail", {
+                    productId,
+                    relatedProducts: [1, 2, 3, 4, 5],
+                    data: {
+                        error: "Product not found",
+                    },
+                });
+            }
+
+            const userList = await UserAccountModel.getWithIdList([
+                detail.seller_id,
+                product.won_bidder_id,
+            ]);
+            const bidder = userList.filter((user) => user.user_id === product.won_bidder_id)[0];
+            const seller = userList.filter((user) => user.user_id === detail.seller_id)[0];
+
+            const retObj = {
+                ...product,
+                ...detail,
+                image_links: JSON.parse(detail.image_links),
+                created_date: moment(product.created_date).locale("en").fromNow(),
+                bidder: {
+                    name: bidder.first_name,
+                    point: bidder.rating_point,
+                },
+                seller: {
+                    name: `${seller.first_name} ${seller.last_name}`,
+                    point: seller.rating_point,
+                },
+                canBuyNow: product.buy_now_price !== null ? true : false,
+            };
+
+            delete retObj.max_tolerable_price;
+            delete retObj.won_bidder_id;
+            delete retObj.cat_id;
+            delete retObj.auto_extend;
+            delete retObj.seller_id;
+
+            const [relatedProducts] = await ProductModel.getRandomProductByCatId(
+                productId,
+                product.cat_id,
+                5
+            );
+
+            const mappedRelated = relatedProducts.map((item) => {
+                const createdDate = moment(item.created_date).locale("en").fromNow();
+
+                const ret = {
+                    productId: item.product_id,
+                    productName: item.product_name,
+                    thumbnail: item.thumbnail,
+                    currentPrice: item.current_price,
+                    totalBids: item.bid_count !== null ? item.bid_count : 0,
+                    createdDate,
+                    expiredDate: item.expired_date,
+                    firstName: item.first_name,
+                };
+
+                if (item.buy_now_price !== null) {
+                    ret.buyNowPrice = numeral(item.buy_now_price).format("0,0");
+                }
+
+                return ret;
+            });
+
+            return res.render("pages/products/detail", {
+                data: {
+                    productDetail: retObj,
+                    related: mappedRelated,
+                },
+            });
+        } catch (error) {
+            console.log(error);
+            throw new Error(error);
+        }
     }
 
     async getFilterCategories(req, res) {
@@ -159,23 +237,4 @@ export default class ProductController extends AppController {
             res.json({ status: 500 });
         }
     }
-}
-
-function sortProductUtil(productList, sortType) {
-    const sorted = productList.sort((left, right) => {
-        switch (sortType) {
-            case "price_asc":
-                return left.current_price - right.current_price;
-            case "price_desc":
-                return right.current_price - left.current_price;
-            case "time_asc":
-                return moment(left.expired_date).diff(moment(right.expired_date));
-            case "time_asc":
-                return moment(right.expired_date).diff(moment(left.expired_date));
-            default:
-                return left.current_price - right.current_price;
-        }
-    });
-
-    return sorted;
 }
