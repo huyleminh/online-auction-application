@@ -184,24 +184,41 @@ export default class ProductModel {
         return new Promise(async function (resolve, reject) {
             const offset = (page - 1) * CommonConst.ITEMS_PER_TABLE_PAGE;
             try {
-                const res = await KnexConnection('product')
-                .join('product_detail', 'product.product_id', '=', 'product_detail.product_id')
-                .select('product.product_id', 'product.product_name', 'product.current_price', 'product.thumbnail', 'product_detail.seller_id')
-                .where('product.won_bidder_id', '=', id).andWhere('product.is_sold', '=', 1).limit(CommonConst.ITEMS_PER_TABLE_PAGE + 1).offset(offset)
+                const res = await KnexConnection("product")
+                    .join("product_detail", "product.product_id", "=", "product_detail.product_id")
+                    .select(
+                        "product.product_id",
+                        "product.product_name",
+                        "product.current_price",
+                        "product.thumbnail",
+                        "product_detail.seller_id"
+                    )
+                    .where("product.won_bidder_id", "=", id)
+                    .andWhere("product.is_sold", "=", 1)
+                    .limit(CommonConst.ITEMS_PER_TABLE_PAGE + 1)
+                    .offset(offset);
                 const hasNext = res.length === CommonConst.ITEMS_PER_TABLE_PAGE + 1;
                 const dataSet = res.slice(0, CommonConst.ITEMS_PER_TABLE_PAGE);
                 const promises = dataSet.map((element) => {
-                    return UserAccountModel.getByColumn('user_id', element.seller_id);
-                })
+                    return UserAccountModel.getByColumn("user_id", element.seller_id);
+                });
                 const additionalInfo = await Promise.all(promises);
                 dataSet.map((element, index) => {
-                    element.seller_name = additionalInfo[index][0].first_name + ' ' + additionalInfo[index][0].last_name;
+                    element.seller_name =
+                        additionalInfo[index][0].first_name +
+                        " " +
+                        additionalInfo[index][0].last_name;
                     element.seller_rating_point = additionalInfo[index][0].rating_point;
-                })
+                });
                 resolve({
                     hasNext: hasNext,
-                    data: res.slice(0, CommonConst.ITEMS_PER_TABLE_PAGE)
+                    data: res.slice(0, CommonConst.ITEMS_PER_TABLE_PAGE),
                 });
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
 
     static getById(id) {
         return new Promise(async function (resolve, reject) {

@@ -1,6 +1,5 @@
 import UserAccountModel from "../models/UserAccountModel.js";
 import WishlistModel from "../models/WishlistModel.js";
-import UserAccountModel from "../models/UserAccountModel.js"
 
 export default class LocalsMiddlewares {
     // Move user in session.passport to locals

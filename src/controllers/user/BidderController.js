@@ -37,8 +37,9 @@ export default class BidderController extends AppController {
 
     async renderBiddingProducts(req, res) {
         const page = parseInt(req.query.page || 1);
+
         if (isNaN(page)) {
-            res.redirect("/bidder/bidding");
+            return res.redirect("/bidder/bidding?page=1");
         }
 
         try {
@@ -52,8 +53,8 @@ export default class BidderController extends AppController {
 
             let data = await JoinBidderModel.getJoinBidderByUsernameWithPage(user[0].user_id, page);
 
-            if (data === undefined) {
-                res.render("pages/user/bidder/bidding", {
+            if (data === undefined || data.data.length === 0) {
+                return res.render("pages/user/bidder/bidding", {
                     layout: "profile",
                     data: {
                         list: [],
@@ -61,10 +62,6 @@ export default class BidderController extends AppController {
                         page: 1
                     }
                 });
-            }
-
-            if (data.data.length === 0) {
-                res.redirect("/bidder/bidding");
             }
 
             const promises = data.data.map((element) => {
@@ -184,7 +181,7 @@ export default class BidderController extends AppController {
     async renderWonList(req, res) {
         const page = parseInt(req.query.page || 1);
         if (isNaN(page)) {
-            res.redirect("/bidder/won");
+            return res.redirect("/bidder/won?page=1");
         }
 
         try {
@@ -198,8 +195,8 @@ export default class BidderController extends AppController {
 
             let data = await ProductModel.getWonProductsByUserId(user[0].user_id, page);
 
-            if (data === undefined) {
-                res.render("pages/user/bidder/wonlist", {
+            if (data === undefined || data.data.length === 0) {
+                return res.render("pages/user/bidder/wonlist", {
                     layout: "profile",
                     data: {
                         list: [],
@@ -207,10 +204,6 @@ export default class BidderController extends AppController {
                         page: 1
                     }
                 });
-            }
-
-            if (data.data.length === 0) {
-                res.redirect("/bidder/won");
             }
 
             const promises = data.data.map((element) => {
