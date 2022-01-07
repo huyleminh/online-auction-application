@@ -83,6 +83,8 @@ passport.use(
                     role: userList[0].role,
                     fullname: `${userList[0].first_name} ${userList[0].last_name}`,
                     userType: "GOOGLE",
+                    point: userList[0].rating_point,
+                    isRated: userList[0].rating_point !== null ? true : false,
                 });
             } catch (error) {
                 console.log(error);
@@ -114,6 +116,8 @@ passport.use(
                 role: userList[0].role,
                 fullname: `${userList[0].first_name} ${userList[0].last_name}`,
                 userType: "NORMAL",
+                point: userList[0].rating_point,
+                isRated: userList[0].rating_point !== null ? true : false,
             });
         } catch (error) {
             console.log(error);
@@ -420,6 +424,7 @@ export default class AuthController extends AppController {
 
     handleLogout(req, res) {
         req.logout();
+        delete req.session.wishlist;
         req.session.save(() => {
             res.redirect(req.headers.referer || "/");
         });

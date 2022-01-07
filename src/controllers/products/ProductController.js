@@ -1,9 +1,12 @@
 import moment from "moment";
 import numeral from "numeral";
+import AuthMiddlewares from "../../middlewares/AuthMiddlewares.js";
+import BiddingHistoryModel from "../../models/BiddingHistoryModel.js";
 import CategoryModel from "../../models/CategoryModel.js";
 import ProdcutDetailModel from "../../models/ProductDetailModel.js";
 import ProductModel from "../../models/ProductModal.js";
 import UserAccountModel from "../../models/UserAccountModel.js";
+import CommomCont from "../../shared/CommonConst.js";
 import CommomUtils from "../../utils/CommonUtils.js";
 import AppController from "../AppController.js";
 
@@ -18,6 +21,7 @@ export default class ProductController extends AppController {
     init() {
         this._router.get("/menu/categories/:catId", this.renderProductList);
         this._router.get("/menu/products/:productId", this.renderProductDetail);
+        this._router.post("/menu/products/:productId", this.postHitBidProduct);
 
         this._router.get("/api/menu/categories", this.getFilterCategories);
     }
@@ -91,7 +95,7 @@ export default class ProductController extends AppController {
                     productId: item.product_id,
                     productName: item.product_name,
                     thumbnail: item.thumbnail,
-                    currentPrice: numeral(item.current_price).format("0,0"),
+                    currentPrice: item.current_price,
                     buyNowPrice:
                         item.buy_now_price !== null
                             ? numeral(item.buy_now_price).format("0,0")
@@ -101,6 +105,7 @@ export default class ProductController extends AppController {
                     firstName: item.first_name,
                     createdDate,
                     isNew: minDiff <= 30,
+                    isSold: item.is_sold,
                 };
 
                 return retObj;
@@ -141,10 +146,8 @@ export default class ProductController extends AppController {
 
             if (!product || !detail) {
                 return res.render("pages/products/detail", {
-                    productId,
-                    relatedProducts: [1, 2, 3, 4, 5],
                     data: {
-                        error: "Product not found",
+                        notFound: true,
                     },
                 });
             }
@@ -196,6 +199,7 @@ export default class ProductController extends AppController {
                     createdDate,
                     expiredDate: item.expired_date,
                     firstName: item.first_name,
+                    isSold: item.is_sold,
                 };
 
                 if (item.buy_now_price !== null) {
@@ -205,10 +209,24 @@ export default class ProductController extends AppController {
                 return ret;
             });
 
+            let mappedHistory = [];
+            if (req.user && req.user.isAuth) {
+                const history = await BiddingHistoryModel.getHistoryByProductId(productId);
+                mappedHistory = history.map((h) => {
+                    const retObj = {
+                        bidder_fname: h.bidder_fname,
+                        current_price: h.current_price,
+                        bid_date: moment(h.bid_date).format(CommomCont.MOMENT_BASE_USER_FORMAT),
+                    };
+                    return retObj;
+                });
+            }
+
             return res.render("pages/products/detail", {
                 data: {
                     productDetail: retObj,
                     related: mappedRelated,
+                    history: mappedHistory,
                 },
             });
         } catch (error) {
@@ -236,5 +254,19 @@ export default class ProductController extends AppController {
             console.log(error);
             res.json({ status: 500 });
         }
+    }
+
+    async postHitBidProduct(req, res) {
+        const { body } = req;
+        console.log(body);
+        // Get user id
+        // Validate is banned
+        // Check input price is higher than old tolerable price
+        // If lower -> forbidden
+        // If higher -> Next
+        // Check in product table
+        // Check expired time
+        // Update job table
+        res.redirect("/menu/categories/all");
     }
 }

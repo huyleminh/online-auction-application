@@ -1,3 +1,4 @@
+import UserAccountModel from "../models/UserAccountModel.js";
 import WishlistModel from "../models/WishlistModel.js";
 import UserAccountModel from "../models/UserAccountModel.js"
 
@@ -14,19 +15,22 @@ export default class LocalsMiddlewares {
     static async getWishlist(req, res, next) {
         const user = req.user;
         if (user) {
-            const userFull = await UserAccountModel.getByColumn('username', user.username);
-            if (userFull === undefined) {
-                req.logout();
-                return req.session.save(() => {
-                    res.redirect("/login");
-                });
-            }
+            if (!req.session.wishlist) {
+                const [userFull] = await UserAccountModel.getByColumn("username", user.username);
+                if (userFull === undefined) {
+                    req.logout();
+                    return req.session.save(() => {
+                        res.redirect("/login");
+                    });
+                }
 
-            let wishlist = await WishlistModel.getWishlistByUserId(userFull[0].user_id);
-            res.locals.wishlist = {
-                wishlist: wishlist,
-                length: wishlist.length
-            };
+                const wishlist = await WishlistModel.getWishlistByUsername(userFull.user_id);
+                req.session.wishlist = {
+                    wishlist: wishlist,
+                    length: wishlist.length,
+                };
+            }
+            res.locals.wishlist = req.session.wishlist;
         }
         next();
     }

@@ -1,9 +1,7 @@
 $(document).ready(function () {
     $(".card-images-preview").owlCarousel({
         items: 3,
-        loop: true,
         center: true,
-        rewind: false,
 
         mouseDrag: true,
         touchDrag: true,
@@ -22,12 +20,12 @@ $(document).ready(function () {
         dragEndSpeed: false,
 
         responsive: {
-            0: { items: 1, nav: true },
-            480: { items: 2, nav: true },
-            768: { items: 2, nav: true, loop: true },
-            992: { items: 3, nav: true, loop: true },
-            1400: { items: 3, nav: true, loop: true },
-            1920: { items: 3, nav: true, loop: true },
+            0: { items: 1, loop: true },
+            480: { items: 2, loop: true },
+            768: { items: 2, loop: true },
+            992: { items: 3, loop: true },
+            1400: { items: 3, loop: true },
+            1920: { items: 3, loop: true },
         },
     });
 
@@ -37,9 +35,7 @@ $(document).ready(function () {
         autoplayHoverPause: true,
 
         items: 3,
-        loop: true,
         center: true,
-        rewind: false,
 
         mouseDrag: true,
         touchDrag: true,
@@ -58,12 +54,12 @@ $(document).ready(function () {
         dragEndSpeed: false,
 
         responsive: {
-            0: { items: 1, nav: true },
-            480: { items: 2, nav: true },
-            768: { items: 2, nav: true, loop: true },
-            992: { items: 3, nav: true, loop: true },
-            1400: { items: 3, nav: true, loop: true },
-            1920: { items: 3, nav: true, loop: true },
+            0: { items: 1, loop: true },
+            480: { items: 2, loop: true },
+            768: { items: 2, loop: true },
+            992: { items: 3, loop: true },
+            1400: { items: 3, loop: true },
+            1920: { items: 3, loop: true },
         },
     });
 
@@ -84,8 +80,6 @@ $(document).ready(function () {
     // Change image
     $(".related-images").click(function () {
         const src = $(this).attr("src");
-
-        $(this).attr("src", $("#main-image").attr("src"));
         $("#main-image").attr("src", src);
     });
 });

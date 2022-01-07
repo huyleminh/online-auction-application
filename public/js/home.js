@@ -144,9 +144,12 @@ function loadTop5Highest() {
                     expType = "timer-danger";
                 }
 
+                const ribbon = item.isSold ? `<div class="ribbon bg-danger">SOLD</div>` : "";
+
                 return `
                     <div class="card product-card">
-                        <div class="p-3">
+                        <div class="p-3 postion-relative">
+                            ${ribbon}
                             <a href="/menu/products/${item.productId}" class="card-image" style="max-height: 200px;">
                                 <img
                                     src=${item.thumbnail}
@@ -225,9 +228,12 @@ function loadTop5Bid() {
                     expType = "timer-danger";
                 }
 
+                const ribbon = item.isSold ? `<div class="ribbon bg-danger">SOLD</div>` : "";
+
                 return `
                     <div class="card product-card">
-                        <div class="p-3">
+                        <div class="p-3 position-relative">
+                            ${ribbon}
                             <a href="/menu/products/${item.productId}" class="card-image" style="max-height: 200px;">
                                 <img
                                     src=${item.thumbnail}
