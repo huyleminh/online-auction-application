@@ -32,6 +32,10 @@ export default class HbsHelper {
         return left + right;
     }
 
+    static calcNo(index, page) {
+        return (page - 1) * CommonConst.ITEMS_PER_TABLE_PAGE + index + 1
+    }
+
     static subtract(left, right) {
         return left - right;
     }
@@ -45,7 +49,8 @@ export default class HbsHelper {
             isGreaterThan: this.isGreaterThan,
             isLessThan: this.isLessThan,
             add: this.add,
-            subtract: this.subtract,
+            calcNo: this.calcNo,
+            subtract: this.subtract
         };
     }
 }

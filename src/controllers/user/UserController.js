@@ -1,5 +1,6 @@
 import moment from "moment";
 import AuthMiddlewares from "../../middlewares/AuthMiddlewares.js";
+import RatingModel from "../../models/RatingModel.js";
 import UserAccountModel from "../../models/UserAccountModel.js";
 import WishlistModel from "../../models/WishlistModel.js";
 import EmailService from "../../services/EmailService.js";
@@ -262,7 +263,7 @@ export default class UserController extends AppController {
         });
     }
 
-    async removeWishlistItem(req, res) {
+   async removeWishlistItem(req, res) {
         const { id } = req.body;
 
         try {
@@ -332,10 +333,30 @@ export default class UserController extends AppController {
         }
     }
 
-    postFeedback(req, res) {
+    async postFeedback(req, res) {
         const body = req.body;
-        console.log(body);
 
-        res.redirect(req.headers.referer);
+        try {
+            const user = await UserAccountModel.getByColumn('username', req.user.username);
+            if (user === undefined) {
+                req.logout();
+                return req.session.save(() => {
+                    res.redirect("/login");
+                });
+            }
+            const feedback = {
+                rated_user_id: body.ratedId,
+                evaluator_id: user[0].user_id,
+                is_positive: body.isPositive === 'true' ? true : false,
+                feedback: body.feedback
+            }
+
+            await RatingModel.insertFeedback(feedback);
+
+            res.redirect(req.headers.referer);
+        } catch (err) {
+            res.redirect(req.headers.referer);
+        }
+
     }
 }

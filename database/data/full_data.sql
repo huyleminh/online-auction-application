@@ -218,16 +218,6 @@ VALUES
         '2021-09-15 16:25:14'
     );
 
-INSERT INTO
-    category(cat_id, cat_name, super_cat_id, created_date)
-VALUES
-    (
-        25,
-        'Smart Devices',
-        5,
-        '2021-11-04 15:39:05'
-    );
-
 /* product */
 insert into product (product_id, product_name, thumbnail, current_price, buy_now_price, expired_date, cat_id, max_tolerable_price, is_sold, won_bidder_id, current_bidding_count) values (1, 'Honda City', 'https://cdn.honda.com.vn/automobiles/October2020/do9qi3pykphR7qLxaGnC.png', 500000000, 600000000, '2022-01-30 05:51:27', 12, 550000000, true, 4, 5);
 insert into product (product_id, product_name, thumbnail, current_price, buy_now_price, expired_date, cat_id, max_tolerable_price, is_sold, won_bidder_id, current_bidding_count) values (2, 'Mercedes-Benz GLC', 'https://www.mercedes-benz.com.vn/vi/passengercars/mercedes-benz-cars/models/glc/suv-x253/explore/highlights/_jcr_content/contentgallerycontainer/par/contentgallery/par/contentgallerytile_1309626203/image.MQ6.8.20210427095713.jpeg', 1500000000, 1700000000, '2022-01-30 15:57:03', 12, 1600000000, true, 8, 5);
