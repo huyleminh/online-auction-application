@@ -80,4 +80,12 @@ $(document).ready(function () {
             });
         });
     });
+
+    // Change image
+    $(".related-images").click(function () {
+        const src = $(this).attr("src");
+
+        $(this).attr("src", $("#main-image").attr("src"));
+        $("#main-image").attr("src", src);
+    });
 });

@@ -200,6 +200,34 @@ export default class ProductModel {
                     hasNext: hasNext,
                     data: res.slice(0, CommonConst.ITEMS_PER_TABLE_PAGE)
                 });
+
+    static getById(id) {
+        return new Promise(async function (resolve, reject) {
+            try {
+                const dataSet = KnexConnection("product").where({ product_id: id }).select();
+                resolve(dataSet);
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
+
+    static getRandomProductByCatId(prodId, catId, limit) {
+        return new Promise(async function (resolve, reject) {
+            try {
+                const dataSet = await KnexConnection.raw(
+                    `
+                        select prod.product_id, prod.product_name, prod.thumbnail, prod.current_price,
+                        prod.buy_now_price, prod.expired_date, prod.created_date, user.first_name, prod.bid_count
+                        from (
+                            select product_id, product_name, thumbnail, current_price, buy_now_price, expired_date, created_date,
+                                    won_bidder_id, current_bidding_count as bid_count
+                            from product where cat_id = ${catId} and product_id <> ${prodId}
+                            order by rand() limit ${limit}
+                        ) as prod join user_account user on prod.won_bidder_id = user.user_id ;
+                    `
+                );
+                resolve(dataSet);
             } catch (err) {
                 reject(err);
             }

@@ -11,10 +11,9 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/">Home</a></li>
-                <li class="breadcrumb-item"><a href="javascript:void(0)">Products</a></li>
+                <li class="breadcrumb-item"><a href="/menu/categories/all">Products</a></li>
                 <li class="breadcrumb-item active" aria-current="page">
-                    Product with id
-                    {{productId}}
+                    {{data.productDetail.product_name}}
                 </li>
             </ol>
         </nav>
@@ -26,42 +25,25 @@
             <div class="col-lg-7 col-sm-12">
                 <div class="card border shadow-0 product-images">
                     <div class="card-body card-body-images">
-                        <div class="card-images-main">
+                        <div class="card-images-main" style="max-height: 500px;">
                             <img
-                                src="https://cdn.pixabay.com/photo/2018/08/16/19/56/wedding-rings-3611277_960_720.jpg"
+                                src="{{data.productDetail.thumbnail}}"
                                 alt="product image"
                                 class="img-fluid img-thumbnail p-0 border-0 rounded"
+                                style="max-height: 500px; object-fit: cover; width: 100%;"
+                                id="main-image"
                             />
                         </div>
-
+                        <hr />
                         <div class="card-images-preview owl-carousel owl-theme mt-4">
                             <div class="card-sub-images-item">
-                                <img
-                                    src="https://cdn.pixabay.com/photo/2018/08/16/19/56/wedding-rings-3611277_960_720.jpg"
-                                    alt="product image"
-                                />
+                                <img src="{{data.productDetail.thumbnail}}" alt="product image" class="related-images" />
                             </div>
-
-                            <div class="card-sub-images-item">
-                                <img
-                                    src="https://cdn.pixabay.com/photo/2018/08/16/19/56/wedding-rings-3611277_960_720.jpg"
-                                    alt="product image"
-                                />
-                            </div>
-
-                            <div class="card-sub-images-item">
-                                <img
-                                    src="https://cdn.pixabay.com/photo/2018/08/16/19/56/wedding-rings-3611277_960_720.jpg"
-                                    alt="product image"
-                                />
-                            </div>
-
-                            <div class="card-sub-images-item">
-                                <img
-                                    src="https://cdn.pixabay.com/photo/2018/08/16/19/56/wedding-rings-3611277_960_720.jpg"
-                                    alt="product image"
-                                />
-                            </div>
+                            {{#each data.productDetail.image_links}}
+                                <div class="card-sub-images-item">
+                                    <img src="{{this}}" alt="product image" class="related-images" />
+                                </div>
+                            {{/each}}
                         </div>
                     </div>
                 </div>
@@ -70,7 +52,7 @@
             <div class="col-lg-5 col-sm-12 d-flex flex-column justify-content-between">
                 <div class="card border shadow-0 mb-3 product-details">
                     <div class="card-body card-body-info">
-                        <h2 class="card-title mb-3">Ring With Clear Stone Accents</h2>
+                        <h2 class="card-title mb-3">{{data.productDetail.product_name}}</h2>
                         <div class="d-flex flex-column">
                             <div class="card-body-info-item d-flex align-items-center mt-4">
                                 <div class="me-3 left">
@@ -78,7 +60,7 @@
                                 </div>
                                 <div class="flex-grow-1 d-flex flex-column right bidprice">
                                     <span class="text-success">
-                                        1.000.000
+                                        {{formatMoney data.productDetail.current_price}}
                                         <span>VND</span>
                                     </span>
                                 </div>
@@ -90,8 +72,12 @@
                                 </div>
                                 <div class="flex-grow-1 d-flex flex-column right">
                                     <span class="text-danger">
-                                        1.000.000
-                                        <span>VND</span>
+                                        {{#if data.productDetail.canBuyNow}}
+                                            {{formatMoney data.productDetail.buy_now_price}}
+                                            <span>VND</span>
+                                        {{else}}
+                                            N/A
+                                        {{/if}}
                                     </span>
                                 </div>
                             </div>
@@ -103,7 +89,7 @@
                                 <div class="flex-grow-1 d-flex flex-column right">
                                     <span class="">
                                         <i class="fas fa-users me-2 text-secondary"></i>
-                                        30
+                                        {{formatMoney data.productDetail.current_bidding_count}}
                                     </span>
                                 </div>
                             </div>
@@ -113,14 +99,18 @@
                                     <span class="">Top Bidder</span>
                                 </div>
                                 <div class="flex-grow-1 d-flex right">
-                                    <span class="me-2">
-                                        <i class="me-2 fas fa-crown text-warning"></i>
-                                        *****Khoa
-                                    </span>
-                                    <span class="ps-2 border-start">
-                                        <i class="me-2 far fa-thumbs-up text-primary"></i>
-                                        80
-                                    </span>
+                                    {{#if data.productDetail.bidder}}
+                                        <span class="me-2">
+                                            <i class="me-2 fas fa-crown text-warning"></i>
+                                            ****{{data.productDetail.bidder.name}}
+                                        </span>
+                                        <span class="ps-2 border-start">
+                                            <i class="me-2 far fa-thumbs-up text-primary"></i>
+                                            {{data.productDetail.bidder.point}}
+                                        </span>
+                                    {{else}}
+                                        <span class="me-2 text-danger">None</span>
+                                    {{/if}}
                                 </div>
                             </div>
 
@@ -131,12 +121,12 @@
                                 <div class="flex-grow-1 d-flex right">
                                     <span class="me-2">
                                         <i class="me-2 fas fa-user-check text-secondary"></i>
-                                        Khoa Ngo
+                                        {{data.productDetail.seller.name}}
                                     </span>
 
                                     <span class="ps-2 border-start">
                                         <i class="me-2 far fa-thumbs-up text-primary"></i>
-                                        80
+                                        {{data.productDetail.seller.point}}
                                     </span>
                                 </div>
                             </div>
@@ -146,8 +136,10 @@
                                     <span class="">Remaining time</span>
                                 </div>
 
-                                <div class="timer timer-danger right">
-                                    <span class="fw-bolder text-white">0d : 1h : 16m : 59s</span>
+                                <div class="timer right">
+                                    <span
+                                        class="fw-bolder countdown"
+                                    >{{data.productDetail.expired_date}}</span>
                                 </div>
                             </div>
 
@@ -161,7 +153,7 @@
                                 </button>
 
                                 <button
-                                    class="btn btn-primary"
+                                    class="btn btn-primary shadow-0"
                                     id="btn-share"
                                     data-mdb-toggle="modal"
                                     data-mdb-target="#shareLinkModal"
@@ -172,6 +164,11 @@
                             </div>
 
                         </div>
+                    </div>
+
+                    <div class="card-footer text-center">
+                        Posted
+                        {{data.productDetail.created_date}}
                     </div>
                 </div>
 
@@ -186,12 +183,14 @@
                         <form action="">
                             <div class="input-group mb-3">
                                 <input
-                                    min="0"
+                                    min="{{add
+                                        data.productDetail.current_price
+                                        data.productDetail.step_price
+                                    }}"
                                     type="number"
                                     style="height: unset;"
                                     class="form-control"
                                     placeholder="Enter your money"
-                                    aria-label="Enter your money"
                                     aria-describedby="btn-bid"
                                     name="money"
                                 />
@@ -199,14 +198,29 @@
                                     Hit a bid
                                 </button>
                             </div>
+                            <div class="form-text">Minimum money is
+                                {{formatMoney
+                                    (add
+                                        data.productDetail.current_price
+                                        data.productDetail.step_price
+                                    )
+                                }}
+                            </div>
                         </form>
 
-                        <div class="d-flex justify-content-center"><span>Or</span></div>
+                        {{! If have buy now price }}
+                        {{#if data.productDetail.canBuyNow}}
+                            <div class="d-flex justify-content-center"><span>Or</span></div>
 
-                        <form action="" class="mb-0 mt-3">
-                            <input type="hidden" name="productId" />
-                            <button type="submit" class="btn btn-block" id="btn-buynow">Buy now</button>
-                        </form>
+                            <form action="" class="mb-0 mt-3">
+                                <input
+                                    type="hidden"
+                                    name="productId"
+                                    value={{data.productDetail.product_id}}
+                                />
+                                <button type="submit" class="btn btn-block" id="btn-buynow">Buy now</button>
+                            </form>
+                        {{/if}}
                     </div>
                 </div>
             </div>
@@ -261,36 +275,7 @@
                         aria-labelledby="description-tab0"
                     >
                         <div class="ck-content">
-                            <h2>The three greatest things you learn from traveling</h2>
-                            <p>Like all the great things on earth traveling teaches us by example.
-                                Here are some of the most precious lessons Ive learned over the
-                                years of traveling.
-                            </p>
-                            <h3>Appreciation of diversity</h3>
-                            <p>Getting used to an entirely different culture can be challenging.
-                                While it's also nice to learn about cultures online or from books,
-                                nothing comes close to experiencing cultural diversity in person.
-                                You learn to appreciate each and every single one of the differences
-                                while you become more culturally fluid.
-                            </p>
-                            <blockquote><p>The real voyage of discovery consists not in seeking new
-                                    landscapes, but having new eyes.</p><p><strong>Marcel Proust</strong></p>
-                            </blockquote>
-                            <h3>Improvisation</h3>
-                            <p>Life doesn't allow us to execute every single plan perfectly. This
-                                especially seems to be the case when you travel. You plan it down to
-                                every minute with a big checklist; but when it comes to executing
-                                it, something always comes up and you're left with your improvising
-                                skills. You learn to adapt as you go. Here's how my travel checklist
-                                looks now:
-                            </p>
-                            <h3>Confidence</h3>
-                            <p>Going to a new place can be quite terrifying. While change and
-                                uncertainty makes us scared, traveling teaches us how ridiculous it
-                                is to be afraid of something before it happens. The moment you face
-                                your fear and see there was nothing to be afraid of, is the moment
-                                you discover bliss.
-                            </p>
+                            {{data.productDetail.description}}
                         </div>
                     </div>
                     <div
@@ -349,13 +334,18 @@
             </div>
             <div class="card-body">
                 <div class="product-related-carousel owl-carousel owl-theme">
-                    {{#each relatedProducts}}
+                    {{#each data.related}}
                         <div class="card border product-card">
                             <div class="p-3">
-                                <a href="/menu/products/1" class="card-image">
+                                <a
+                                    href="/menu/products/{{this.productId}}"
+                                    class="card-image"
+                                    style="max-height: 200px; height: 200px"
+                                >
                                     <img
-                                        src="https://cdn.pixabay.com/photo/2018/08/16/19/56/wedding-rings-3611277_960_720.jpg"
+                                        src="{{this.thumbnail}}"
                                         class="img-fluid"
+                                        style="object-fit: contain; height: 100%; width: 100%"
                                     />
                                     <div class="mask">
                                         <span><i class="fas fa-search-plus me-1"></i>View details</span>
@@ -363,39 +353,42 @@
                                 </a>
                             </div>
                             <div class="card-body p-3 d-flex flex-column justify-content-between">
-                                <h4 class="card-title">Ring With Clear Stone Accents</h4>
+                                <h4 class="card-title">{{this.productName}}</h4>
                                 <div class="card-info mb-3 d-flex align-items-center bid">
                                     <i class="fas fa-gavel text-success"></i>
                                     <span class="text-success">Current Bid</span>
-                                    <span class="flex-grow-1 text-end">1.000.000 VND</span>
+                                    <span class="flex-grow-1 text-end">{{formatMoney
+                                            this.currentPrice
+                                        }}
+                                        VND</span>
                                 </div>
                                 <div class="card-info mb-3 d-flex align-items-center">
                                     <i class="fas fa-dollar-sign text-danger"></i>
                                     <span class="text-danger">Buy Now</span>
-                                    <span class="flex-grow-1 text-end">1.000.000 VND</span>
+                                    <span class="flex-grow-1 text-end">{{this.buyNowPrice}}
+                                        VND</span>
                                 </div>
                                 <div class="card-info mb-3 d-flex align-items-center">
                                     <i class="fas fa-crown text-warning"></i>
                                     <span class="text-warning">Top Bidder:</span>
-                                    <span class="flex-grow-1 text-end">*****Khoa</span>
+                                    <span class="flex-grow-1 text-end">****{{this.firstName}}</span>
                                 </div>
-                                <div
-                                    class="card-info mb-3 d-flex align-items-center timer timer-danger"
-                                >
-                                    <span class="timer-danger fw-bolder">0d : 1h : 16m : 59s</span>
-                                    <span class="flex-grow-1 text-end">30 Bids</span>
+                                <div class="card-info mb-3 d-flex align-items-center timer">
+                                    <span class="fw-bolder countdown">{{this.expiredDate}}</span>
+                                    <span class="flex-grow-1 text-end">{{this.totalBids}}
+                                        Bids</span>
                                 </div>
                                 <a
-                                    href="/menu/products/1"
+                                    href="/menu/products/{{this.productId}}"
                                     type="button"
                                     class="btn btn-primary btn-block bidnow"
                                 >
                                     <i class="fas fa-gavel me-2"></i>
-                                    Bid Now
+                                    Go to Bid Now
                                 </a>
                             </div>
                             <div class="card-footer text-center p-3">
-                                <p class="m-0 verical-align-middle">2 days ago</p>
+                                <p class="m-0 verical-align-middle">{{this.createdDate}}</p>
                             </div>
                         </div>
                     {{/each}}
@@ -447,4 +440,5 @@
 {{#section "js"}}
     <script src="/owlcarousel/owl.carousel.min.js"></script>
     <script src="/js/menu.js"></script>
+    <script src="/js/countdown.js"></script>
 {{/section}}
