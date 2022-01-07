@@ -58,6 +58,12 @@ export default class UserController extends AppController {
         );
 
         this._router.post("/user/feedback", AuthMiddlewares.authorizeUser, this.postFeedback);
+
+        this._router.get(
+            "/user/feedback/view",
+            AuthMiddlewares.authorizeUser,
+            this.renderViewFeedbackPage
+        );
     }
 
     async renderProfilePage(req, res) {
@@ -263,7 +269,7 @@ export default class UserController extends AppController {
         });
     }
 
-   async removeWishlistItem(req, res) {
+    async removeWishlistItem(req, res) {
         const { id } = req.body;
 
         try {
@@ -337,7 +343,7 @@ export default class UserController extends AppController {
         const body = req.body;
 
         try {
-            const user = await UserAccountModel.getByColumn('username', req.user.username);
+            const user = await UserAccountModel.getByColumn("username", req.user.username);
             if (user === undefined) {
                 req.logout();
                 return req.session.save(() => {
@@ -347,9 +353,9 @@ export default class UserController extends AppController {
             const feedback = {
                 rated_user_id: body.ratedId,
                 evaluator_id: user[0].user_id,
-                is_positive: body.isPositive === 'true' ? true : false,
-                feedback: body.feedback
-            }
+                is_positive: body.isPositive === "true" ? true : false,
+                feedback: body.feedback,
+            };
 
             await RatingModel.insertFeedback(feedback);
 
@@ -357,6 +363,51 @@ export default class UserController extends AppController {
         } catch (err) {
             res.redirect(req.headers.referer);
         }
+    }
 
+    async renderViewFeedbackPage(req, res) {
+        let { page } = req.query;
+        try {
+            const [user] = await UserAccountModel.getByColumn("username", req.user.username);
+
+            if (!user) {
+                req.logout();
+                delete req.session.wishlist;
+                return req.session.save(() => {
+                    res.redirect("/login");
+                });
+            }
+
+            const [totalRows] = await RatingModel.countRowsByRatedUserId(user.user_id);
+            page = page ? parseInt(page) : 1;
+
+            const totalPages =
+                totalRows.count < DEFAULT_TABLE_ROW_LIMIT
+                    ? 1
+                    : Math.ceil(totalRows.count / DEFAULT_TABLE_ROW_LIMIT);
+
+            if (isNaN(page) || page < 1 || page > totalPages) {
+                page = 1;
+                return res.redirect(`/user/feedback/view?page=${page}`);
+            }
+
+            const [ratingHistory] = await RatingModel.getAllByRatedUserId(
+                user.user_id,
+                DEFAULT_TABLE_ROW_LIMIT,
+                DEFAULT_TABLE_ROW_LIMIT * (page - 1)
+            );
+
+            res.render("pages/user/feedback", {
+                layout: "profile",
+                data: {
+                    list: ratingHistory,
+                    page,
+                    hasNext: page !== totalPages,
+                },
+            });
+        } catch (error) {
+            console.log(error);
+            throw new Error(error);
+        }
     }
 }
