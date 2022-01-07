@@ -1,4 +1,5 @@
 import AuthMiddlewares from "../../middlewares/AuthMiddlewares.js";
+import { ImageDiskUpload } from "../../middlewares/MulterUpload.js";
 import AppController from "../AppController.js";
 
 export default class SellerController extends AppController {
@@ -21,7 +22,7 @@ export default class SellerController extends AppController {
 
         this._router.post(
             "/seller/products/upload",
-            AuthMiddlewares.authorizeUser,
+            ImageDiskUpload.single("upload"),
             this.uploadProductImage
         );
     }
@@ -39,5 +40,9 @@ export default class SellerController extends AppController {
         res.redirect("/seller/products");
     }
 
-    uploadProductImage(req, res) {}
+    uploadProductImage(req, res) {
+        const file = req.file;
+        console.log(file);
+        res.send({ url: `http://localhost:${5000}/uploads/${file.originalname}` });
+    }
 }

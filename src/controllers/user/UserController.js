@@ -8,6 +8,8 @@ import Authenticator from "../../utils/Authenticatior.js";
 import PasswordHelper from "../../utils/helpers/PasswordHelper.js";
 import AppController from "../AppController.js";
 
+const DEFAULT_TABLE_ROW_LIMIT = 10;
+
 export default class UserController extends AppController {
     constructor() {
         super();
@@ -47,6 +49,11 @@ export default class UserController extends AppController {
             "/user/wishlist/delete",
             AuthMiddlewares.authorizeUser,
             this.removeWishlistItem
+        );
+        this._router.post(
+            "/user/wishlist/add",
+            AuthMiddlewares.authorizeUser,
+            this.addWishlistItem
         );
 
         this._router.post("/user/feedback", AuthMiddlewares.authorizeUser, this.postFeedback);
@@ -218,23 +225,110 @@ export default class UserController extends AppController {
     }
 
     renderWishlist(req, res) {
+        let { page } = req.query;
+
+        const wishlist = JSON.parse(JSON.stringify(req.session.wishlist));
+        if (!wishlist) {
+            req.session.wishlist = {
+                wishlist: [],
+                length: 0,
+            };
+        }
+
+        const total =
+            wishlist.wishlist.length < DEFAULT_TABLE_ROW_LIMIT
+                ? 1
+                : Math.ceil(wishlist.wishlist.length / DEFAULT_TABLE_ROW_LIMIT);
+
+        page = page ? parseInt(page) : 1;
+
+        if (isNaN(page) || page < 1 || page > total) {
+            page = 1;
+            return res.redirect(`/user/wishlist?page=${page}`);
+        }
+
+        const list = wishlist.wishlist.splice(
+            (page - 1) * DEFAULT_TABLE_ROW_LIMIT,
+            DEFAULT_TABLE_ROW_LIMIT
+        );
+
         res.render("pages/user/wishlist", {
             layout: "profile",
+            data: {
+                page,
+                hasNext: page !== total,
+                list,
+            },
         });
     }
 
     async removeWishlistItem(req, res) {
-        const { id, user } = req.body;
-        // Remove in section + remove in db
-        if (res.locals.wishlist) {
-            const index = res.locals.wishlist.wishlist.findIndex((element) => element.product_id === parseInt(id));
+        const { id } = req.body;
 
-            if (index !== -1) {
-                res.locals.wishlist.wishlist.splice(index, 1);
-                res.locals.wishlist.length = res.locals.wishlist.wishlist.length;
-                await WishlistModel.removeWishlistById(user, id);
-                res.redirect("/user/wishlist");
+        try {
+            const user = await UserAccountModel.getByColumn("username", req.user.username);
+            if (user === undefined) {
+                req.logout();
+                return req.session.save(() => {
+                    res.redirect("/login");
+                });
             }
+
+            if (req.session.wishlist) {
+                const index = req.session.wishlist.wishlist.findIndex(
+                    (element) => element.product_id === parseInt(id)
+                );
+
+                if (index !== -1) {
+                    req.session.wishlist.wishlist.splice(index, 1);
+                    req.session.wishlist.length = req.session.wishlist.wishlist.length;
+                    await WishlistModel.removeWishlistById(user[0].user_id, id);
+                    res.redirect("/user/wishlist");
+                }
+            }
+        } catch (err) {
+            res.redirect("/user/wishlist");
+        }
+    }
+
+    async addWishlistItem(req, res) {
+        const { body } = req;
+
+        try {
+            const [user] = await UserAccountModel.getByColumn("username", req.user.username);
+            if (user === undefined) {
+                req.logout();
+                return req.session.save(() => {
+                    res.redirect("/login");
+                });
+            }
+
+            if (!req.session.wishlist) {
+                req.session.wishlist = {
+                    wishlist: [],
+                    length: 0,
+                };
+            }
+            const newProd = {
+                ...body,
+                current_price: +body.current_price,
+                product_id: +body.product_id,
+                is_sold: +body.is_sold,
+            };
+
+            const index = req.session.wishlist.wishlist.findIndex(
+                (item) => item.product_id === newProd.product_id
+            );
+            if (index === -1) {
+                req.session.wishlist.wishlist.push(newProd);
+                req.session.wishlist.length++;
+
+                WishlistModel.insert({ product_id: +body.product_id, user_id: user.user_id });
+            }
+            res.redirect(req.headers.referer);
+        } catch (err) {
+            console.log(err);
+            throw new Error(err);
         }
     }
 

@@ -88,14 +88,12 @@ export default class HomeController extends AppController {
                         productName: item.product_name,
                         thumbnail: item.thumbnail,
                         currentPrice: numeral(item.current_price).format("0,0"),
-                        // expiredDate: moment(item.expired_date).format(
-                        //     CommonConst.MOMENT_BASE_USER_FORMAT
-                        // ),
                         totalBids: item.bid_count !== null ? item.bid_count : 0,
                         createdDate,
                         expiredDate: moment(item.expired_date).locale("en").from(),
                         firstName: item.first_name,
                         dayDiff,
+                        isSold: item.is_sold,
                     };
 
                     if (item.buy_now_price !== null) {
@@ -129,14 +127,12 @@ export default class HomeController extends AppController {
                         productName: item.product_name,
                         thumbnail: item.thumbnail,
                         currentPrice: numeral(item.current_price).format("0,0"),
-                        // expiredDate: moment(item.expired_date).format(
-                        //     CommonConst.MOMENT_BASE_USER_FORMAT
-                        // ),
                         totalBids: item.bid_count !== null ? item.bid_count : 0,
                         createdDate,
                         expiredDate: moment(item.expired_date).locale("en").from(),
                         firstName: item.first_name,
                         dayDiff,
+                        isSold: item.is_sold
                     };
 
                     if (item.buy_now_price !== null) {

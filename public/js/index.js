@@ -99,7 +99,7 @@ $(document).ready(function () {
 function loadCatFilter() {
     $.getJSON("/api/menu/categories", function (data) {
         if (data.status === 200) {
-            const ul = $("#filterCatList");
+            const ul = $(".filterCatList");
 
             const mappedCat = data.data
                 .map((cat) => {

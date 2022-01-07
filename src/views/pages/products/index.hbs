@@ -61,6 +61,9 @@
                                     {{#if this.isNew}}
                                         <div class="ribbon">NEW</div>
                                     {{/if}}
+                                    {{#if this.isSold}}
+                                        <div class="ribbon bg-danger">SOLD</div>
+                                    {{/if}}
                                     <a href="/menu/products/{{this.productId}}" class="card-image" style="max-height: 200px; height: 200px">
                                         <img
                                             src="{{this.thumbnail}}"
@@ -82,7 +85,7 @@
                                     <div class="card-info mb-2 d-flex align-items-center bid">
                                         <i class="fas fa-gavel text-success"></i>
                                         <span class="text-success">Current Bid</span>
-                                        <span class="flex-grow-1 text-end">{{this.currentPrice}} VND</span>
+                                        <span class="flex-grow-1 text-end">{{formatMoney this.currentPrice}} VND</span>
                                     </div>
 
                                     <div class="card-info mb-2 d-flex align-items-center">
@@ -104,14 +107,58 @@
                                         <span class="flex-grow-1 text-end">{{this.totalBids}} Bids</span>
                                     </div>
 
-                                    <a
-                                        href="/menu/products/{{this.productId}}"
-                                        type="button"
-                                        class="btn btn-primary btn-block bidnow"
-                                    >
-                                        <i class="fas fa-gavel me-2"></i>
-                                        Go to bid now
-                                    </a>
+                                    <div class="d-flex justify-content-between">
+                                        <a
+                                            href="/menu/products/{{this.productId}}"
+                                            type="button"
+                                            class="btn btn-primary bidnow"
+                                        >
+                                            <i class="fas fa-gavel me-2"></i>
+                                            Go to bid now
+                                        </a>
+                                        {{#if ../localUser.isAuth}}
+                                            <form action="/user/wishlist/add" method="post" class="mb-0" >
+                                                <input
+                                                    type="hidden"
+                                                    name="product_id"
+                                                    value={{this.productId}}
+                                                />
+                                                <input
+                                                    type="hidden"
+                                                    name="product_name"
+                                                    value="{{this.productName}}"
+                                                />
+                                                <input
+                                                    type="hidden"
+                                                    name="thumbnail"
+                                                    value="{{this.thumbnail}}"
+                                                />
+                                                <input
+                                                    type="hidden"
+                                                    name="current_price"
+                                                    value={{this.currentPrice}}
+                                                />
+                                                <input
+                                                    type="hidden"
+                                                    name="is_sold"
+                                                    value={{this.isSold}}
+                                                />
+                                                <input
+                                                    type="hidden"
+                                                    name="expired_date"
+                                                    value="{{this.expiredDate}}"
+                                                />
+                                                <button
+                                                    class="btn btn-outline-danger px-3 h-100"
+                                                    title="Add to wishlist"
+                                                    id="add-wishlist"
+                                                    type="submit"
+                                                >
+                                                    <i class="fas fa-heart"></i>
+                                                </button>
+                                            </form>
+                                        {{/if}}
+                                    </div>
                                 </div>
 
                                 <div class="card-footer text-center px-3 py-2">

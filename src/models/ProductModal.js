@@ -5,9 +5,10 @@ export default class ProductModel {
         return new Promise(async function (resolve, reject) {
             try {
                 const dataSet = await KnexConnection.raw(`
-                    select top.product_id, top.product_name, top.thumbnail, top.current_price, top.buy_now_price, top.expired_date, top.won_bidder_id, top.bid_count, first_name, top.created_date
+                    select top.product_id, top.product_name, top.thumbnail, top.current_price, top.buy_now_price, top.expired_date,
+                        top.won_bidder_id, top.bid_count, first_name, top.created_date, top.is_sold
                     from (
-                        select product_id, product_name, thumbnail, current_price, buy_now_price, expired_date, won_bidder_id, current_bidding_count as bid_count, created_date
+                        select product_id, product_name, thumbnail, current_price, buy_now_price, expired_date, won_bidder_id, current_bidding_count as bid_count, created_date, is_sold
                         from product
                         order by current_price desc limit 5
                     ) as top join user_account user on top.won_bidder_id = user.user_id ;
@@ -26,7 +27,7 @@ export default class ProductModel {
                     select top.product_id, top.product_name, top.thumbnail, top.current_price, top.buy_now_price, top.expired_date, top.won_bidder_id, top.bid_count, first_name, top.created_date
                     from (
                         select product_id, product_name, thumbnail, current_price, buy_now_price, expired_date, won_bidder_id, current_bidding_count as bid_count, created_date
-                        from product
+                        from product where is_sold = 0
                         order by expired_date asc limit 5
                     ) as top join user_account user on top.won_bidder_id = user.user_id ;
                 `);
@@ -41,9 +42,10 @@ export default class ProductModel {
         return new Promise(async function (resolve, reject) {
             try {
                 const dataSet = await KnexConnection.raw(`
-                    select top.product_id, top.product_name, top.thumbnail, top.current_price, top.buy_now_price, top.expired_date, top.won_bidder_id, top.bid_count, first_name, top.created_date
+                    select top.product_id, top.product_name, top.thumbnail, top.current_price, top.buy_now_price, top.expired_date,
+                        top.won_bidder_id, top.bid_count, first_name, top.created_date, top.is_sold
                     from (
-                        select product_id, product_name, thumbnail, current_price, buy_now_price, expired_date, won_bidder_id, current_bidding_count as bid_count, created_date
+                        select product_id, product_name, thumbnail, current_price, buy_now_price, expired_date, won_bidder_id, current_bidding_count as bid_count, created_date, is_sold
                         from product
                         order by current_bidding_count desc limit 5
                     ) as top join user_account user on top.won_bidder_id = user.user_id ;
@@ -60,9 +62,9 @@ export default class ProductModel {
             try {
                 const dataSet = await KnexConnection.raw(`
                     select prod.product_id, prod.product_name, prod.thumbnail, prod.current_price,
-                    prod.buy_now_price, prod.expired_date, prod.created_date, user.first_name, prod.bid_count
+                    prod.buy_now_price, prod.expired_date, prod.created_date, user.first_name, prod.bid_count, prod.is_sold
                     from (
-                        select product_id, product_name, thumbnail, current_price, buy_now_price, expired_date, p.created_date, won_bidder_id, current_bidding_count as bid_count
+                        select product_id, product_name, thumbnail, current_price, buy_now_price, expired_date, p.created_date, won_bidder_id, current_bidding_count as bid_count, is_sold
                         from product p join category c on p.cat_id = c.cat_id
                         where (MATCH(cat_name) AGAINST('${key}')) or MATCH(product_name) AGAINST('${key}')
                         limit ${limit} offset ${offset}
@@ -80,9 +82,9 @@ export default class ProductModel {
             try {
                 const dataSet = await KnexConnection.raw(`
                     select prod.product_id, prod.product_name, prod.thumbnail, prod.current_price,
-                    prod.buy_now_price, prod.expired_date, prod.created_date, user.first_name, prod.bid_count
+                    prod.buy_now_price, prod.expired_date, prod.created_date, user.first_name, prod.bid_count, prod.is_sold
                     from (
-                        select product_id, product_name, thumbnail, current_price, buy_now_price, expired_date, created_date, won_bidder_id, current_bidding_count as bid_count
+                        select product_id, product_name, thumbnail, current_price, buy_now_price, expired_date, created_date, won_bidder_id, current_bidding_count as bid_count, is_sold
                         from product where match(product_name) against('${key}')
                         limit ${limit} offset ${offset}
                     ) as prod join user_account user on prod.won_bidder_id = user.user_id;
@@ -99,9 +101,9 @@ export default class ProductModel {
             try {
                 const dataSet = await KnexConnection.raw(`
                     select prod.product_id, prod.product_name, prod.thumbnail, prod.current_price,
-                    prod.buy_now_price, prod.expired_date, prod.created_date, user.first_name, prod.bid_count
+                    prod.buy_now_price, prod.expired_date, prod.created_date, user.first_name, prod.bid_count, prod.is_sold
                     from (
-                        select product_id, product_name, thumbnail, current_price, buy_now_price, expired_date, p.created_date, won_bidder_id, current_bidding_count as bid_count
+                        select product_id, product_name, thumbnail, current_price, buy_now_price, expired_date, p.created_date, won_bidder_id, current_bidding_count as bid_count, is_sold
                         from product p join category c on p.cat_id = c.cat_id
                         where match(cat_name) against('${key}')
                         limit ${limit} offset ${offset}
@@ -120,9 +122,9 @@ export default class ProductModel {
                 const dataSet = await KnexConnection.raw(
                     `
                         select prod.product_id, prod.product_name, prod.thumbnail, prod.current_price,
-                        prod.buy_now_price, prod.expired_date, prod.created_date, user.first_name, prod.bid_count
+                        prod.buy_now_price, prod.expired_date, prod.created_date, user.first_name, prod.bid_count, prod.is_sold
                         from (
-                        select product_id, product_name, thumbnail, current_price, buy_now_price, expired_date, created_date, won_bidder_id, current_bidding_count as bid_count
+                        select product_id, product_name, thumbnail, current_price, buy_now_price, expired_date, created_date, won_bidder_id, current_bidding_count as bid_count, is_sold
                         from product where cat_id = ${id}
                         limit ${limit} offset ${offset}
                         ) as prod join user_account user on prod.won_bidder_id = user.user_id;
@@ -141,9 +143,9 @@ export default class ProductModel {
                 const dataSet = await KnexConnection.raw(
                     `
                         select prod.product_id, prod.product_name, prod.thumbnail, prod.current_price,
-                        prod.buy_now_price, prod.expired_date, prod.created_date, user.first_name, prod.bid_count
+                        prod.buy_now_price, prod.expired_date, prod.created_date, user.first_name, prod.bid_count, prod.is_sold
                         from (
-                        select product_id, product_name, thumbnail, current_price, buy_now_price, expired_date, created_date, won_bidder_id, current_bidding_count as bid_count
+                        select product_id, product_name, thumbnail, current_price, buy_now_price, expired_date, created_date, won_bidder_id, current_bidding_count as bid_count, is_sold
                         from product limit ${limit} offset ${offset}
                         ) as prod join user_account user on prod.won_bidder_id = user.user_id ;
                     `
@@ -193,10 +195,10 @@ export default class ProductModel {
                 const dataSet = await KnexConnection.raw(
                     `
                         select prod.product_id, prod.product_name, prod.thumbnail, prod.current_price,
-                        prod.buy_now_price, prod.expired_date, prod.created_date, user.first_name, prod.bid_count
+                        prod.buy_now_price, prod.expired_date, prod.created_date, user.first_name, prod.bid_count, prod.is_sold
                         from (
                             select product_id, product_name, thumbnail, current_price, buy_now_price, expired_date, created_date,
-                                    won_bidder_id, current_bidding_count as bid_count
+                                    won_bidder_id, current_bidding_count as bid_count, is_sold
                             from product where cat_id = ${catId} and product_id <> ${prodId}
                             order by rand() limit ${limit}
                         ) as prod join user_account user on prod.won_bidder_id = user.user_id ;

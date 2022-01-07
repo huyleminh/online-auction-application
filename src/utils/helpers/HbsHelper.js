@@ -32,6 +32,10 @@ export default class HbsHelper {
         return left + right;
     }
 
+    static subtract(left, right) {
+        return left - right;
+    }
+
     static getAll() {
         return {
             isEqual: this.isEqual,
@@ -40,7 +44,8 @@ export default class HbsHelper {
             formatMoney: this.formatMoney,
             isGreaterThan: this.isGreaterThan,
             isLessThan: this.isLessThan,
-            add: this.add
+            add: this.add,
+            subtract: this.subtract,
         };
     }
 }

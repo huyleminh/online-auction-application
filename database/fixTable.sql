@@ -10,3 +10,7 @@ ADD FULLTEXT(cat_name);
 
 alter table `newsletter_subscriber`
 drop constraint `FK_SUBSCRIBER_USER_ACCOUNT`;
+
+-- add column to allow to bid if have not been rated
+alter table product
+add is_allow_all tinyint(1);

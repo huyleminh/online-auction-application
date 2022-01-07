@@ -3,6 +3,7 @@
     <link rel="stylesheet" href="/css/ckcontent-styles.min.css" />
     <link rel="stylesheet" href="/owlcarousel/assets/owl.carousel.min.css" />
     <link rel="stylesheet" href="/owlcarousel/assets/owl.theme.default.min.css" />
+    <link rel="stylesheet" href="/css/table.css" />
 {{/section}}
 
 <section class="container-fluid bg-light menu-container" id="top-menu-container">
@@ -21,211 +22,385 @@
 
     <div class="container pb-5">
         {{! Product detail - start }}
-        <div class="row mb-4">
-            <div class="col-lg-7 col-sm-12">
-                <div class="card border shadow-0 product-images">
-                    <div class="card-body card-body-images">
-                        <div class="card-images-main" style="max-height: 500px;">
-                            <img
-                                src="{{data.productDetail.thumbnail}}"
-                                alt="product image"
-                                class="img-fluid img-thumbnail p-0 border-0 rounded"
-                                style="max-height: 500px; object-fit: cover; width: 100%;"
-                                id="main-image"
-                            />
-                        </div>
-                        <hr />
-                        <div class="card-images-preview owl-carousel owl-theme mt-4">
-                            <div class="card-sub-images-item">
-                                <img src="{{data.productDetail.thumbnail}}" alt="product image" class="related-images" />
+        {{#if data.notFound}}
+            <div
+                class="modal fade show d-block"
+                id="exampleModal"
+                tabindex="-1"
+                aria-labelledby="notFoundModal"
+                aria-modal="true"
+                role="dialog"
+            >
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body d-flex flex-column align-items-center">
+                            <div class="text-center mb-3">
+                                <i
+                                    class="fas fa-exclamation-triangle text-warning"
+                                    style="font-size: 5rem;"
+                                ></i>
                             </div>
-                            {{#each data.productDetail.image_links}}
-                                <div class="card-sub-images-item">
-                                    <img src="{{this}}" alt="product image" class="related-images" />
-                                </div>
-                            {{/each}}
+
+                            <div class="text-center mb-3 fs-3">
+                                Product not found
+                            </div>
+
+                            <div class="text-center mb-3">
+                                This may be an error or product has been removed
+                            </div>
+
+                            <div class="text-center">
+                                <a
+                                    role="button"
+                                    class="btn btn-custom btn-custom-main"
+                                    href="/menu/categories/all"
+                                >
+                                    Back to menu
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="col-lg-5 col-sm-12 d-flex flex-column justify-content-between">
-                <div class="card border shadow-0 mb-3 product-details">
-                    <div class="card-body card-body-info">
-                        <h2 class="card-title mb-3">{{data.productDetail.product_name}}</h2>
-                        <div class="d-flex flex-column">
-                            <div class="card-body-info-item d-flex align-items-center mt-4">
-                                <div class="me-3 left">
-                                    <span class="">Current Bid</span>
-                                </div>
-                                <div class="flex-grow-1 d-flex flex-column right bidprice">
-                                    <span class="text-success">
-                                        {{formatMoney data.productDetail.current_price}}
-                                        <span>VND</span>
-                                    </span>
-                                </div>
+            <div class="modal-backdrop fade show"></div>
+        {{else}}
+            <div class="row mb-4">
+                <div class="col-lg-7 col-sm-12">
+                    <div class="card border shadow-0 product-images">
+                        <div class="card-body card-body-images">
+                            <div class="card-images-main" style="max-height: 500px;">
+                                <img
+                                    src="{{data.productDetail.thumbnail}}"
+                                    alt="product image"
+                                    class="img-fluid img-thumbnail p-0 border-0 rounded"
+                                    style="max-height: 500px; object-fit: cover; width: 100%;"
+                                    id="main-image"
+                                />
                             </div>
-
-                            <div class="card-body-info-item d-flex align-items-center mt-4">
-                                <div class="me-3 left">
-                                    <span class="">Buy Now</span>
+                            <hr />
+                            <div class="card-images-preview owl-carousel owl-theme mt-4">
+                                <div class="card-sub-images-item">
+                                    <img
+                                        src="{{data.productDetail.thumbnail}}"
+                                        alt="product image"
+                                        class="related-images"
+                                    />
                                 </div>
-                                <div class="flex-grow-1 d-flex flex-column right">
-                                    <span class="text-danger">
-                                        {{#if data.productDetail.canBuyNow}}
-                                            {{formatMoney data.productDetail.buy_now_price}}
+                                {{#each data.productDetail.image_links}}
+                                    <div class="card-sub-images-item">
+                                        <img
+                                            src="{{this}}"
+                                            alt="product image"
+                                            class="related-images"
+                                        />
+                                    </div>
+                                {{/each}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-5 col-sm-12 d-flex flex-column justify-content-between">
+                    <div class="card border shadow-0 mb-3 product-details">
+                        <div class="card-body card-body-info">
+                            <h2 class="card-title mb-3">{{data.productDetail.product_name}}</h2>
+                            <div class="d-flex flex-column">
+                                <div class="card-body-info-item d-flex align-items-center mt-4">
+                                    <div class="me-3 left">
+                                        <span class="">Current Bid</span>
+                                    </div>
+                                    <div class="flex-grow-1 d-flex flex-column right bidprice">
+                                        <span class="text-success">
+                                            {{formatMoney data.productDetail.current_price}}
                                             <span>VND</span>
-                                        {{else}}
-                                            N/A
-                                        {{/if}}
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div class="card-body-info-item d-flex align-items-center mt-4">
-                                <div class="me-3 left">
-                                    <span class="">Total bid(s)</span>
-                                </div>
-                                <div class="flex-grow-1 d-flex flex-column right">
-                                    <span class="">
-                                        <i class="fas fa-users me-2 text-secondary"></i>
-                                        {{formatMoney data.productDetail.current_bidding_count}}
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div class="card-body-info-item d-flex align-items-center mt-4">
-                                <div class="align-self-start me-3 left">
-                                    <span class="">Top Bidder</span>
-                                </div>
-                                <div class="flex-grow-1 d-flex right">
-                                    {{#if data.productDetail.bidder}}
-                                        <span class="me-2">
-                                            <i class="me-2 fas fa-crown text-warning"></i>
-                                            ****{{data.productDetail.bidder.name}}
                                         </span>
+                                    </div>
+                                </div>
+
+                                <div class="card-body-info-item d-flex align-items-center mt-4">
+                                    <div class="me-3 left">
+                                        <span class="">Buy Now</span>
+                                    </div>
+                                    <div class="flex-grow-1 d-flex flex-column right">
+                                        <span class="text-danger">
+                                            {{#if data.productDetail.canBuyNow}}
+                                                {{formatMoney data.productDetail.buy_now_price}}
+                                                <span>VND</span>
+                                            {{else}}
+                                                N/A
+                                            {{/if}}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="card-body-info-item d-flex align-items-center mt-4">
+                                    <div class="me-3 left">
+                                        <span class="">Total bid(s)</span>
+                                    </div>
+                                    <div class="flex-grow-1 d-flex flex-column right">
+                                        <span class="">
+                                            <i class="fas fa-users me-2 text-secondary"></i>
+                                            {{formatMoney data.productDetail.current_bidding_count}}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="card-body-info-item d-flex align-items-center mt-4">
+                                    <div class="align-self-start me-3 left">
+                                        <span class="">Top Bidder</span>
+                                    </div>
+                                    <div class="flex-grow-1 d-flex right">
+                                        {{#if data.productDetail.bidder}}
+                                            <span class="me-2">
+                                                <i class="me-2 fas fa-crown text-warning"></i>
+                                                ****{{data.productDetail.bidder.name}}
+                                            </span>
+                                            <span class="ps-2 border-start">
+                                                <i class="me-2 far fa-thumbs-up text-primary"></i>
+                                                {{data.productDetail.bidder.point}}
+                                            </span>
+                                        {{else}}
+                                            <span class="me-2 text-danger">None</span>
+                                        {{/if}}
+                                    </div>
+                                </div>
+
+                                <div class="card-body-info-item d-flex align-items-center mt-4">
+                                    <div class="align-self-start me-3 left">
+                                        <span class="">Posted by</span>
+                                    </div>
+                                    <div class="flex-grow-1 d-flex right">
+                                        <span class="me-2">
+                                            <i class="me-2 fas fa-user-check text-secondary"></i>
+                                            {{data.productDetail.seller.name}}
+                                        </span>
+
                                         <span class="ps-2 border-start">
                                             <i class="me-2 far fa-thumbs-up text-primary"></i>
-                                            {{data.productDetail.bidder.point}}
+                                            {{data.productDetail.seller.point}}
                                         </span>
-                                    {{else}}
-                                        <span class="me-2 text-danger">None</span>
+                                    </div>
+                                </div>
+
+                                {{#if data.productDetail.is_sold}}
+                                    <div class="card-body-info-item d-flex align-items-center mt-4">
+                                        <div class="me-3 left">
+                                            <span class="">Status</span>
+                                        </div>
+
+                                        <div class="timer right">
+                                            <span class="fw-bolder timer-danger">SOLD</span>
+                                        </div>
+                                    </div>
+                                {{/if}}
+                                <div class="card-body-info-item d-flex align-items-center mt-4">
+                                    <div class="me-3 left">
+                                        <span class="">Remaining time</span>
+                                    </div>
+
+                                    <div class="timer right">
+                                        <span
+                                            class="fw-bolder countdown"
+                                        >{{data.productDetail.expired_date}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="card-btn-group d-flex mt-4">
+                                    {{#if localUser.isAuth}}
+                                        <form
+                                            action="/user/wishlist/add"
+                                            method="post"
+                                            class="mb-0"
+                                        >
+                                            <input
+                                                type="hidden"
+                                                name="product_id"
+                                                value={{data.productDetail.product_id}}
+                                            />
+                                            <input
+                                                type="hidden"
+                                                name="product_name"
+                                                value="{{data.productDetail.product_name}}"
+                                            />
+                                            <input
+                                                type="hidden"
+                                                name="thumbnail"
+                                                value="{{data.productDetail.thumbnail}}"
+                                            />
+                                            <input
+                                                type="hidden"
+                                                name="current_price"
+                                                value={{data.productDetail.current_price}}
+                                            />
+                                            <input
+                                                type="hidden"
+                                                name="is_sold"
+                                                value={{data.productDetail.is_sold}}
+                                            />
+                                            <input
+                                                type="hidden"
+                                                name="expired_date"
+                                                value="{{data.productDetail.expired_date}}"
+                                            />
+                                            <button
+                                                class="btn btn-outline-danger me-3 p-3"
+                                                title="Add to wishlist"
+                                                id="add-wishlist"
+                                                type="submit"
+                                            >
+                                                <i class="fas fa-heart"></i>
+                                            </button>
+                                        </form>
                                     {{/if}}
+
+                                    <button
+                                        class="btn btn-primary shadow-0"
+                                        id="btn-share"
+                                        data-mdb-toggle="modal"
+                                        data-mdb-target="#shareLinkModal"
+                                    >
+                                        <i class="fas fa-share-alt me-2"></i>
+                                        Share
+                                    </button>
                                 </div>
+
                             </div>
+                        </div>
 
-                            <div class="card-body-info-item d-flex align-items-center mt-4">
-                                <div class="align-self-start me-3 left">
-                                    <span class="">Posted by</span>
-                                </div>
-                                <div class="flex-grow-1 d-flex right">
-                                    <span class="me-2">
-                                        <i class="me-2 fas fa-user-check text-secondary"></i>
-                                        {{data.productDetail.seller.name}}
-                                    </span>
-
-                                    <span class="ps-2 border-start">
-                                        <i class="me-2 far fa-thumbs-up text-primary"></i>
-                                        {{data.productDetail.seller.point}}
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div class="card-body-info-item d-flex align-items-center mt-4">
-                                <div class="me-3 left">
-                                    <span class="">Remaining time</span>
-                                </div>
-
-                                <div class="timer right">
-                                    <span
-                                        class="fw-bolder countdown"
-                                    >{{data.productDetail.expired_date}}</span>
-                                </div>
-                            </div>
-
-                            <div class="card-btn-group d-flex mt-4">
-                                <button
-                                    class="btn btn-outline-danger me-3 p-3"
-                                    title="Add to wishlist"
-                                    id="add-wishlist"
-                                >
-                                    <i class="fas fa-heart"></i>
-                                </button>
-
-                                <button
-                                    class="btn btn-primary shadow-0"
-                                    id="btn-share"
-                                    data-mdb-toggle="modal"
-                                    data-mdb-target="#shareLinkModal"
-                                >
-                                    <i class="fas fa-share-alt me-2"></i>
-                                    Share
-                                </button>
-                            </div>
-
+                        <div class="card-footer text-center">
+                            Posted
+                            {{data.productDetail.created_date}}
                         </div>
                     </div>
 
-                    <div class="card-footer text-center">
-                        Posted
-                        {{data.productDetail.created_date}}
-                    </div>
-                </div>
+                    {{#unless data.productDetail.is_sold}}
+                        <div class="card shadow-0 border product-submit">
+                            <div class="card-body card-btn-group">
+                                <p class="text-center">
+                                    <a href="/about/#learn_automation" class="fw-bolder">
+                                        Learn how automatic bidding works
+                                        <i class="fas fa-question ms-1"></i>
+                                    </a>
+                                </p>
 
-                <div class="card shadow-0 border product-submit">
-                    <div class="card-body card-btn-group">
-                        <p class="text-center">
-                            <a href="/about/#learn_automation" class="fw-bolder">
-                                Learn how automatic bidding works
-                                <i class="fas fa-question ms-1"></i>
-                            </a>
-                        </p>
-                        <form action="">
-                            <div class="input-group mb-3">
-                                <input
-                                    min="{{add
-                                        data.productDetail.current_price
-                                        data.productDetail.step_price
-                                    }}"
-                                    type="number"
-                                    style="height: unset;"
-                                    class="form-control"
-                                    placeholder="Enter your money"
-                                    aria-describedby="btn-bid"
-                                    name="money"
-                                />
-                                <button class="btn" type="submit" id="btn-bid">
-                                    Hit a bid
-                                </button>
+                                {{! If seller allow all bidder can bid }}
+                                {{#if localUser.isAuth}}
+                                    {{#if data.productDetail.is_allow_all}}
+                                        <form action="" method="post">
+                                            <div class="input-group mb-3">
+                                                <input
+                                                    min="{{add
+                                                        data.productDetail.current_price
+                                                        data.productDetail.step_price
+                                                    }}"
+                                                    type="number"
+                                                    style="height: unset;"
+                                                    class="form-control"
+                                                    placeholder="Enter your money"
+                                                    aria-describedby="btn-bid"
+                                                    name="money"
+                                                />
+                                                <button class="btn" type="submit" id="btn-bid">
+                                                    Hit a bid
+                                                </button>
+                                            </div>
+                                            <div class="form-text">Minimum money is
+                                                {{formatMoney
+                                                    (add
+                                                        data.productDetail.current_price
+                                                        data.productDetail.step_price
+                                                    )
+                                                }}
+                                            </div>
+                                        </form>
+
+                                        {{! If have buy now price }}
+                                        {{#if data.productDetail.canBuyNow}}
+                                            <div class="d-flex justify-content-center"><span
+                                                >Or</span></div>
+
+                                            <form action="" class="mb-0 mt-3">
+                                                <input
+                                                    type="hidden"
+                                                    name="productId"
+                                                    value={{data.productDetail.product_id}}
+                                                />
+                                                <button
+                                                    type="submit"
+                                                    class="btn btn-block"
+                                                    id="btn-buynow"
+                                                >Buy now</button>
+                                            </form>
+                                        {{/if}}
+                                    {{else}}
+                                        {{! Only over 80 point bidder can bid }}
+                                        {{#if (isGreaterThan localUser.point 80)}}
+                                            <form action="" method="post">
+                                                <div class="input-group mb-3">
+                                                    <input
+                                                        min="{{add
+                                                            data.productDetail.current_price
+                                                            data.productDetail.step_price
+                                                        }}"
+                                                        type="number"
+                                                        style="height: unset;"
+                                                        class="form-control"
+                                                        placeholder="Enter your money"
+                                                        aria-describedby="btn-bid"
+                                                        name="money"
+                                                    />
+                                                    <button class="btn" type="submit" id="btn-bid">
+                                                        Hit a bid
+                                                    </button>
+                                                </div>
+                                                <div class="form-text">Minimum money is
+                                                    {{formatMoney
+                                                        (add
+                                                            data.productDetail.current_price
+                                                            data.productDetail.step_price
+                                                        )
+                                                    }}
+                                                </div>
+                                            </form>
+
+                                            {{! If have buy now price }}
+                                            {{#if data.productDetail.canBuyNow}}
+                                                <div class="d-flex justify-content-center"><span
+                                                    >Or</span></div>
+
+                                                <form action="" class="mb-0 mt-3">
+                                                    <input
+                                                        type="hidden"
+                                                        name="productId"
+                                                        value={{data.productDetail.product_id}}
+                                                    />
+                                                    <button
+                                                        type="submit"
+                                                        class="btn btn-block"
+                                                        id="btn-buynow"
+                                                    >Buy now</button>
+                                                </form>
+                                            {{/if}}
+                                        {{else}}
+                                            <p class="text-danger fw-bolder">You cannot bid this
+                                                product. Because your rating point is less than 80
+                                                or you have not been rated.</p>
+                                        {{/if}}
+
+                                    {{/if}}
+                                {{else}}
+                                    {{!-- Not login --}}
+                                    <p class="text-danger fw-bolder">Your have to
+                                        <a href="/login">login</a>
+                                        to bid this product</p>
+                                {{/if}}
                             </div>
-                            <div class="form-text">Minimum money is
-                                {{formatMoney
-                                    (add
-                                        data.productDetail.current_price
-                                        data.productDetail.step_price
-                                    )
-                                }}
-                            </div>
-                        </form>
-
-                        {{! If have buy now price }}
-                        {{#if data.productDetail.canBuyNow}}
-                            <div class="d-flex justify-content-center"><span>Or</span></div>
-
-                            <form action="" class="mb-0 mt-3">
-                                <input
-                                    type="hidden"
-                                    name="productId"
-                                    value={{data.productDetail.product_id}}
-                                />
-                                <button type="submit" class="btn btn-block" id="btn-buynow">Buy now</button>
-                            </form>
-                        {{/if}}
-                    </div>
+                        </div>
+                    {{/unless}}
                 </div>
             </div>
-        </div>
-        {{! Product detail - end }}
+            {{! Product detail - end }}
+        {{/if}}
 
         {{! Product description & history - start }}
         <div class="card border shadow-0 mb-4 product-extra">
@@ -261,6 +436,7 @@
                             role="tab"
                             aria-controls="history"
                             aria-selected="false"
+                            data-historykey={{data.productDetail.product_id}}
                         >
                             Auction History
                         </button>
@@ -284,7 +460,9 @@
                         role="tabpanel"
                         aria-labelledby="history-tab0"
                     >
-                        <table class="table table-striped">
+                        <table
+                            class="table table-striped table-bordered table-custom table-responsive"
+                        >
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
@@ -293,31 +471,15 @@
                                     <th scope="col">Bid date</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>****Khoa</td>
-                                    <td>6,000,000</td>
-                                    <td>1/11/2019 10:43</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>****Quang</td>
-                                    <td>5,900,000</td>
-                                    <td>1/11/2019 9:43</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">3</th>
-                                    <td>****Tuấn</td>
-                                    <td>5,800,000</td>
-                                    <td>1/11/2019 8:43</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">4</th>
-                                    <td>****Minh</td>
-                                    <td>5,700,000</td>
-                                    <td>1/11/2019 7:43</td>
-                                </tr>
+                            <tbody id="history-table-body">
+                                {{#each data.history}}
+                                    <tr>
+                                        <td scope="row">{{add @index 1}}</td>
+                                        <td>****{{this.bidder_fname}}</td>
+                                        <td>{{formatMoney this.current_price}} VND</td>
+                                        <td>{{this.bid_date}}</td>
+                                    </tr>
+                                {{/each}}
                             </tbody>
                         </table>
                     </div>
@@ -336,7 +498,10 @@
                 <div class="product-related-carousel owl-carousel owl-theme">
                     {{#each data.related}}
                         <div class="card border product-card">
-                            <div class="p-3">
+                            <div class="p-3 position-relative">
+                                {{#if this.isSold}}
+                                    <div class="ribbon bg-danger">SOLD</div>
+                                {{/if}}
                                 <a
                                     href="/menu/products/{{this.productId}}"
                                     class="card-image"

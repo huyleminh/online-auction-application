@@ -39,7 +39,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{#each wishlist.wishlist}}
+                    {{#each data.list}}
                         <tr>
                             <td scope="row">{{add @index 1}}</td>
                             <td>
@@ -51,11 +51,11 @@
                             <td>
                                 {{#if this.is_sold}}
                                     <div>
-                                        <span class="tag tag-success">Available</span>
+                                        <span class="tag tag-danger">Sold</span>
                                     </div>
                                 {{else}}
                                     <div>
-                                        <span class="tag tag-danger">Sold</span>
+                                        <span class="tag tag-success">Available</span>
                                     </div>
                                 {{/if}}
                             </td>
@@ -72,7 +72,6 @@
                                         >
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <input name="user" type="hidden" value={{../localUser.username}}></input>
                                         <input name="id" type="hidden" value={{this.product_id}}></input>
                                         <button
                                             class="btn btn-danger btn-sm shadow-0 remove-wishlist-item"
@@ -92,6 +91,36 @@
             </table>
         </div>
         {{!-- </form> --}}
+
+        <form action="" method="get">
+            <nav class="pagination-container mt-4">
+                <ul class="pagination justify-content-center">
+                    {{#if (isEqual data.page 1)}}
+                        <li class="page-item disabled" aria-current="page">
+                            <a class="page-link page-link-custom" href="#"></a>
+                        </li>
+                    {{else}}
+                        <li class="page-item" aria-current="page">
+                            <a class="page-link page-link-custom" href="?page={{subtract data.page 1}}">{{subtract data.page 1}}</a>
+                        </li>
+                    {{/if}}
+                    <li class="page-item active" aria-current="page">
+                        <a class="page-link page-link-custom" href="?page={{data.page}}">
+                            {{data.page}}
+                        </a>
+                    </li>
+                    {{#if data.hasNext}}
+                        <li class="page-item" aria-current="page">
+                            <a class="page-link page-link-custom" href="?page={{add data.page 1}}">{{add data.page 1}}</a>
+                        </li>
+                    {{else}}
+                        <li class="page-item disabled" aria-current="page">
+                            <a class="page-link page-link-custom" href="#"></a>
+                        </li>
+                    {{/if}}
+                </ul>
+            </nav>
+        </form>
 
     </div>
 </div>
