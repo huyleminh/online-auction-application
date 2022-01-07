@@ -1,4 +1,5 @@
 import WishlistModel from "../models/WishlistModel.js";
+import UserAccountModel from "../models/UserAccountModel.js"
 
 export default class LocalsMiddlewares {
     // Move user in session.passport to locals
@@ -13,7 +14,15 @@ export default class LocalsMiddlewares {
     static async getWishlist(req, res, next) {
         const user = req.user;
         if (user) {
-            let wishlist = await WishlistModel.getWishlistByUsername(user.username);
+            const userFull = await UserAccountModel.getByColumn('username', user.username);
+            if (userFull === undefined) {
+                req.logout();
+                return req.session.save(() => {
+                    res.redirect("/login");
+                });
+            }
+
+            let wishlist = await WishlistModel.getWishlistByUserId(userFull[0].user_id);
             res.locals.wishlist = {
                 wishlist: wishlist,
                 length: wishlist.length
