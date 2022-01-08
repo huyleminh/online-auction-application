@@ -33,7 +33,7 @@ export default class ManageUserController extends AppController {
 
         this._router.get(
             "/admin/sellers",
-            //  AuthMiddlewares.authorizeAdmin,
+             AuthMiddlewares.authorizeAdmin,
             this.sellerPage
         );
         this._router.post("/admin/sellers", AuthMiddlewares.authorizeAdmin, this.downgradeSeller);

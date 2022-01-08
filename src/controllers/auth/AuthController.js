@@ -31,14 +31,19 @@ passport.use(
         async function (token, tokenSecret, profile, done) {
             // Verify email as username in db
             try {
-                const userList = await UserAccountModel.getByColumn(
-                    "username",
-                    profile._json.email
-                );
+                const [user] = await UserAccountModel.getByColumn("username", profile._json.email);
 
-                if (userList.length === 0) {
+                if (!user) {
+                    const [userWithEmail] = await UserAccountModel.getUsernameByEmail(
+                        profile._json.email
+                    );
+                    if (userWithEmail) {
+                        return done(null, false, {
+                            message:
+                                "This email has been used, please login with another account or register a new one",
+                        });
+                    }
                     // Create new Account here
-
                     const insertData = {
                         username: profile._json.email,
                         password: PasswordHelper.generateHashPassword(
@@ -67,7 +72,7 @@ passport.use(
                 // Verify password
                 const idValid = PasswordHelper.verifyHash(
                     `${profile._json.sub}-${AppConstant.GOOGLE_SECRET_PASSWORD_KEY}`,
-                    userList[0].password
+                    user.password
                 );
 
                 if (!idValid) {
@@ -79,12 +84,12 @@ passport.use(
 
                 return done(null, {
                     isAuth: true,
-                    username: userList[0].username,
-                    role: userList[0].role,
-                    fullname: `${userList[0].first_name} ${userList[0].last_name}`,
+                    username: user.username,
+                    role: user.role,
+                    fullname: `${user.first_name} ${user.last_name}`,
                     userType: "GOOGLE",
-                    point: userList[0].rating_point,
-                    isRated: userList[0].rating_point !== null ? true : false,
+                    point: user.rating_point,
+                    isNotRated: user.rating_point === null ? true : false,
                 });
             } catch (error) {
                 console.log(error);
@@ -117,7 +122,7 @@ passport.use(
                 fullname: `${userList[0].first_name} ${userList[0].last_name}`,
                 userType: "NORMAL",
                 point: userList[0].rating_point,
-                isRated: userList[0].rating_point !== null ? true : false,
+                isNotRated: userList[0].rating_point === null ? true : false,
             });
         } catch (error) {
             console.log(error);
@@ -140,15 +145,43 @@ export default class AuthController extends AppController {
                 scope: ["profile", "email"],
             })
         );
-        this._router.get(
-            "/login/google/callback",
-            passport.authenticate("google", { failureRedirect: "/login" }),
-            (req, res) => {
-                req.session.save(() => {
-                    res.redirect("/");
+        // this._router.get(
+        //     "/login/google/callback",
+        //     passport.authenticate("google", { failureRedirect: "/login" }),
+        //     (req, res) => {
+        //         req.session.save(() => {
+        //             res.redirect("/");
+        //         });
+        //     }
+        // );
+
+        this._router.get("/login/google/callback", function (req, res, next) {
+            passport.authenticate("google", function (err, user, info) {
+                if (err) {
+                    return next(err);
+                }
+                if (!user) {
+                    return res.render("pages/auth/login", {
+                        layout: "auth",
+                        error: {
+                            message: info.message,
+                        },
+                    });
+                }
+
+                req.logIn(user, function (err) {
+                    if (err) {
+                        return next(err);
+                    }
+
+                    const { returnUrl } = req.session;
+                    delete req.session.returnUrl;
+                    req.session.save(function () {
+                        res.redirect(returnUrl || "/");
+                    });
                 });
-            }
-        );
+            })(req, res, next);
+        });
 
         this._router.post("/login", function (req, res, next) {
             passport.authenticate("local", function (err, user, info) {

@@ -1,13 +1,18 @@
 import moment from "moment";
 import numeral from "numeral";
 import AuthMiddlewares from "../../middlewares/AuthMiddlewares.js";
+import AutoBiddingJobModel from "../../models/AutoBiddingJobModel.js";
 import BiddingHistoryModel from "../../models/BiddingHistoryModel.js";
 import CategoryModel from "../../models/CategoryModel.js";
+import JoinBidderModel from "../../models/JoinBidderModel.js";
 import ProdcutDetailModel from "../../models/ProductDetailModel.js";
 import ProductModel from "../../models/ProductModal.js";
 import UserAccountModel from "../../models/UserAccountModel.js";
+import EmailService from "../../services/EmailService.js";
 import CommomCont from "../../shared/CommonConst.js";
+import EmailTemplate from "../../shared/template/EmailTemplate.js";
 import CommomUtils from "../../utils/CommonUtils.js";
+import { ScheduleJobEventInstance } from "../../utils/ScheduleJobEvent.js";
 import AppController from "../AppController.js";
 
 const DEFAULT_PAGE_SIZE = 12;
@@ -21,7 +26,11 @@ export default class ProductController extends AppController {
     init() {
         this._router.get("/menu/categories/:catId", this.renderProductList);
         this._router.get("/menu/products/:productId", this.renderProductDetail);
-        this._router.post("/menu/products/:productId", this.postHitBidProduct);
+        this._router.post(
+            "/menu/products/:productId",
+            AuthMiddlewares.authorizeUser,
+            this.postHitBidProduct
+        );
 
         this._router.get("/api/menu/categories", this.getFilterCategories);
     }
@@ -137,6 +146,8 @@ export default class ProductController extends AppController {
 
     async renderProductDetail(req, res) {
         const { productId } = req.params;
+        const [message] = req.flash("message");
+        const [type] = req.flash("type");
 
         try {
             const [[product], [detail]] = await Promise.all([
@@ -228,6 +239,7 @@ export default class ProductController extends AppController {
                     related: mappedRelated,
                     history: mappedHistory,
                 },
+                msg: { message, type },
             });
         } catch (error) {
             console.log(error);
@@ -257,16 +269,174 @@ export default class ProductController extends AppController {
     }
 
     async postHitBidProduct(req, res) {
-        const { body } = req;
-        console.log(body);
-        // Get user id
-        // Validate is banned
-        // Check input price is higher than old tolerable price
-        // If lower -> forbidden
-        // If higher -> Next
-        // Check in product table
-        // Check expired time
-        // Update job table
-        res.redirect("/menu/categories/all");
+        const { body, user } = req;
+        try {
+            // Find if product is available
+            const [product] = await ProductModel.getById(body.productId);
+            console.log({ product });
+            if (!product) {
+                return res.redirect(`/menu/products/${body.productId}`);
+            }
+
+            // Redirect if sold or expired
+            if (product.is_sold || moment().isSame(moment(product.expired_date))) {
+                req.flash("message", "This product has been sold or expired");
+                req.flash("type", "warning");
+                return res.redirect(`/menu/products/${body.productId}`);
+            }
+
+            // Get user id
+            const [userFromDb] = await UserAccountModel.getByColumn("username", user.username);
+            console.log({ userFromDb });
+            if (!userFromDb) {
+                req.logout();
+                delete req.session.wishlist;
+                return req.session.save(() => {
+                    res.redirect("/login");
+                });
+            }
+
+            // Redirect if user cannot bid with current rating point
+            if (!product.is_allow_all && userFromDb.rating_point <= 80) {
+                req.flash("message", "Your point is not high enough to join bidding this product");
+                req.flash("type", "danger");
+                return res.redirect(`/menu/products/${body.productId}`);
+            }
+
+            // Validate is banned
+            const [banResult] = await JoinBidderModel.getJoinBidderWithProduct(
+                userFromDb.user_id,
+                body.productId
+            );
+            console.log({ banResult });
+            if (banResult && banResult.is_banned) {
+                req.flash("message", "You are banned by the seller in bidding this product");
+                req.flash("type", "danger");
+                return res.redirect(`/menu/products/${body.productId}`);
+            }
+
+            // Start bidding
+            const [detail] = await ProdcutDetailModel.getlById(product.product_id);
+            console.log({ detail });
+
+            // Check input price
+            // Greater than or equal buy now price
+            if (parseInt(body.money) >= product.buy_now_price) {
+                console.log("Buy now");
+
+                await BiddingHistoryModel.insert({
+                    product_id: product.product_id,
+                    bidder_id: userFromDb.user_id,
+                    current_price: product.buy_now_price,
+                    bidder_fname: userFromDb.first_name,
+                    tolerable_price: parseInt(body.money),
+                });
+
+                await ProductModel.update(product.product_id, {
+                    current_price: product.buy_now_price,
+                    max_tolerable_price: parseInt(body.money),
+                    is_sold: 1,
+                    won_bidder_id: userFromDb.user_id,
+                });
+
+                // Update job
+                const [job] = await AutoBiddingJobModel.getByProductId(product.product_id);
+                console.log({ job });
+                await ScheduleJobEventInstance.reScheduleJob(
+                    job.job_id,
+                    moment().add(10, "seconds").toDate()
+                );
+
+                req.flash("message", "Buy product successfully");
+                req.flash("type", "success");
+                return res.redirect(`/menu/products/${body.productId}`);
+            }
+
+            // Price must be higher than old price
+            const [userBidHistory] = await BiddingHistoryModel.getTolerablePriceAndBidDate(
+                userFromDb.user_id,
+                product.product_id
+            );
+            console.log({ userBidHistory });
+            if (userBidHistory && userBidHistory.tolerable_price >= parseInt(body.money)) {
+                req.flash("message", "You have bidded with higher price for this product");
+                req.flash("type", "warning");
+                return res.redirect(`/menu/products/${body.productId}`);
+            }
+
+            if (parseInt(body.money) <= product.max_tolerable_price) {
+                console.log("Lower - Equal");
+                await BiddingHistoryModel.insert({
+                    product_id: product.product_id,
+                    bidder_id: userFromDb.user_id,
+                    current_price: parseInt(body.money),
+                    bidder_fname: userFromDb.first_name,
+                    tolerable_price: parseInt(body.money),
+                });
+
+                await ProductModel.update(product.product_id, {
+                    current_price: parseInt(body.money),
+                });
+            } else {
+                console.log("Higher");
+                await BiddingHistoryModel.insert({
+                    product_id: product.product_id,
+                    bidder_id: userFromDb.user_id,
+                    current_price: product.max_tolerable_price + detail.step_price,
+                    bidder_fname: userFromDb.first_name,
+                    tolerable_price: parseInt(body.money),
+                });
+
+                const tempId = product.won_bidder_id;
+                await ProductModel.update(product.product_id, {
+                    current_price: product.max_tolerable_price + detail.step_price,
+                    max_tolerable_price: parseInt(body.money),
+                    won_bidder_id: userFromDb.user_id,
+                });
+
+                // Send email to temp winner
+                if (tempId !== userFromDb.user_id) {
+                    UserAccountModel.getByColumn("user_id", tempId).then((res) => {
+                        const [winner] = res;
+                        if (winner) {
+                            EmailService.sendEmailWithHTMLContent(
+                                winner.email,
+                                "Bidding progress - Your max tolerable price has been passed",
+                                EmailTemplate.biddingPriceWarningBidder()
+                            ).catch((error) => {
+                                console.log(error);
+                            });
+                        }
+                    });
+                }
+            }
+
+            // Check expired date to update job and expired date
+            if (detail.auto_extend) {
+                const minDiff = moment().diff(moment(product.expired_date), "minutes");
+                if (Math.abs(minDiff) <= 5) {
+                    const newExpiredDate = moment(product.expired_date).add(10, "minutes");
+                    console.log({ newExpiredDate });
+                    await ProductModel.update(product.product_id, {
+                        expired_date: newExpiredDate.format(CommomCont.MOMENT_BASE_DB_FORMAT),
+                    });
+
+                    // Update job
+                    const [job] = await AutoBiddingJobModel.getByProductId(product.product_id);
+                    console.log({ job });
+                    await ScheduleJobEventInstance.reScheduleJob(
+                        job.job_id,
+                        newExpiredDate.toDate()
+                    );
+                }
+            }
+
+            req.flash("message", "Hit a price successfully");
+            req.flash("type", "success");
+            return res.redirect(`/menu/products/${body.productId}`);
+        } catch (error) {
+            console.log(error);
+            throw new Error(error);
+        }
     }
 }

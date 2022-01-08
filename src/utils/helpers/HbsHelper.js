@@ -40,6 +40,14 @@ export default class HbsHelper {
         return left - right;
     }
 
+    static and(left, right) {
+        return left && right;
+    }
+
+    static or(left, right) {
+        return left || right;
+    }
+
     static getAll() {
         return {
             isEqual: this.isEqual,
@@ -50,7 +58,9 @@ export default class HbsHelper {
             isLessThan: this.isLessThan,
             add: this.add,
             calcNo: this.calcNo,
-            subtract: this.subtract
+            subtract: this.subtract,
+            and: this.and,
+            or: this.or,
         };
     }
 }

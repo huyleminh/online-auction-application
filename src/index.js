@@ -12,6 +12,7 @@ import AppControllers from "./controllers/index.js";
 import LocalsMiddlewares from "./middlewares/LocalsMiddlewares.js";
 import AppConstant from "./shared/AppConstant.js";
 import HbsHelper from "./utils/helpers/HbsHelper.js";
+import { ScheduleJobEventInstance } from "./utils/ScheduleJobEvent.js";
 // import knex from "./utils/KnexConnection.js";
 
 class AppServer {
@@ -101,15 +102,21 @@ class AppServer {
         });
     }
 
-    start() {
+    initializeScheduleWorker() {}
+
+    async start() {
         this.initializeGlobalMiddlewares();
         this.initializeViewEngine();
         this.initializeControllers();
         this.initializeOutMiddlewares();
-
-        this.app.listen(this.port, () => {
-            console.log(`Server is listening on http://localhost:${this.port}`);
-        });
+        try {
+            await ScheduleJobEventInstance.runOldScheduledJob();
+            this.app.listen(this.port, () => {
+                console.log(`Server is listening on http://localhost:${this.port}`);
+            });
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
 
