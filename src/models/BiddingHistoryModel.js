@@ -28,6 +28,17 @@ export default class BiddingHistoryModel {
             } catch (err) {
                 reject(err);
             }
-        })
+        });
+    }
+
+    static insert(entity) {
+        return new Promise(async function (resolve, reject) {
+            try {
+                const res = await KnexConnection("bidding_history").insert(entity);
+                resolve(res);
+            } catch (err) {
+                reject(err);
+            }
+        });
     }
 }

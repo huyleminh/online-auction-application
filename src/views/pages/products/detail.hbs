@@ -64,6 +64,15 @@
             </div>
             <div class="modal-backdrop fade show"></div>
         {{else}}
+            {{#unless localUser.isAuth}}
+                <div class="alert alert-info">Your have to
+                    <a href="/login" class="fw-bolder">login</a>
+                    to bid this product</div>
+            {{/unless}}
+            {{#if msg.message}}
+                <div class="alert alert-{{msg.type}}">{{msg.message}}</div>
+            {{/if}}
+
             <div class="row mb-4">
                 <div class="col-lg-7 col-sm-12">
                     <div class="card border shadow-0 product-images">
@@ -292,7 +301,14 @@
 
                                 {{! If seller allow all bidder can bid }}
                                 {{#if localUser.isAuth}}
-                                    {{#if data.productDetail.is_allow_all}}
+                                    {{#if
+                                        (or
+                                            data.productDetail.is_allow_all
+                                            isGreaterThan
+                                            localUser.point
+                                            80
+                                        )
+                                    }}
                                         <form action="" method="post">
                                             <div class="input-group mb-3">
                                                 <input
@@ -306,6 +322,12 @@
                                                     placeholder="Enter your money"
                                                     aria-describedby="btn-bid"
                                                     name="money"
+                                                    required
+                                                />
+                                                <input
+                                                    type="hidden"
+                                                    name="productId"
+                                                    value={{data.productDetail.product_id}}
                                                 />
                                                 <button class="btn" type="submit" id="btn-bid">
                                                     Bid
@@ -341,66 +363,10 @@
                                             </form>
                                         {{/if}}
                                     {{else}}
-                                        {{! Only over 80 point bidder can bid }}
-                                        {{#if (isGreaterThan localUser.point 80)}}
-                                            <form action="" method="post">
-                                                <div class="input-group mb-3">
-                                                    <input
-                                                        min="{{add
-                                                            data.productDetail.current_price
-                                                            data.productDetail.step_price
-                                                        }}"
-                                                        type="number"
-                                                        style="height: unset;"
-                                                        class="form-control"
-                                                        placeholder="Enter your money"
-                                                        aria-describedby="btn-bid"
-                                                        name="money"
-                                                    />
-                                                    <button class="btn" type="submit" id="btn-bid">
-                                                        Hit a bid
-                                                    </button>
-                                                </div>
-                                                <div class="form-text">Minimum money is
-                                                    {{formatMoney
-                                                        (add
-                                                            data.productDetail.current_price
-                                                            data.productDetail.step_price
-                                                        )
-                                                    }}
-                                                </div>
-                                            </form>
-
-                                            {{! If have buy now price }}
-                                            {{#if data.productDetail.canBuyNow}}
-                                                <div class="d-flex justify-content-center"><span
-                                                    >Or</span></div>
-
-                                                <form action="" class="mb-0 mt-3">
-                                                    <input
-                                                        type="hidden"
-                                                        name="productId"
-                                                        value={{data.productDetail.product_id}}
-                                                    />
-                                                    <button
-                                                        type="submit"
-                                                        class="btn btn-block"
-                                                        id="btn-buynow"
-                                                    >Buy now</button>
-                                                </form>
-                                            {{/if}}
-                                        {{else}}
-                                            <p class="text-danger fw-bolder">You cannot bid this
-                                                product. Because your rating point is less than 80
-                                                or you have not been rated.</p>
-                                        {{/if}}
-
+                                        <p class="text-danger fw-bolder">You cannot bid this
+                                            product. Because your rating point is less than 80 or
+                                            you have not been rated.</p>
                                     {{/if}}
-                                {{else}}
-                                    {{!-- Not login --}}
-                                    <p class="text-danger fw-bolder">Your have to
-                                        <a href="/login">login</a>
-                                        to bid this product</p>
                                 {{/if}}
                             </div>
                         </div>

@@ -253,6 +253,19 @@ export default class ProductModel {
         });
     }
 
+    static update(productId, entity) {
+        return new Promise(async function (resolve, reject) {
+            try {
+                const dataSet = await KnexConnection("product")
+                    .where({ product_id: productId })
+                    .update(entity);
+                resolve(dataSet);
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
+
     static insertAProduct(product, detail) {
         return new Promise(async function (resolve, reject) {
             try {

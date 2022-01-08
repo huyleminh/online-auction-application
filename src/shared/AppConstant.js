@@ -53,4 +53,8 @@ export default class AppConstant {
     static get GOOGLE_SECRET_PASSWORD_KEY() {
         return process.env.GOOGLE_SECRET_TOKEN;
     }
+
+    static get APP_URL() {
+        return process.env.APP_URL;
+    }
 }

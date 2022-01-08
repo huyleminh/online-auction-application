@@ -15,14 +15,30 @@ export default class JoinBidderModel {
                 const dataSet = res[0].slice(0, CommonConst.ITEMS_PER_TABLE_PAGE);
                 dataSet.map((element) => {
                     element.status = element.won_bidder_id === userId;
-                })
+                });
                 resolve({
                     hasNext: hasNext,
-                    data: dataSet
+                    data: dataSet,
                 });
             } catch (err) {
                 reject(err);
             }
-        })
+        });
+    }
+
+    static getJoinBidderWithProduct(userId, productId) {
+        return new Promise(async function (resolve, reject) {
+            try {
+                const res = await KnexConnection("join_bidder")
+                    .where({
+                        product_id: productId,
+                        bidder_id: userId,
+                    })
+                    .select();
+                resolve(res);
+            } catch (err) {
+                reject(err);
+            }
+        });
     }
 }

@@ -1,6 +1,6 @@
 import KnexConnection from "../utils/KnexConnection.js";
 
-export default class ProdcutDetailModel {
+export default class ProductDetailModel {
     static getlById(id) {
         return new Promise(async function (resolve, reject) {
             try {
