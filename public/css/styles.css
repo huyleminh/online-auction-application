@@ -260,19 +260,11 @@ body {
     font-size: 1.25rem;
 }
 
-.product-card .card-body .card-info i {
+.product-card .card-body .card-info > i {
     font-size: 1rem;
     margin-right: 8px;
     width: 35px;
     text-align: center;
-}
-
-.product-card .card-body .card-info.bid i {
-    font-size: 1.5rem;
-}
-
-.product-card .card-body .card-info.bid span {
-    font-size: 1.15rem;
 }
 
 .product-card .card-body .card-info.bid > span:first-child {

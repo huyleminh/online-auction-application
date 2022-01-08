@@ -88,7 +88,7 @@
                             </div>
                             <hr />
                             <div class="card-images-preview owl-carousel owl-theme mt-4">
-                                <div class="card-sub-images-item">
+                                <div class="card-sub-images-item d-flex">
                                     <img
                                         src="{{data.productDetail.thumbnail}}"
                                         alt="product image"
@@ -96,7 +96,7 @@
                                     />
                                 </div>
                                 {{#each data.productDetail.image_links}}
-                                    <div class="card-sub-images-item">
+                                    <div class="card-sub-images-item d-flex">
                                         <img
                                             src="{{this}}"
                                             alt="product image"
@@ -116,7 +116,7 @@
                             <div class="d-flex flex-column">
                                 <div class="card-body-info-item d-flex align-items-center mt-4">
                                     <div class="me-3 left">
-                                        <span class="">Current Bid</span>
+                                        <span class="">Price</span>
                                     </div>
                                     <div class="flex-grow-1 d-flex flex-column right bidprice">
                                         <span class="text-success">
@@ -169,7 +169,14 @@
                                                 {{data.productDetail.bidder.point}}
                                             </span>
                                         {{else}}
-                                            <span class="me-2 text-danger">None</span>
+                                            <span class="me-2">
+                                                <i class="me-2 fas fa-crown text-warning"></i>
+                                                N/A
+                                            </span>
+                                            <span class="ps-2 border-start">
+                                                <i class="me-2 far fa-thumbs-up text-primary"></i>
+                                                N/A
+                                            </span>
                                         {{/if}}
                                     </div>
                                 </div>
@@ -323,16 +330,17 @@
                                                     value={{data.productDetail.product_id}}
                                                 />
                                                 <button class="btn" type="submit" id="btn-bid">
-                                                    Hit a bid
+                                                    Bid
                                                 </button>
                                             </div>
-                                            <div class="form-text">Minimum money is
+                                            <div class="form-text">You have to bid at least
                                                 {{formatMoney
                                                     (add
                                                         data.productDetail.current_price
                                                         data.productDetail.step_price
                                                     )
                                                 }}
+                                                to join
                                             </div>
                                         </form>
 
@@ -417,7 +425,7 @@
                         aria-labelledby="description-tab0"
                     >
                         <div class="ck-content">
-                            {{data.productDetail.description}}
+                            {{{data.productDetail.description}}}
                         </div>
                     </div>
                     <div
@@ -487,7 +495,7 @@
                                 <h4 class="card-title">{{this.productName}}</h4>
                                 <div class="card-info mb-3 d-flex align-items-center bid">
                                     <i class="fas fa-gavel text-success"></i>
-                                    <span class="text-success">Current Bid</span>
+                                    <span class="text-success">Price</span>
                                     <span class="flex-grow-1 text-end">{{formatMoney
                                             this.currentPrice
                                         }}
@@ -502,7 +510,11 @@
                                 <div class="card-info mb-3 d-flex align-items-center">
                                     <i class="fas fa-crown text-warning"></i>
                                     <span class="text-warning">Top Bidder:</span>
-                                    <span class="flex-grow-1 text-end">****{{this.firstName}}</span>
+                                    {{#if (isNotEqual this.firstName null)}}
+                                        <span class="flex-grow-1 text-end">****{{this.firstName}}</span>
+                                    {{else}}
+                                        <span class="flex-grow-1 text-end">N/A</span>
+                                    {{/if}}
                                 </div>
                                 <div class="card-info mb-3 d-flex align-items-center timer">
                                     <span class="fw-bolder countdown">{{this.expiredDate}}</span>

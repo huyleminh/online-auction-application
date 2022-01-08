@@ -87,6 +87,11 @@
 .card-images-preview .card-sub-images-item img {
     border: 1px solid #cfcfcf;
     border-radius: 5px;
+    object-fit: cover;
+}
+
+.owl-item.cloned, .owl-item {
+    display: flex;
 }
 
 /* .product-images .card-images-preview .owl-item,
@@ -201,6 +206,14 @@
 
 #toggle-filter-btn:hover {
     background-color: #f7f7ff;
+}
+
+.card-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 @media (max-width: 991px) {

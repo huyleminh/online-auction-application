@@ -9,18 +9,22 @@
             <li class="breadcrumb-item"><a href="/">Home</a></li>
             <li class="breadcrumb-item"><a href="javascript:void(0)">User</a></li>
             <li class="breadcrumb-item"><a href="/seller/products">My selling products</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Post new product</li>
+            <li class="breadcrumb-item active" aria-current="page">Post a product</li>
         </ol>
     </nav>
 {{/section}}
 
 <div class="card border shadow-0">
     <div class="card-header">
-        <h3 class="mb-0">Post new product</h3>
+        <h3 class="mb-0">Post a product</h3>
     </div>
 
     <div class="card-body d-flex flex-column align-items-center">
-        <form action="" method="post" class="mb-0">
+        <form action="" method="post" enctype="multipart/form-data" class="mb-0">
+            <div class="mb-3">
+                    <label class="form-label text-dark fw-bolder">Required Information
+                        <span class="text-danger">*</span></label>
+            </div>
             <div class="row mb-3">
                 <div class="col-sm-6 mb-sm-0 mb-3">
                     <div class="form-outline">
@@ -29,29 +33,32 @@
                             class="form-control"
                             name="prodName"
                             id="prodName"
+                            autocomplete="off"
                             required
                         />
-                        <label for="prodName" class="form-label">Product Name
-                            <span class="text-danger">*</span></label>
+                        <label for="prodName" class="form-label">Product Name</label>
                     </div>
                 </div>
 
                 <div class="col-sm-6">
                     <div class="form-outline">
                         <input
-                            type="text"
+                            type="hidden"
                             class="form-control"
                             name="prodCategory"
                             id="prodCategory"
                             list="prodCategoryList"
+                            autocomplete="off"
                             required
                         />
-                        <datalist id="prodCategoryList">
-                            <option value="Boston">
-                            <option value="Cambridge">
-                        </datalist>
-                        <label for="prodCategory" class="form-label">Choose a category
-                            <span class="text-danger">*</span></label>
+                        <div>
+                            <select class="form-select" id="catSelected" required>
+                                <option value="" selected>Choose a category</option>
+                                {{#each data}}
+                                    <option value={{this.cat_id}}>{{this.cat_name}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -67,8 +74,7 @@
                             id="startPrice"
                             required
                         />
-                        <label for="startPrice" class="form-label">Start price
-                            <span class="text-danger">*</span></label>
+                        <label for="startPrice" class="form-label">Start price</label>
                     </div>
                 </div>
 
@@ -82,23 +88,7 @@
                             id="stepPrice"
                             required
                         />
-                        <label for="stepPrice" class="form-label">Step price
-                            <span class="text-danger">*</span></label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-sm-6 col">
-                    <div class="form-outline">
-                        <input
-                            type="number"
-                            min="0"
-                            class="form-control"
-                            name="buynowPrice"
-                            id="buynowPrice"
-                        />
-                        <label for="buynowPrice" class="form-label">Buy now price (optional)</label>
+                        <label for="stepPrice" class="form-label">Step price</label>
                     </div>
                 </div>
             </div>
@@ -112,12 +102,11 @@
                             id="expiredDate"
                             class="form-control form-icon-trailing"
                             name="expiredDate"
+                            autocomplete="off"
                         />
-                        <label class="form-label" for="expiredDate">Expired date
-                            <span class="text-danger">*</span></label>
+                        <label class="form-label" for="expiredDate">Expired date</label>
                     </div>
                 </div>
-
                 <div class="col-sm-6">
                     <div class="form-outline">
                         <i class="fas fa-clock trailing"></i>
@@ -126,30 +115,73 @@
                             id="expiredTime"
                             class="form-control form-icon-trailing"
                             name="expiredTime"
+                            autocomplete="off"
                         />
-                        <label class="form-label" for="expiredTime">Expired time
-                            <span class="text-danger">*</span></label>
+                        <label class="form-label" for="expiredTime">Expired time</label>
                     </div>
                 </div>
             </div>
 
-            <div class="form-check">
-                <input
-                    class="form-check-input"
-                    type="checkbox"
-                    value="on"
-                    id="autoExtend"
-                    aria-describedby="autoExtendText"
-                />
-                <label class="form-check-label" for="autoExtend">
-                    Auto extend duration
-                </label>
+            <div class="mb-3">
+                    <label class="form-label text-dark fw-bolder">Optional</label>
             </div>
-            <div class="form-text mb-3" id="autoExtendText">If yes, if there is a new auction before
-                the end of 5 minutes, the product automatically renews for another 10 minutes.</div>
+
+            <div class="row mb-3">
+                <div class="col-sm-6 mb-sm-0 mb-3">
+                    <div class="form-check">
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value="on"
+                            id="autoExtend"
+                            aria-describedby="autoExtendText"
+                            name="autoExtend"
+                        />
+                        <label class="form-check-label" for="autoExtend">
+                            Auto extend duration
+                        </label>
+                    </div>
+                    <div class="form-text mb-3" id="autoExtendText">If there is a new bidding before
+                        the end time 5 minutes, the expired time will be automatically extended for 10 minutes longer.
+                    </div>
+                </div>
+
+                <div class="col-sm-6 mb-sm-0 mb-3">
+                    <div class="form-check">
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value="on"
+                            id="allowAll"
+                            aria-describedby="allowAllText"
+                            name="allowAll"
+                        />
+                        <label class="form-check-label" for="allowAll">
+                            Allow all bidders
+                        </label>
+                    </div>
+                    <div class="form-text mb-3" id="allowAllText">The system will allow all bidders whose rating point below 80 to bid for your product (by default, the system only allows bidder with rating point higher than 80).
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-sm-6 mb-sm-0 mb-3">
+                    <div class="form-outline">
+                        <input
+                            type="number"
+                            min="0"
+                            class="form-control"
+                            name="buynowPrice"
+                            id="buynowPrice"
+                        />
+                        <label for="buynowPrice" class="form-label">Buy now price</label>
+                    </div>
+                </div>
+            </div>
 
             {{! Upload thumbnail }}
-            <div class="mb-3 image-uploads">
+            <div class="mb-3 image-uploads d-flex">
                 <label class="form-label text-dark fw-bolder">Upload thumbnail
                     <span class="text-danger">*</span></label>
                 <div class="image-uploads-item d-flex">
@@ -157,6 +189,7 @@
                     <label
                         for="thumbnailImg"
                         class="d-flex justify-content-center align-items-center"
+                        id="upload-thumbnail"
                     >
                         <i class="fas fa-plus"></i>
                     </label>
@@ -166,8 +199,10 @@
                         accept="image/*"
                         name="thumbnailImg"
                         id="thumbnailImg"
+                        required
                     />
                 </div>
+                <div class="form-text text-danger d-none" id="warning-image-thumbnail"></div>
             </div>
             {{! Upload thumbnail }}
 
@@ -191,8 +226,10 @@
                         name="detailImages"
                         id="detailImages"
                         multiple
+                        required
                     />
                 </div>
+                <div class="form-text d-none text-danger" id="warning-image-details"></div>
             </div>
             {{! Upload detail }}
 
