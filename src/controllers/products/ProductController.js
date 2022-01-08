@@ -3,7 +3,7 @@ import numeral from "numeral";
 import AuthMiddlewares from "../../middlewares/AuthMiddlewares.js";
 import BiddingHistoryModel from "../../models/BiddingHistoryModel.js";
 import CategoryModel from "../../models/CategoryModel.js";
-import ProdcutDetailModel from "../../models/ProductDetailModel.js";
+import ProductDetailModel from "../../models/ProductDetailModel.js";
 import ProductModel from "../../models/ProductModal.js";
 import UserAccountModel from "../../models/UserAccountModel.js";
 import CommomCont from "../../shared/CommonConst.js";
@@ -113,7 +113,7 @@ export default class ProductController extends AppController {
 
             const total = totalRows[0].total ? totalRows[0].total : 0;
             const pageList = Array.from(
-                { length: Math.floor(total / DEFAULT_PAGE_SIZE) + 1 },
+                { length: total % DEFAULT_PAGE_SIZE === 0 ? total / DEFAULT_PAGE_SIZE : Math.floor(total / DEFAULT_PAGE_SIZE) + 1 },
                 (_, i) => {
                     return { key: i + 1, isActive: i + 1 === page };
                 }
@@ -141,7 +141,7 @@ export default class ProductController extends AppController {
         try {
             const [[product], [detail]] = await Promise.all([
                 ProductModel.getById(productId),
-                ProdcutDetailModel.getlById(productId),
+                ProductDetailModel.getlById(productId),
             ]);
 
             if (!product || !detail) {
@@ -164,10 +164,10 @@ export default class ProductController extends AppController {
                 ...detail,
                 image_links: JSON.parse(detail.image_links),
                 created_date: moment(product.created_date).locale("en").fromNow(),
-                bidder: {
+                bidder: bidder ? {
                     name: bidder.first_name,
                     point: bidder.rating_point,
-                },
+                } : null,
                 seller: {
                     name: `${seller.first_name} ${seller.last_name}`,
                     point: seller.rating_point,
@@ -198,7 +198,7 @@ export default class ProductController extends AppController {
                     totalBids: item.bid_count !== null ? item.bid_count : 0,
                     createdDate,
                     expiredDate: item.expired_date,
-                    firstName: item.first_name,
+                    firstName: item.first_name ? item.first_name : null,
                     isSold: item.is_sold,
                 };
 

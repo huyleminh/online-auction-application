@@ -129,7 +129,7 @@ export default class ProductModel {
                         select product_id, product_name, thumbnail, current_price, buy_now_price, expired_date, created_date, won_bidder_id, current_bidding_count as bid_count, is_sold
                         from product where cat_id = ${id}
                         limit ${limit} offset ${offset}
-                        ) as prod join user_account user on prod.won_bidder_id = user.user_id;
+                        ) as prod left join user_account user on prod.won_bidder_id = user.user_id;
                     `
                 );
                 resolve(dataSet);
@@ -149,7 +149,7 @@ export default class ProductModel {
                         from (
                         select product_id, product_name, thumbnail, current_price, buy_now_price, expired_date, created_date, won_bidder_id, current_bidding_count as bid_count, is_sold
                         from product limit ${limit} offset ${offset}
-                        ) as prod join user_account user on prod.won_bidder_id = user.user_id ;
+                        ) as prod left join user_account user on prod.won_bidder_id = user.user_id ;
                     `
                 );
                 resolve(dataSet);
@@ -243,10 +243,22 @@ export default class ProductModel {
                                     won_bidder_id, current_bidding_count as bid_count, is_sold
                             from product where cat_id = ${catId} and product_id <> ${prodId}
                             order by rand() limit ${limit}
-                        ) as prod join user_account user on prod.won_bidder_id = user.user_id ;
+                        ) as prod left join user_account user on prod.won_bidder_id = user.user_id ;
                     `
                 );
                 resolve(dataSet);
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
+
+    static insertAProduct(product, detail) {
+        return new Promise(async function (resolve, reject) {
+            try {
+                const res1 = await KnexConnection("product").insert(product);
+                const res2 = await KnexConnection("product_detail").insert(detail);
+                resolve({ status: true });
             } catch (err) {
                 reject(err);
             }
