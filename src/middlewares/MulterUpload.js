@@ -17,6 +17,19 @@ const diskStorage = multer.diskStorage({
     },
 });
 
-const diskUpload = multer({ storage: diskStorage });
+const diskUpload = multer({
+    storage: diskStorage,
+    fileFilter: function (req, file, cb) {
+        try {
+            if ([...file.mimetype.matchAll(/^(image\/)\w*/g)].length !== 0) {
+                cb(null, true);
+            } else {
+                cb(null, false)
+            }
+        } catch (err) {
+            console.log("Error:", err);
+        }
+    }
+});
 
 export { diskUpload as ImageDiskUpload };

@@ -234,8 +234,5 @@ export default class BidderController extends AppController {
                 }
             });
         }
-        // res.render("pages/user/bidder/wonlist", {
-        //     layout: "profile",
-        // });
     }
 }

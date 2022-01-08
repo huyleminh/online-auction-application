@@ -104,14 +104,42 @@ $(document).ready(function () {
         $("#detailImages").on("change", function (e) {
             const target = e.target;
             const fileLen = target.files.length;
+            var flag = false;
 
             if (fileLen <= 0) {
                 return;
             }
 
+            if (fileLen < 3) {
+                if ($("#warning-image-details").hasClass("d-none")) {
+                    $("#warning-image-details").text("Please choose at least 3 images.");
+                    $("#warning-image-details").removeClass("d-none");
+                }
+                flag = true;
+            } else {
+                if (!$("#warning-image-details").hasClass("d-none")) {
+                    $("#warning-image-details").text("");
+                    $("#warning-image-details").addClass("d-none");
+                }
+            }
+
             $("#preview-detail").html("");
             for (let i = 0; i < fileLen; ++i) {
                 const file = target.files[i];
+                if ([...file.type.matchAll(/^(image\/)\w*/g)].length === 0) {
+                    if ($("#warning-image-details").hasClass("d-none")) {
+                        $("#warning-image-details").text("Invalid file's type. Please choose again.");
+                        flag = true;
+                        $("#preview-detail").html("");
+                        $("#warning-image-details").removeClass("d-none");
+                    }
+                    return;
+                } else {
+                    if (!$("#warning-image-details").hasClass("d-none")) {
+                        $("#warning-image-details").text("");
+                        $("#warning-image-details").addClass("d-none");
+                    }
+                }
                 let fileReader = new FileReader();
 
                 fileReader.readAsDataURL(file);
@@ -129,6 +157,9 @@ $(document).ready(function () {
                     $("#preview-detail").html(tmp);
                 };
             }
+            if (flag) {
+                $("#detailImages").val('');
+            }
         });
     }
 
@@ -142,6 +173,23 @@ $(document).ready(function () {
             }
 
             const file = target.files[0];
+            if ([...file.type.matchAll(/^(image\/)\w*/g)].length === 0) {
+                if ($("#warning-image-thumbnail").hasClass("d-none")) {
+                    $("#warning-image-thumbnail").text("Invalid file's type. Please choose again.");
+                    $("#thumbnailImg").val('');
+                    $("#preview-thumbnail").html("");
+                    if ($('#upload-thumbnail').hasClass("opacity-0")) {
+                        $('#upload-thumbnail').removeClass("opacity-0");
+                    }
+                    $("#warning-image-thumbnail").removeClass("d-none");
+                }
+                return;
+            } else {
+                if (!$("#warning-image-thumbnail").hasClass("d-none")) {
+                    $("#warning-image-thumbnail").text("");
+                    $("#warning-image-thumbnail").addClass("d-none");
+                }
+            }
             let fileReader = new FileReader();
 
             fileReader.readAsDataURL(file);
@@ -149,16 +197,39 @@ $(document).ready(function () {
                 const url = fileReader.result;
 
                 let tmp = `
-                        <div class="image-preview-item">
+                        <div class="image-preview-item position-absolute">
                             <img src=${url} alt="upload-image">
                         </div>
                     `;
 
                 $("#preview-thumbnail").html("");
                 $("#preview-thumbnail").html(tmp);
+                if (!$('#upload-thumbnail').hasClass("opacity-0")) {
+                    $('#upload-thumbnail').addClass("opacity-0");
+                }
             };
         });
     }
+
+    // Handle select category on the create product page
+    if ($("#catSelected")) {
+        $("#catSelected").on("change", function () {
+            $("#prodCategory").val(this.value);
+        })
+    }
+
+    // Validate images before submit
+    // $("#saveProductBtn").submit(function (event) {
+    //     if (!$("#warning-image-thumbnail").hasClass("d-none") || !$("#warning-image-details").hasClass("d-none")) {
+    //         alert("Please check your information again.")
+    //         event.preventDefault();
+    //     }
+
+    //     // if ($("#warning-image-details").hasClass("d-none")) {
+    //     //     $("#warning-image-details").text("Please choose at least 3 images.");
+    //     //     $("#warning-image-details").removeClass("d-none");
+    //     // }
+    // })
 
     // Init product expired date datepicker
     if (document.querySelector("#expiredDate")) {
