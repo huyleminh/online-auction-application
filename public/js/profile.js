@@ -289,12 +289,15 @@ $(document).ready(function () {
 
     // Profile information preparation
     if (window.location.pathname === "/user/account") {
-        fetchAllProvince();
+        // fetchAllProvince();
         $.getJSON("https://provinces.open-api.vn/api/?depth=1", function (data) {
             const provinceList = data;
             insertOptionsToTarget($("#provinceList"), provinceList);
 
             // Prefetch district
+            if (!$("#province").val()) {
+                return
+            }
             const provinceOption = $("#provinceList").find(
                 `option[value="${$("#province").val()}"]`
             );

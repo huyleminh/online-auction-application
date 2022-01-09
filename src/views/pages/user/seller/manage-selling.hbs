@@ -1,0 +1,156 @@
+{{#section "banner"}}
+    {{> banner title="Your Profile" subTitle="Manage your profile and explore more things"}}
+{{/section}}
+
+{{#section "breadcrumb"}}
+    <h3>User profile</h3>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="javascript:void(0)">User</a></li>
+            <li class="breadcrumb-item"><a href="/seller/products">My selling products</a></li>
+            {{!-- <li class="breadcrumb-item active" aria-current="page">Post a product</li> --}}
+        </ol>
+    </nav>
+{{/section}}
+
+{{#section "css"}}
+    <link rel="stylesheet" href="/css/table.css" />
+{{/section}}
+
+<div class="card border shadow-0">
+    <div class="card-header">
+        <h3 class="mb-0">My selling products</h3>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped mb-0 table-custom">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Product name</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Current price</th>
+                        <th scope="col">Step price</th>
+                        <th scope="col">Auto extend</th>
+                        <th scope="col">Allow all</th>
+                        <th scope="col">Create date</th>
+                        <th scope="col">Expired time</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each data.list}}
+                        <tr>
+                            <td scope="row">{{add @index 1}}</td>
+                            <td>
+                                <div>
+                                    <img class="img-fluid rounded" src={{this.thumbnail}} alt={{this.product_name}}></img>
+                                </div>
+                            </td>
+                            <td>{{this.product_name}}</td>
+                            <td>
+                                {{#if this.is_sold}}
+                                    <div>
+                                        <span class="tag tag-danger">Sold</span>
+                                    </div>
+                                {{else}}
+                                    <div>
+                                        <span class="tag tag-success">Selling</span>
+                                    </div>
+                                {{/if}}
+                            </td>
+                            <td>{{formatMoney this.current_price}} VND</td>
+                            <td>{{formatMoney this.step_price}} VND</td>
+                            <td>
+                                {{#if this.auto_extend}}
+                                    <div>
+                                        <span class="tag tag-danger">No</span>
+                                    </div>
+                                {{else}}
+                                    <div>
+                                        <span class="tag tag-success">Yes</span>
+                                    </div>
+                                {{/if}}
+                            </td>
+                            <td>
+                                {{#if this.is_allow_all}}
+                                    <div>
+                                        <span class="tag tag-danger">No</span>
+                                    </div>
+                                {{else}}
+                                    <div>
+                                        <span class="tag tag-success">Yes</span>
+                                    </div>
+                                {{/if}}
+                            </td>
+                            <td>{{formatDate this.created_date}}</td>
+                            <td>{{formatDate this.expired_date}}</td>
+                            <td>
+                                <div class="action">
+                                    <a
+                                        href="/menu/products/{{this.product_id}}"
+                                        class="btn btn-custom btn-custom-main btn-sm shadow-0 me-1"
+                                        title="View details"
+                                        data-mdb-toggle="tooltip"
+                                    >
+                                        <i class="fas fa-eye"></i>
+                                    <a
+                                        href="/seller/products/{{this.product_id}}"
+                                        class="btn btn-custom btn-custom-main btn-sm shadow-0 bg-warning me-1"
+                                        title="Edit description"
+                                        data-mdb-toggle="tooltip"
+                                    >
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+        {{!-- </form> --}}
+
+    <form action="" method="get">
+        <nav class="pagination-container mt-4">
+            <ul class="pagination justify-content-center">
+                {{#if (isEqual data.page 1)}}
+                    <li class="page-item disabled" aria-current="page">
+                        <a class="page-link page-link-custom" href="#"></a>
+                    </li>
+                {{else}}
+                    <li class="page-item" aria-current="page">
+                        <a class="page-link page-link-custom" href="?page={{subtract data.page 1}}">{{subtract data.page 1}}</a>
+                    </li>
+                {{/if}}
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link page-link-custom" href="?page={{data.page}}">
+                        {{data.page}}
+                    </a>
+                </li>
+                {{#if data.hasNext}}
+                    <li class="page-item" aria-current="page">
+                        <a class="page-link page-link-custom" href="?page={{add data.page 1}}">{{add data.page 1}}</a>
+                    </li>
+                {{else}}
+                    <li class="page-item disabled" aria-current="page">
+                        <a class="page-link page-link-custom" href="#"></a>
+                    </li>
+                {{/if}}
+            </ul>
+        </nav>
+    </form>
+</div>
+
+{{#section "js"}}
+    <script src="/ckeditor/ckeditor.js"></script>
+    <script>
+        ClassicEditor.create( document.querySelector( '#editor' ), { simpleUpload: { types: ["png",
+        "jpeg"], uploadUrl: `/seller/products/upload`, } } ) .then( editor => { window.editor = editor; } ) .catch(
+        error => { console.error( 'There was a problem initializing the editor.', error ); } );
+    </script>
+{{/section}}

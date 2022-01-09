@@ -66,11 +66,11 @@ function loadTop5Due() {
                 return `
                     <div class="card product-card">
                         <div class="p-3">
-                            <a href="/menu/products/${item.productId}" class="card-image" style="max-height: 200px;">
+                            <a href="/menu/products/${item.productId}" class="card-image" style="max-height: 250px; height: 250px">
                                 <img
                                     src=${item.thumbnail}
                                     class="img-fluid"
-                                    style="height: 100%; object-fit: cover"
+                                    style="height: 100%; object-fit: contain"
                                 />
                                 <div class="mask">
                                     <span><i class="fas fa-search-plus me-1"></i>View details</span>
@@ -79,32 +79,34 @@ function loadTop5Due() {
                         </div>
 
                         <div class="card-body p-3 d-flex flex-column justify-content-between">
-                            <h4 class="card-title">${item.productName}</h4>
-                            <div class="card-info mb-3 d-flex align-items-center bid">
-                                <i class="fas fa-gavel text-success"></i>
-                                <span class="text-success">Current Bid</span>
-                                <span class="flex-grow-1 text-end">${item.currentPrice} VND</span>
+                            <h4 class="card-title" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">${item.productName}</h4>
+                            <div class="card-info">
+                                <div class="card-info mb-3 d-flex align-items-center bid">
+                                    <i class="fas fa-gavel text-success"></i>
+                                    <span class="text-success">Current Bid</span>
+                                    <span class="flex-grow-1 text-end">${item.currentPrice} VND</span>
+                                </div>
+                                <div class="card-info mb-3 d-flex align-items-center">
+                                    <i class="fas fa-dollar-sign text-danger"></i>
+                                    <span class="text-danger">Buy Now</span>
+                                    <span class="flex-grow-1 text-end">${buyNow}</span>
+                                </div>
+                                <div class="card-info mb-3 d-flex align-items-center">
+                                    <i class="fas fa-crown text-warning"></i>
+                                    <span class="text-warning">Top Bidder:</span>
+                                    <span class="flex-grow-1 text-end">${item.firstName}</span>
+                                </div>
+                                <div
+                                    class="card-info mb-3 d-flex align-items-center timer"
+                                >
+                                    <span class="${expType} fw-bolder">Expired ${item.expiredDate}</span>
+                                    <span class="flex-grow-1 text-end">${item.totalBids} Bids</span>
+                                </div>
+                                <a href="/menu/products/${item.productId}" type="button" class="btn btn-primary btn-block bidnow">
+                                    <i class="fas fa-gavel me-2"></i>
+                                    Go to bid page
+                                </a>
                             </div>
-                            <div class="card-info mb-3 d-flex align-items-center">
-                                <i class="fas fa-dollar-sign text-danger"></i>
-                                <span class="text-danger">Buy Now</span>
-                                <span class="flex-grow-1 text-end">${buyNow}</span>
-                            </div>
-                            <div class="card-info mb-3 d-flex align-items-center">
-                                <i class="fas fa-crown text-warning"></i>
-                                <span class="text-warning">Top Bidder:</span>
-                                <span class="flex-grow-1 text-end">****${item.firstName}</span>
-                            </div>
-                            <div
-                                class="card-info mb-3 d-flex align-items-center timer"
-                            >
-                                <span class="${expType} fw-bolder">Expired ${item.expiredDate}</span>
-                                <span class="flex-grow-1 text-end">${item.totalBids} Bids</span>
-                            </div>
-                            <a href="/menu/products/${item.productId}" type="button" class="btn btn-primary btn-block bidnow">
-                                <i class="fas fa-gavel me-2"></i>
-                                Go to bid page
-                            </a>
                         </div>
                         <div class="card-footer text-center p-3">
                             <p class="m-0 verical-align-middle">Posted ${item.createdDate}</p>
@@ -150,11 +152,11 @@ function loadTop5Highest() {
                     <div class="card product-card">
                         <div class="p-3 postion-relative">
                             ${ribbon}
-                            <a href="/menu/products/${item.productId}" class="card-image" style="max-height: 200px;">
+                            <a href="/menu/products/${item.productId}" class="card-image" style="max-height: 250px; height: 250px">
                                 <img
                                     src=${item.thumbnail}
                                     class="img-fluid"
-                                    style="height: 100%; object-fit: cover"
+                                    style="height: 100%; object-fit: contain"
                                 />
                                 <div class="mask">
                                     <span><i class="fas fa-search-plus me-1"></i>View details</span>
@@ -163,32 +165,34 @@ function loadTop5Highest() {
                         </div>
 
                         <div class="card-body p-3 d-flex flex-column justify-content-between">
-                            <h4 class="card-title">${item.productName}</h4>
-                            <div class="card-info mb-3 d-flex align-items-center bid">
-                                <i class="fas fa-gavel text-success"></i>
-                                <span class="text-success">Current Bid</span>
-                                <span class="flex-grow-1 text-end">${item.currentPrice} VND</span>
+                            <h4 class="card-title" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">${item.productName}</h4>
+                            <div class="card-info">
+                                <div class="card-info mb-3 d-flex align-items-center bid">
+                                    <i class="fas fa-gavel text-success"></i>
+                                    <span class="text-success">Current Bid</span>
+                                    <span class="flex-grow-1 text-end">${item.currentPrice} VND</span>
+                                </div>
+                                <div class="card-info mb-3 d-flex align-items-center">
+                                    <i class="fas fa-dollar-sign text-danger"></i>
+                                    <span class="text-danger">Buy Now</span>
+                                    <span class="flex-grow-1 text-end">${buyNow}</span>
+                                </div>
+                                <div class="card-info mb-3 d-flex align-items-center">
+                                    <i class="fas fa-crown text-warning"></i>
+                                    <span class="text-warning">Top Bidder:</span>
+                                    <span class="flex-grow-1 text-end">${item.firstName}</span>
+                                </div>
+                                <div
+                                    class="card-info mb-3 d-flex align-items-center timer"
+                                >
+                                    <span class="${expType} fw-bolder">Expired ${item.expiredDate}</span>
+                                    <span class="flex-grow-1 text-end">${item.totalBids} Bids</span>
+                                </div>
+                                <a href="/menu/products/${item.productId}" type="button" class="btn btn-primary btn-block bidnow">
+                                    <i class="fas fa-gavel me-2"></i>
+                                    Go to bid page
+                                </a>
                             </div>
-                            <div class="card-info mb-3 d-flex align-items-center">
-                                <i class="fas fa-dollar-sign text-danger"></i>
-                                <span class="text-danger">Buy Now</span>
-                                <span class="flex-grow-1 text-end">${buyNow}</span>
-                            </div>
-                            <div class="card-info mb-3 d-flex align-items-center">
-                                <i class="fas fa-crown text-warning"></i>
-                                <span class="text-warning">Top Bidder:</span>
-                                <span class="flex-grow-1 text-end">****${item.firstName}</span>
-                            </div>
-                            <div
-                                class="card-info mb-3 d-flex align-items-center timer"
-                            >
-                                <span class="${expType} fw-bolder">Expired ${item.expiredDate}</span>
-                                <span class="flex-grow-1 text-end">${item.totalBids} Bids</span>
-                            </div>
-                            <a href="/menu/products/${item.productId}" type="button" class="btn btn-primary btn-block bidnow">
-                                <i class="fas fa-gavel me-2"></i>
-                                Go to bid page
-                            </a>
                         </div>
                         <div class="card-footer text-center p-3">
                             <p class="m-0 verical-align-middle">Posted ${item.createdDate}</p>
@@ -234,11 +238,11 @@ function loadTop5Bid() {
                     <div class="card product-card">
                         <div class="p-3 position-relative">
                             ${ribbon}
-                            <a href="/menu/products/${item.productId}" class="card-image" style="max-height: 200px;">
+                            <a href="/menu/products/${item.productId}" class="card-image" style="max-height: 250px; height: 250px">
                                 <img
                                     src=${item.thumbnail}
                                     class="img-fluid"
-                                    style="height: 100%; object-fit: cover"
+                                    style="height: 100%; object-fit: contain"
                                 />
                                 <div class="mask">
                                     <span><i class="fas fa-search-plus me-1"></i>View details</span>
@@ -247,32 +251,34 @@ function loadTop5Bid() {
                         </div>
 
                         <div class="card-body p-3 d-flex flex-column justify-content-between">
-                            <h4 class="card-title">${item.productName}</h4>
-                            <div class="card-info mb-3 d-flex align-items-center bid">
-                                <i class="fas fa-gavel text-success"></i>
-                                <span class="text-success">Current Bid</span>
-                                <span class="flex-grow-1 text-end">${item.currentPrice} VND</span>
+                            <h4 class="card-title" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">${item.productName}</h4>
+                            <div class="card-info">
+                                <div class="card-info mb-3 d-flex align-items-center bid">
+                                    <i class="fas fa-gavel text-success"></i>
+                                    <span class="text-success">Current Bid</span>
+                                    <span class="flex-grow-1 text-end">${item.currentPrice} VND</span>
+                                </div>
+                                <div class="card-info mb-3 d-flex align-items-center">
+                                    <i class="fas fa-dollar-sign text-danger"></i>
+                                    <span class="text-danger">Buy Now</span>
+                                    <span class="flex-grow-1 text-end">${buyNow}</span>
+                                </div>
+                                <div class="card-info mb-3 d-flex align-items-center">
+                                    <i class="fas fa-crown text-warning"></i>
+                                    <span class="text-warning">Top Bidder:</span>
+                                    <span class="flex-grow-1 text-end">****${item.firstName}</span>
+                                </div>
+                                <div
+                                    class="card-info mb-3 d-flex align-items-center timer"
+                                >
+                                    <span class="${expType} fw-bolder">Expired ${item.expiredDate}</span>
+                                    <span class="flex-grow-1 text-end">${item.totalBids} Bids</span>
+                                </div>
+                                <a href="/menu/products/${item.productId}" type="button" class="btn btn-primary btn-block bidnow">
+                                    <i class="fas fa-gavel me-2"></i>
+                                    Go to bid page
+                                </a>
                             </div>
-                            <div class="card-info mb-3 d-flex align-items-center">
-                                <i class="fas fa-dollar-sign text-danger"></i>
-                                <span class="text-danger">Buy Now</span>
-                                <span class="flex-grow-1 text-end">${buyNow}</span>
-                            </div>
-                            <div class="card-info mb-3 d-flex align-items-center">
-                                <i class="fas fa-crown text-warning"></i>
-                                <span class="text-warning">Top Bidder:</span>
-                                <span class="flex-grow-1 text-end">****${item.firstName}</span>
-                            </div>
-                            <div
-                                class="card-info mb-3 d-flex align-items-center timer"
-                            >
-                                <span class="${expType} fw-bolder">Expired ${item.expiredDate}</span>
-                                <span class="flex-grow-1 text-end">${item.totalBids} Bids</span>
-                            </div>
-                            <a href="/menu/products/${item.productId}" type="button" class="btn btn-primary btn-block bidnow">
-                                <i class="fas fa-gavel me-2"></i>
-                                Go to bid page
-                            </a>
                         </div>
                         <div class="card-footer text-center p-3">
                             <p class="m-0 verical-align-middle">Posted ${item.createdDate}</p>

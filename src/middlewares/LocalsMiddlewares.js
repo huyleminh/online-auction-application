@@ -1,12 +1,28 @@
 import UserAccountModel from "../models/UserAccountModel.js";
 import WishlistModel from "../models/WishlistModel.js";
+import moment from 'moment';
 
 export default class LocalsMiddlewares {
     // Move user in session.passport to locals
-    static exchangeAuthLocalData(req, res, next) {
+    static async exchangeAuthLocalData(req, res, next) {
         const user = req.user;
         if (user) {
             res.locals.localUser = user;
+            const userInfo = await UserAccountModel.getByColumn("username", user.username);
+            if (userInfo === undefined) {
+                res.locals.isSeller = false;
+                req.logout();
+                return req.session.save(() => {
+                    res.redirect("/login");
+                });
+            }
+
+            const { seller_expired_date } = userInfo[0];
+            if (seller_expired_date && moment(seller_expired_date).isAfter(moment())) {
+                res.locals.isSeller = true;
+            } else {
+                res.locals.isSeller = false;
+            }
         }
         next();
     }
