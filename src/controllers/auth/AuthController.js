@@ -332,7 +332,7 @@ export default class AuthController extends AppController {
             req.session.otpTempSecret = secret;
             res.json({ status: 200 });
         } catch (error) {
-            console.log(e);
+            console.log(error);
             res.json({ status: 500 });
         }
     }
