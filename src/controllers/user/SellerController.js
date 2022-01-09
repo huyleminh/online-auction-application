@@ -37,6 +37,12 @@ export default class SellerController extends AppController {
         );
 
         this._router.get(
+            "/seller/products/results",
+            AuthMiddlewares.authorizeUser,
+            this.renderAuctionResult
+        );
+
+        this._router.get(
             "/seller/products/:productId",
             AuthMiddlewares.authorizeUser,
             this.renderEditProduct
@@ -224,5 +230,35 @@ export default class SellerController extends AppController {
 
     editProduct(req, res) {
         res.redirect("/");
+    }
+
+    renderAuctionResult(req, res) {
+        let { page } = req.query;
+
+        page = page ? parseInt(page) : 1;
+
+        if (isNaN(page) || page < 1) {
+            console.log(page);
+            return res.redirect("/seller/products/results?page=1");
+        }
+        res.render("pages/user/seller/result", {
+            layout: "profile",
+            data: {
+                list: [
+                    {
+                        product_name: "ABC",
+                        thumbnail:
+                            "https://firebasestorage.googleapis.com/v0/b/the-xanh-ecommerce.appspot.com/o/af3fcb5a-e40a-4d7d-9c71-025e6e83b063.jpeg?alt=media&token=af3fcb5a-e40a-4d7d-9c71-025e6e83b063",
+                        is_sold: 1,
+                        current_price: 1500000,
+                        bidder_name: "Hello",
+                        bidder_point: 80,
+                        expired_date: new Date().toJSON(),
+                    },
+                ],
+                page: 1,
+                hasNext: false,
+            },
+        });
     }
 }
