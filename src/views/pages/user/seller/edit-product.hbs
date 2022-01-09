@@ -1,0 +1,75 @@
+{{#section "banner"}}
+    {{> banner title="Your Profile" subTitle="Manage your profile and explore more things"}}
+{{/section}}
+
+{{#section "breadcrumb"}}
+    <h3>User profile</h3>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="javascript:void(0)">User</a></li>
+            <li class="breadcrumb-item"><a href="/seller/products">My selling products</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Edit description</li>
+        </ol>
+    </nav>
+{{/section}}
+
+<div class="card border shadow-0">
+    <div class="card-header">
+        <h3 class="mb-0">Edit description</h3>
+    </div>
+
+    <div class="card-body d-flex flex-column align-items-center">
+        <div class="w-100">
+            <form action="/seller/products/edit" method="post" enctype="multipart/form-data" class="mb-0">
+                <div class="mb-3">
+                    <label class="form-label text-dark fw-bolder mb-0">Old description</label>
+                </div>
+                <div class="mb-3">
+                    <a
+                        class="btn btn-primary"
+                        data-mdb-toggle="collapse"
+                        href="#oldDes"
+                        role="button"
+                        aria-expanded="false"
+                        aria-controls="oldDes"
+                        style="background-color: #6963ff;"
+                    >
+                        Click here to show
+                    </a>
+                </div>
+                <div class="collapse scroll-section mt-3 mb-3 w-100" id="oldDes" style="max-height: 500px; overflow-y: auto;">
+                    <div class="ck-content">
+                        {{{data}}}
+                    </div>
+                </div>
+                <label class="form-label text-dark fw-bolder">New description
+                    <span class="text-danger">*</span></label>
+                <textarea class="form-control" id="editor" name="description"></textarea>
+
+                <div class="d-flex justify-content-center mt-3">
+                    <button
+                        type="submit"
+                        class="shadow-0 btn btn-custom btn-custom-main me-3"
+                        id="saveProductBtn"
+                    >
+                        Save
+                    </button>
+
+                    <a type="button" class="shadow-0 btn btn-outline-secondary" href="/seller/products">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{#section "js"}}
+    <script src="/ckeditor/ckeditor.js"></script>
+    <script>
+        ClassicEditor.create( document.querySelector( '#editor' ), { simpleUpload: { types: ["png",
+        "jpeg"], uploadUrl: `/seller/products/upload`, } } ) .then( editor => { window.editor = editor; } ) .catch(
+        error => { console.error( 'There was a problem initializing the editor.', error ); } );
+    </script>
+{{/section}}
