@@ -16,6 +16,12 @@ $(document).ready(function () {
 
                 // Find the distance between now and the count down date
                 let distance = countDownDate - now;
+                if (distance < 0) {
+                    countId && clearInterval(countId);
+                    item.classList.add("timer-danger");
+                    item.innerHTML= "EXPIRED";
+                    return;
+                }
 
                 // Time calculations for days, hours, minutes and seconds
                 let days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -43,11 +49,6 @@ $(document).ready(function () {
                 item.innerHTML = countString;
 
                 // If the count down is over, write some text
-                if (distance < 0) {
-                    countId && clearInterval(countId);
-                    item.classList.add("timer-danger");
-                    item.innerHTML("EXPIRED");
-                }
             }, 1000);
 
             intervalIdList.push(countId);

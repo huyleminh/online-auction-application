@@ -50,4 +50,15 @@ export default class AutoBiddingJobModel {
             }
         });
     }
+
+    static insert(entity) {
+        return new Promise(async function (resolve, reject) {
+            try {
+                const dataSet = await KnexConnection("auto_bidding_job").insert(entity);
+                resolve(dataSet);
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
 }

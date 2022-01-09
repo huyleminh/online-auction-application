@@ -99,7 +99,6 @@ export default class ProductController extends AppController {
             const productListMap = CommomUtils.sortProductUtil(productList[0], sort).map((item) => {
                 const createdDate = moment(item.created_date).locale("en").fromNow();
                 const minDiff = moment().diff(moment(item.created_date), "minutes");
-
                 const retObj = {
                     productId: item.product_id,
                     productName: item.product_name,
@@ -122,7 +121,12 @@ export default class ProductController extends AppController {
 
             const total = totalRows[0].total ? totalRows[0].total : 0;
             const pageList = Array.from(
-                { length: total % DEFAULT_PAGE_SIZE === 0 ? total / DEFAULT_PAGE_SIZE : Math.floor(total / DEFAULT_PAGE_SIZE) + 1 },
+                {
+                    length:
+                        total % DEFAULT_PAGE_SIZE === 0
+                            ? total / DEFAULT_PAGE_SIZE
+                            : Math.floor(total / DEFAULT_PAGE_SIZE) + 1,
+                },
                 (_, i) => {
                     return { key: i + 1, isActive: i + 1 === page };
                 }
@@ -175,10 +179,12 @@ export default class ProductController extends AppController {
                 ...detail,
                 image_links: JSON.parse(detail.image_links),
                 created_date: moment(product.created_date).locale("en").fromNow(),
-                bidder: bidder ? {
-                    name: bidder.first_name,
-                    point: bidder.rating_point,
-                } : null,
+                bidder: bidder
+                    ? {
+                          name: bidder.first_name,
+                          point: bidder.rating_point,
+                      }
+                    : null,
                 seller: {
                     name: `${seller.first_name} ${seller.last_name}`,
                     point: seller.rating_point,
@@ -273,7 +279,7 @@ export default class ProductController extends AppController {
         try {
             // Find if product is available
             const [product] = await ProductModel.getById(body.productId);
-            console.log({ product });
+            // console.log({ product });
             if (!product) {
                 return res.redirect(`/menu/products/${body.productId}`);
             }
@@ -287,7 +293,7 @@ export default class ProductController extends AppController {
 
             // Get user id
             const [userFromDb] = await UserAccountModel.getByColumn("username", user.username);
-            console.log({ userFromDb });
+            // console.log({ userFromDb });
             if (!userFromDb) {
                 req.logout();
                 delete req.session.wishlist;
@@ -308,7 +314,7 @@ export default class ProductController extends AppController {
                 userFromDb.user_id,
                 body.productId
             );
-            console.log({ banResult });
+            // console.log({ banResult });
             if (banResult && banResult.is_banned) {
                 req.flash("message", "You are banned by the seller in bidding this product");
                 req.flash("type", "danger");
@@ -317,10 +323,18 @@ export default class ProductController extends AppController {
 
             // Start bidding
             const [detail] = await ProductDetailModel.getlById(product.product_id);
-            console.log({ detail });
+            // console.log({ detail });
+
+            // Insert to join bid table
+            if (!banResult) {
+                await JoinBidderModel.insert({
+                    product_id: product.product_id,
+                    bidder_id: userFromDb.user_id,
+                    is_banned: 0,
+                });
+            }
 
             // Check input price
-            // Greater than or equal buy now price
             if (parseInt(body.money) >= product.buy_now_price) {
                 console.log("Buy now");
 
@@ -341,7 +355,8 @@ export default class ProductController extends AppController {
 
                 // Update job
                 const [job] = await AutoBiddingJobModel.getByProductId(product.product_id);
-                console.log({ job });
+                // console.log({ job });
+                // ! job undefined
                 ScheduleJobEventInstance.reScheduleJob(
                     job.job_id,
                     moment().add(10, "seconds").toDate()
@@ -357,7 +372,7 @@ export default class ProductController extends AppController {
                 userFromDb.user_id,
                 product.product_id
             );
-            console.log({ userBidHistory });
+            // console.log({ userBidHistory });
             if (userBidHistory && userBidHistory.tolerable_price >= parseInt(body.money)) {
                 req.flash("message", "You have bidded with higher price for this product");
                 req.flash("type", "warning");
@@ -378,24 +393,30 @@ export default class ProductController extends AppController {
                     current_price: parseInt(body.money),
                 });
             } else {
-                console.log("Higher");
+                // console.log("Higher");
                 await BiddingHistoryModel.insert({
                     product_id: product.product_id,
                     bidder_id: userFromDb.user_id,
-                    current_price: product.max_tolerable_price + detail.step_price,
+                    current_price:
+                        product.max_tolerable_price === null
+                            ? product.current_price + detail.step_price
+                            : product.max_tolerable_price + detail.step_price,
                     bidder_fname: userFromDb.first_name,
                     tolerable_price: parseInt(body.money),
                 });
 
                 const tempId = product.won_bidder_id;
                 await ProductModel.update(product.product_id, {
-                    current_price: product.max_tolerable_price + detail.step_price,
+                    current_price:
+                        product.max_tolerable_price === null
+                            ? product.current_price + detail.step_price
+                            : product.max_tolerable_price + detail.step_price,
                     max_tolerable_price: parseInt(body.money),
                     won_bidder_id: userFromDb.user_id,
                 });
 
-                // Send email to temp winner
-                if (tempId !== userFromDb.user_id) {
+                // Send email to temp loser
+                if (tempId && tempId !== userFromDb.user_id) {
                     UserAccountModel.getByColumn("user_id", tempId).then((res) => {
                         const [winner] = res;
                         if (winner) {
@@ -424,10 +445,7 @@ export default class ProductController extends AppController {
                     // Update job
                     const [job] = await AutoBiddingJobModel.getByProductId(product.product_id);
                     console.log({ job });
-                    ScheduleJobEventInstance.reScheduleJob(
-                        job.job_id,
-                        newExpiredDate.toDate()
-                    );
+                    ScheduleJobEventInstance.reScheduleJob(job.job_id, newExpiredDate.toDate());
                 }
             }
 

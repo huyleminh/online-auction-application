@@ -18,6 +18,7 @@ class ScheduleJobEvent {
         this._scheduleJobs[jobId] = this._scheduler.scheduleJob(
             startDate,
             async function (id) {
+                console.log(`>>> JOB START: JOB_ID${id}`);
                 const [job] = await AutoBiddingJobModel.getByProductId(id);
                 const [product] = await ProductModel.getById(job.product_id);
                 const [detail] = await ProductDetailModel.getlById(job.product_id);
@@ -75,6 +76,7 @@ class ScheduleJobEvent {
                 if (this._scheduleJobs[jobId]) {
                     delete this._scheduleJobs[id];
                 }
+                console.log(`>>> JOB END: JOB_ID${id}`);
             }.bind(this, jobId)
         );
     }

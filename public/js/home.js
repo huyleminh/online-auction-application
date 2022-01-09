@@ -64,7 +64,7 @@ function loadTop5Due() {
                 }
 
                 return `
-                    <div class="card product-card">
+                    <div class="card product-card w-100">
                         <div class="p-3">
                             <a href="/menu/products/${item.productId}" class="card-image" style="max-height: 250px; height: 250px">
                                 <img
@@ -149,7 +149,7 @@ function loadTop5Highest() {
                 const ribbon = item.isSold ? `<div class="ribbon bg-danger">SOLD</div>` : "";
 
                 return `
-                    <div class="card product-card">
+                    <div class="card product-card w-100">
                         <div class="p-3 postion-relative">
                             ${ribbon}
                             <a href="/menu/products/${item.productId}" class="card-image" style="max-height: 250px; height: 250px">
@@ -235,7 +235,7 @@ function loadTop5Bid() {
                 const ribbon = item.isSold ? `<div class="ribbon bg-danger">SOLD</div>` : "";
 
                 return `
-                    <div class="card product-card">
+                    <div class="card product-card w-100">
                         <div class="p-3 position-relative">
                             ${ribbon}
                             <a href="/menu/products/${item.productId}" class="card-image" style="max-height: 250px; height: 250px">

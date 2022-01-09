@@ -133,7 +133,7 @@ export default class EmailTemplate {
     static biddingPriceWarningBidder() {
         return this.generateTemplate(`
             <p style="font-size: 16px">
-                The product you are posting has been sold
+                Your max tolerable price has been passed
             </p>
             <p style="font-size: 16px">
                 You can view at ${AppConstant.APP_URL}/bidder/bidding

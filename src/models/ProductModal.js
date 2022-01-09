@@ -258,7 +258,7 @@ export default class ProductModel {
             try {
                 const res1 = await KnexConnection("product").insert(product);
                 const res2 = await KnexConnection("product_detail").insert(detail);
-                resolve({ status: true });
+                resolve(res1);
             } catch (err) {
                 reject(err);
             }
@@ -293,6 +293,19 @@ export default class ProductModel {
                 });
             } catch (error) {
                 reject(error);
+            }
+        });
+    }
+
+    static update(productId, entity) {
+        return new Promise(async function (resolve, reject) {
+            try {
+                const dataSet = await KnexConnection("product")
+                    .where({ product_id: productId })
+                    .update(entity);
+                resolve(dataSet);
+            } catch (err) {
+                reject(err);
             }
         });
     }
