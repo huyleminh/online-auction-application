@@ -171,7 +171,7 @@ export default class SellerController extends AppController {
 
         page = page ? parseInt(page) : 1;
 
-        if (isNaN(page)) {
+        if (isNaN(page) || page < 1) {
             return res.redirect(`/user/wishlist?page=1`);
         }
 
