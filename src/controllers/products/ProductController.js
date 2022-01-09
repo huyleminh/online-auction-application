@@ -335,7 +335,7 @@ export default class ProductController extends AppController {
             }
 
             // Check input price
-            if (parseInt(body.money) >= product.buy_now_price) {
+            if (product.buy_now_price !== null && parseInt(body.money) >= product.buy_now_price) {
                 console.log("Buy now");
 
                 await BiddingHistoryModel.insert({
@@ -393,7 +393,7 @@ export default class ProductController extends AppController {
                     current_price: parseInt(body.money),
                 });
             } else {
-                // console.log("Higher");
+                console.log("Higher");
                 await BiddingHistoryModel.insert({
                     product_id: product.product_id,
                     bidder_id: userFromDb.user_id,

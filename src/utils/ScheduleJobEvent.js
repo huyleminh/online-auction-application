@@ -14,12 +14,13 @@ class ScheduleJobEvent {
         this._scheduleJobs = {};
     }
 
+    // TODO: Edit is_sold field in the product table.
     subscribeNewJob(jobId, startDate) {
         this._scheduleJobs[jobId] = this._scheduler.scheduleJob(
             startDate,
             async function (id) {
-                console.log(`>>> JOB START: JOB_ID${id}`);
-                const [job] = await AutoBiddingJobModel.getByProductId(id);
+                console.log(`>>> JOB START: JOB_ID ${id} ${new Date()}`);
+                const [job] = await AutoBiddingJobModel.getByJobId(id);
                 const [product] = await ProductModel.getById(job.product_id);
                 const [detail] = await ProductDetailModel.getlById(job.product_id);
 
@@ -27,6 +28,7 @@ class ScheduleJobEvent {
                     UserAccountModel.getByColumn("user_id", product.won_bidder_id).then((res) => {
                         const [bidder] = res;
                         if (bidder) {
+                            console.log(`>>> JOB SEND WINNER: JOB_ID ${id} - ${new Date()}`);
                             EmailService.sendEmailWithHTMLContent(
                                 bidder.email,
                                 "Bidding result - You have won a product",
@@ -43,6 +45,7 @@ class ScheduleJobEvent {
                     UserAccountModel.getByColumn("user_id", detail.seller_id).then((sellerList) => {
                         const [seller] = sellerList;
                         if (seller) {
+                            console.log(`>>> JOB SEND SELLER: JOB_ID ${id} - ${new Date()}`);
                             EmailService.sendEmailWithHTMLContent(
                                 seller.email,
                                 "Bidding result - The product you are posting has been sold",
@@ -59,6 +62,7 @@ class ScheduleJobEvent {
                     UserAccountModel.getByColumn("user_id", detail.seller_id).then((sellerList) => {
                         const [seller] = sellerList;
                         if (seller) {
+                            console.log(`>>> JOB SEND SELLER - NO WINNER: JOB_ID ${id} - ${new Date()}`);
                             EmailService.sendEmailWithHTMLContent(
                                 seller.email,
                                 "Bidding result - Time for your bidding product has been expired",
@@ -76,13 +80,14 @@ class ScheduleJobEvent {
                 if (this._scheduleJobs[jobId]) {
                     delete this._scheduleJobs[id];
                 }
-                console.log(`>>> JOB END: JOB_ID${id}`);
+                console.log(`>>> JOB SEND WINNER: JOB_ID ${id} - ${new Date()}`);
             }.bind(this, jobId)
         );
     }
 
     unSubscribeExistedJob(jobId) {
         if (this._scheduleJobs[jobId]) {
+            console.log(`>>> RESCHEDULE JOB: JOB_ID ${jobId} - ${new Date()}`);
             this._scheduleJobs[jobId].cancel(false);
             delete this._scheduleJobs[jobId];
         }

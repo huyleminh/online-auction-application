@@ -14,3 +14,5 @@ drop constraint `FK_SUBSCRIBER_USER_ACCOUNT`;
 -- add column to allow to bid if have not been rated
 alter table product
 add is_allow_all tinyint(1);
+
+alter table product modify product_name text;
