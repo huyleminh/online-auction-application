@@ -117,11 +117,14 @@ export default class UserController extends AppController {
                 dob: moment(body.dob, "DD/MM/YYYY").format("YYYY-MM-DD"),
                 address: addressInfo,
             });
+            req.user.fullname = `${body.first_name} ${body.last_name}`;
+            req.session.save(() => {
+                res.redirect("/user/account");
+            });
         } catch (error) {
             console.log(error);
             throw new Error(error);
         }
-        res.redirect("/user/account");
     }
 
     renderChangeEmail(req, res) {

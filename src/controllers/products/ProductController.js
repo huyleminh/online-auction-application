@@ -98,7 +98,7 @@ export default class ProductController extends AppController {
 
             const productListMap = CommomUtils.sortProductUtil(productList[0], sort).map((item) => {
                 const createdDate = moment(item.created_date).locale("en").fromNow();
-                const minDiff = -1 * moment().diff(moment(item.expired_date), "minutes");
+                const minDiff = moment().diff(moment(item.created_date), "minutes");
 
                 const retObj = {
                     productId: item.product_id,

@@ -73,12 +73,14 @@
                 </a>
             </li>
 
-            <li class="profile-bar-item">
-                <a class="p-2" href="/seller/products/create">
-                    <i class="fas fa-plus me-3"></i>
-                    Sell on H2A BID
-                </a>
-            </li>
+            {{#if isSeller}}
+                <li class="profile-bar-item">
+                    <a class="p-2" href="/seller/products/create">
+                        <i class="fas fa-plus me-3"></i>
+                        Sell on H2A BID
+                    </a>
+                </li>
+            {{/if}}
         </ul>
 
     </div>

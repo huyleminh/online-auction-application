@@ -13,7 +13,7 @@ export default class ProductModel {
                         select product_id, product_name, thumbnail, current_price, buy_now_price, expired_date, won_bidder_id, current_bidding_count as bid_count, created_date, is_sold
                         from product
                         order by current_price desc limit 5
-                    ) as top join user_account user on top.won_bidder_id = user.user_id ;
+                    ) as top left join user_account user on top.won_bidder_id = user.user_id ;
                 `);
                 resolve(dataSet);
             } catch (err) {
@@ -31,7 +31,7 @@ export default class ProductModel {
                         select product_id, product_name, thumbnail, current_price, buy_now_price, expired_date, won_bidder_id, current_bidding_count as bid_count, created_date
                         from product where is_sold = 0
                         order by expired_date asc limit 5
-                    ) as top join user_account user on top.won_bidder_id = user.user_id ;
+                    ) as top left join user_account user on top.won_bidder_id = user.user_id ;
                 `);
                 resolve(dataSet);
             } catch (err) {
@@ -253,19 +253,6 @@ export default class ProductModel {
         });
     }
 
-    static update(productId, entity) {
-        return new Promise(async function (resolve, reject) {
-            try {
-                const dataSet = await KnexConnection("product")
-                    .where({ product_id: productId })
-                    .update(entity);
-                resolve(dataSet);
-            } catch (err) {
-                reject(err);
-            }
-        });
-    }
-
     static insertAProduct(product, detail) {
         return new Promise(async function (resolve, reject) {
             try {
@@ -274,6 +261,38 @@ export default class ProductModel {
                 resolve({ status: true });
             } catch (err) {
                 reject(err);
+            }
+        });
+    }
+
+    static getSellingProductsByUserId(id, page) {
+        return new Promise(async function (resolve, reject) {
+            const offset = (page - 1) * CommonConst.ITEMS_PER_TABLE_PAGE;
+            try {
+                const res = await KnexConnection("product")
+                    .join("product_detail", "product.product_id", "=", "product_detail.product_id")
+                    .select(
+                        "product.product_id",
+                        "product.product_name",
+                        "product.current_price",
+                        "product.thumbnail",
+                        "product.is_sold",
+                        "product.expired_date",
+                        "product.created_date",
+                        "product.is_allow_all",
+                        "product_detail.step_price",
+                        "product_detail.auto_extend"
+                    )
+                    .where("product_detail.seller_id", "=", id)
+                    .limit(CommonConst.ITEMS_PER_TABLE_PAGE + 1)
+                    .offset(offset);
+                const hasNext = res.length === CommonConst.ITEMS_PER_TABLE_PAGE + 1;
+                resolve({
+                    hasNext: hasNext,
+                    data: res.slice(0, CommonConst.ITEMS_PER_TABLE_PAGE),
+                });
+            } catch (error) {
+                reject(error);
             }
         });
     }
