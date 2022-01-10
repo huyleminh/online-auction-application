@@ -23,8 +23,6 @@
     </div>
 
     <div class="card-body">
-        <form action="/user/wishlist/delete" method="post" id="deleteWishlistItem">
-            <input type="hidden" name="itemId" id="itemId">
         <div class="table-responsive">
             <table class="table table-bordered table-striped mb-0 table-custom">
                 <thead>
@@ -41,7 +39,7 @@
                 <tbody>
                     {{#each data.list}}
                         <tr>
-                            <td scope="row">{{add @index 1}}</td>
+                            <td scope="row">{{calcNo @index ../data.page}}</td>
                             <td>
                                 <div>
                                     <img class="img-fluid rounded" src={{this.thumbnail}} alt={{this.product_name}}></img>
@@ -55,7 +53,7 @@
                                     </div>
                                 {{else}}
                                     <div>
-                                        <span class="tag tag-success">Available</span>
+                                        <span class="tag tag-success">Selling</span>
                                     </div>
                                 {{/if}}
                             </td>

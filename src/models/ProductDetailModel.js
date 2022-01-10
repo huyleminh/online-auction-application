@@ -25,4 +25,18 @@ export default class ProductDetailModel {
             }
         })
     }
+
+    static deleteWithProductId(id) {
+        return new Promise(async function (resolve, reject) {
+            try {
+                const res = await KnexConnection('product_detail')
+                .where('product_id', id)
+                .del();
+
+                resolve(res);
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
 }

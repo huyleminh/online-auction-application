@@ -77,6 +77,20 @@ export default class JoinBidderModel {
                     .update({ is_banned: entity.is_banned });
 
                 resolve(dataSet);
+             } catch (err) {
+                reject(err);
+            }
+        });
+    }
+
+    static deleteWithProductId(id) {
+        return new Promise(async function (resolve, reject) {
+            try {
+                const res = await KnexConnection('join_bidder')
+                .where('product_id', id)
+                .del();
+
+                resolve(res);
             } catch (err) {
                 reject(err);
             }

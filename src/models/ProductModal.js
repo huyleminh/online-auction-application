@@ -315,7 +315,7 @@ export default class ProductModel {
             const offset = (page - 1) * CommonConst.ITEMS_PER_TABLE_PAGE;
             try {
                 const resultSet = await KnexConnection.raw(`
-                    select 
+                    select
                         product.product_name,
                         product.current_price,
                         product.thumbnail,
@@ -326,11 +326,11 @@ export default class ProductModel {
                         product.won_bidder_id
                     from product join product_detail on product.product_id = product_detail.product_id
                     left join user_account on product.won_bidder_id = user_account.user_id
-                    where product_detail.seller_id = ${sellerId} 
+                    where product_detail.seller_id = ${sellerId}
                     and (product.expired_date <= current_timestamp or is_sold = 1)
                     limit ${CommonConst.ITEMS_PER_TABLE_PAGE + 1} offset ${offset}
                 `);
-                
+
                 const hasNext = resultSet.length === CommonConst.ITEMS_PER_TABLE_PAGE + 1;
                 resolve({
                     hasNext: hasNext,
@@ -338,6 +338,44 @@ export default class ProductModel {
                 });
             } catch (error) {
                 reject(error);
+            }
+        });
+    }
+
+    static getAllWithPagination(page) {
+        return new Promise(async function (resolve, reject) {
+            const offset = (page - 1) * CommonConst.ITEMS_PER_TABLE_PAGE;
+            try {
+                const dataSet = await KnexConnection.raw(
+                    `
+                        select prod.product_id, prod.product_name, prod.thumbnail,
+                        prod.expired_date, prod.created_date, prod.bid_count, prod.is_sold, cat.cat_name
+                        from (
+                        select product_id, product_name, thumbnail, expired_date, created_date, current_bidding_count as bid_count, is_sold, cat_id
+                        from product limit ${CommonConst.ITEMS_PER_TABLE_PAGE + 1} offset ${offset}
+                        ) as prod join category cat on prod.cat_id = cat.cat_id;
+                    `
+                );
+                resolve({
+                    hasNext: dataSet[0].length === CommonConst.ITEMS_PER_TABLE_PAGE + 1,
+                    data: dataSet[0].slice(0, CommonConst.ITEMS_PER_TABLE_PAGE)
+                });
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
+
+    static deleteWithProductId(id) {
+        return new Promise(async function (resolve, reject) {
+            try {
+                const res = await KnexConnection('product')
+                .where('product_id', id)
+                .del();
+
+                resolve(res);
+            } catch (err) {
+                reject(err);
             }
         });
     }
