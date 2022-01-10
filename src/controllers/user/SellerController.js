@@ -4,6 +4,7 @@ import { ImageDiskUpload } from "../../middlewares/MulterUpload.js";
 import AutoBiddingJobModel from "../../models/AutoBiddingJobModel.js";
 import CategoryModel from "../../models/CategoryModel.js";
 import ProductModel from "../../models/ProductModal.js";
+import ProductDetailModel from "../../models/ProductDetailModel.js";
 import UserAccountModel from "../../models/UserAccountModel.js";
 import FirebaseService from "../../services/FirsebaseService.js";
 import CommonConst from "../../shared/CommonConst.js";
@@ -43,7 +44,7 @@ export default class SellerController extends AppController {
         );
 
         this._router.get(
-            "/seller/products/:productId",
+            "/seller/products/:productId/edit",
             AuthMiddlewares.authorizeUser,
             this.renderEditProduct
         );
@@ -82,15 +83,6 @@ export default class SellerController extends AppController {
             const { seller_expired_date } = user[0];
             if (seller_expired_date && moment(seller_expired_date).isAfter(moment())) {
                 // Is Seller
-                // return res.render("pages/user/bidder/upgrade", {
-                //     layout: "profile",
-                //     data: {
-                //         isSeller: true,
-                //         sellerExpiredDate: moment(seller_expired_date).format(
-                //             CommonConst.MOMENT_BASE_USER_FORMAT
-                //         ),
-                //     },
-                // });
                 const product = {};
                 const detail = {};
 
@@ -224,12 +216,101 @@ export default class SellerController extends AppController {
         }
     }
 
-    renderEditProduct(req, res) {
-        res.redirect("/");
+    async renderEditProduct(req, res) {
+        let { productId } = req.params;
+        productId = parseInt(productId);
+
+        if (isNaN(productId)) {
+            return res.render("pages/user/seller/edit-product", {
+                layout: "profile",
+                notFound: true
+            });
+        }
+
+        try {
+            const user = await UserAccountModel.getByColumn("username", req.user.username);
+            if (user === undefined) {
+                req.logout();
+                return req.session.save(() => {
+                    res.redirect("/login");
+                });
+            }
+
+            let data = await ProductDetailModel.getlById(parseInt(productId));
+
+            if (data === undefined || data.length === 0) {
+                return res.render("pages/user/seller/edit-product", {
+                    layout: "profile",
+                    id: productId,
+                    notFound: true
+                });
+            }
+
+            if (data[0].seller_id !== user[0].user_id) {
+                return res.redirect("/403")
+            }
+
+            return res.render("pages/user/seller/edit-product", {
+                layout: "profile",
+                id: productId,
+                data: data[0].description
+            });
+        } catch (err) {
+            console.log(err);
+            return res.render("pages/user/seller/edit-product", {
+                layout: "profile",
+                id: productId,
+                notFound: true
+            });
+        }
     }
 
-    editProduct(req, res) {
-        res.redirect("/");
+    async editProduct(req, res) {
+        const { body } = req;
+        const productId = parseInt(body.productId);
+        const description = body.description;
+        try {
+            const user = await UserAccountModel.getByColumn("username", req.user.username);
+            if (user === undefined) {
+                req.logout();
+                return req.session.save(() => {
+                    res.redirect("/login");
+                });
+            }
+
+            const current = moment().format(CommonConst.MOMENT_BASE_USER_FORMAT);
+            const editAt = `<h5 class="mb-3 mt-3 p-3" style="font-weight: bold; border-left: 5px solid #6963ff">✏️ ${current}</h5>`;
+
+            let data = await ProductDetailModel.getlById(parseInt(productId));
+
+            if (data[0].seller_id !== user[0].user_id) {
+                return res.redirect("/403")
+            }
+
+            if (data === undefined || data.length === 0) {
+                return res.render("pages/user/seller/edit-product", {
+                    layout: "profile",
+                    id: productId,
+                    notFound: true
+                });
+            }
+
+            const newDescription = data[0].description.concat(editAt).concat(description);
+            await ProductDetailModel.updateDescription(productId, newDescription);
+
+            return res.render("pages/user/seller/edit-product", {
+                layout: "profile",
+                id: productId,
+                success: true
+            });
+        } catch (err) {
+            console.log(err);
+            return res.render("pages/user/seller/edit-product", {
+                layout: "profile",
+                id: productId,
+                notFound: true
+            });
+        }
     }
 
     async renderAuctionResult(req, res) {

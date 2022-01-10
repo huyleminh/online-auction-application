@@ -11,4 +11,18 @@ export default class ProductDetailModel {
             }
         });
     }
+
+    static updateDescription(productId, description) {
+        return new Promise(async function (resolve, reject) {
+            try {
+                const resultSet = KnexConnection("product_detail")
+                    .where({ product_id: productId })
+                    .update({ description });
+
+                resolve(resultSet)
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
 }
