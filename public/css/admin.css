@@ -226,10 +226,6 @@ body {
     width: var(--siderbar-sm-width);
 }
 
-.sidebar.collapsed .sidebar-logo img {
-    display: none;
-}
-
 .sidebar.collapsed .menu .menu-item > a {
     overflow: visible;
 }

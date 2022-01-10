@@ -1,0 +1,124 @@
+<section aria-label="breadcrumb" class="d-flex align-items-center justify-content-between mb-3">
+    <h3 class="mb-0">Product list</h3>
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item">
+            <a href="javascript:void(0);">
+                <i class="fas fa-tachometer-alt"></i>
+                Dashboard
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Product list</li>
+    </ol>
+</section>
+
+{{#section "css"}}
+    <link rel="stylesheet" href="/css/table.css" />
+{{/section}}
+
+<div class="card border shadow-0">
+    <div class="card-body">
+        <form action="/user/wishlist/delete" method="post" id="deleteWishlistItem">
+            <input type="hidden" name="itemId" id="itemId">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped mb-0 table-custom">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Product name</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Create at</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Expired time</th>
+                        <th scope="col">Number of bidders</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each data.list}}
+                        <tr>
+                            <td scope="row">{{add @index 1}}</td>
+                            <td>
+                                <div>
+                                    <img class="img-fluid rounded" src={{this.thumbnail}} alt={{this.product_name}}></img>
+                                </div>
+                            </td>
+                            <td>{{this.product_name}}</td>
+                            <td>{{this.cat_name}}</td>
+                            <td>{{formatDate this.created_date}}</td>
+                            <td>
+                                {{#if this.is_sold}}
+                                    <div>
+                                        <span class="tag tag-danger">Sold</span>
+                                    </div>
+                                {{else}}
+                                    <div>
+                                        <span class="tag tag-success">Available</span>
+                                    </div>
+                                {{/if}}
+                            </td>
+                            <td>{{formatDate this.expired_date}}</td>
+                            <td>{{this.current_bidding_count}}</td>
+                            <td>
+                                <div class="action">
+                                    <form action="/admin/products/delete" method="post">
+                                        <a
+                                            href="/menu/products/{{this.product_id}}"
+                                            class="btn btn-custom btn-custom-main btn-sm shadow-0"
+                                            title="View details"
+                                            data-mdb-toggle="tooltip"
+                                        >
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <input name="id" type="hidden" value={{this.product_id}}></input>
+                                        <button
+                                            class="btn btn-danger btn-sm shadow-0 remove-wishlist-item"
+                                            title="Remove"
+                                            data-mdb-toggle="tooltip"
+                                            data-removekey="1"
+                                            type="submit"
+                                        >
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        {{!-- </form> --}}
+
+        <form action="" method="get">
+            <nav class="pagination-container mt-4">
+                <ul class="pagination justify-content-center">
+                    {{#if (isEqual data.page 1)}}
+                        <li class="page-item disabled" aria-current="page">
+                            <a class="page-link page-link-custom" href="#"></a>
+                        </li>
+                    {{else}}
+                        <li class="page-item" aria-current="page">
+                            <a class="page-link page-link-custom" href="?page={{subtract data.page 1}}">{{subtract data.page 1}}</a>
+                        </li>
+                    {{/if}}
+                    <li class="page-item active" aria-current="page">
+                        <a class="page-link page-link-custom" href="?page={{data.page}}">
+                            {{data.page}}
+                        </a>
+                    </li>
+                    {{#if data.hasNext}}
+                        <li class="page-item" aria-current="page">
+                            <a class="page-link page-link-custom" href="?page={{add data.page 1}}">{{add data.page 1}}</a>
+                        </li>
+                    {{else}}
+                        <li class="page-item disabled" aria-current="page">
+                            <a class="page-link page-link-custom" href="#"></a>
+                        </li>
+                    {{/if}}
+                </ul>
+            </nav>
+        </form>
+
+    </div>
+</div>
