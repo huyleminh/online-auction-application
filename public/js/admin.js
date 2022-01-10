@@ -124,12 +124,14 @@ function closeAdSidebarModal() {
 function openSidebar() {
     localStorage.setItem("ad-sidebar", "open");
     $(".sidebar").removeClass("collapsed");
+    $("#web-logo").attr("src", "/images/logo_auction_v3_reverse_v2.png");
     $("#main").css("margin-left", "var(--siderbar-width)");
 }
 
 function closeSidebar() {
     localStorage.setItem("ad-sidebar", "close");
     $(".sidebar").addClass("collapsed");
+    $("#web-logo").attr("src", "/images/logo_auction_v3_compact.png");
     $("#main").css("margin-left", "var(--siderbar-sm-width)");
 }
 
