@@ -52,4 +52,34 @@ export default class JoinBidderModel {
             }
         });
     }
+
+    static getByProductId(productId) {
+        return new Promise(async function (resolve, reject) {
+            try {
+                const res = await KnexConnection("join_bidder")
+                    .where({ product_id: productId })
+                    .select();
+                resolve(res);
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
+
+    static update(entity) {
+        return new Promise(async function (resolve, reject) {
+            try {
+                const dataSet = await KnexConnection("join_bidder")
+                    .where({
+                        product_id: entity.product_id,
+                        bidder_id: entity.bidder_id,
+                    })
+                    .update({ is_banned: entity.is_banned });
+
+                resolve(dataSet);
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
 }

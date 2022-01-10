@@ -193,4 +193,16 @@ export default class EmailTemplate {
         </div>
         `;
     }
+
+    static banBidder(productName) {
+        return this.generateTemplate(`
+            <p style="font-size: 16px">
+                You have been banned from bidding for ${productName}
+            </p>
+
+            <p style="font-size: 16px; color: red">
+                You will have never bid for ${productName}. You can visit ${AppConstant.APP_URL}/bidder/bidding.
+            </p>
+        `);
+    }
 }

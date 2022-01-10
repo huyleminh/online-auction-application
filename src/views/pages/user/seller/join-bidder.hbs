@@ -1,0 +1,167 @@
+{{#section "banner"}}
+    {{> banner title="Your Profile" subTitle="Manage your profile and explore more things"}}
+{{/section}}
+
+{{#section "breadcrumb"}}
+    <h3>User profile</h3>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="javascript:void(0)">User</a></li>
+            <li class="breadcrumb-item"><a href="/seller/products">My selling products</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{data.productId}}</li>
+            <li class="breadcrumb-item active" aria-current="page">Bidder list</li>
+        </ol>
+    </nav>
+{{/section}}
+
+{{#section "css"}}
+    <link rel="stylesheet" href="/css/table.css" />
+{{/section}}
+
+<div class="card border shadow-0">
+    <div class="card-header">
+        <h3 class="mb-0">Bidder list</h3>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped mb-0 table-custom">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Bidder name</th>
+                        <th scope="col">Highest bid price</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Bid date</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each data.list}}
+                        <tr>
+                            <td scope="row">{{add @index 1}}</td>
+                            <td>****{{this.bidder_fname}}</td>
+                            <td>{{formatMoney this.current_price}} VND</td>
+                            <td>
+                                {{#if this.is_banned}}
+                                    <div>
+                                        <span class="tag tag-danger">Banned</span>
+                                    </div>
+                                {{else}}
+                                    <div>
+                                        <span class="tag tag-success">Normal</span>
+                                    </div>
+                                {{/if}}
+                            </td>
+                            <td>{{formatDate this.bid_date}}</td>
+                            <td>
+                                <div class="action">
+                                    {{! <button
+                                        class="btn btn-success btn-sm shadow-0 me-1"
+                                        title="Unban this bidder"
+                                        data-mdb-toggle="tooltip"
+                                    >
+                                        <i class="fas fa-user-check"></i>
+                                    </button> }}
+                                    <form action="" method="post" class="mb-0">
+                                        <input type="hidden" name="bidderId" value="{{this.bidder_id}}">
+                                        <button
+                                            class="btn btn-danger btn-sm shadow-0 me-1"
+                                            title="Ban this bidder"
+                                            type="submit"
+                                            data-mdb-toggle="tooltip"
+                                            {{#if this.is_banned}}
+                                                disabled
+                                            {{/if}}
+                                        >
+                                            <i class="fas fa-ban"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{! </form> }}
+    <form action="" method="get">
+        <nav class="pagination-container mt-4">
+            <ul class="pagination justify-content-center">
+                {{#if (isEqual data.page 1)}}
+                    <li class="page-item disabled" aria-current="page">
+                        <a class="page-link page-link-custom" href="#"></a>
+                    </li>
+                {{else}}
+                    <li class="page-item" aria-current="page">
+                        <a
+                            class="page-link page-link-custom"
+                            href="?page={{subtract data.page 1}}"
+                        >{{subtract data.page 1}}</a>
+                    </li>
+                {{/if}}
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link page-link-custom" href="?page={{data.page}}">
+                        {{data.page}}
+                    </a>
+                </li>
+                {{#if data.hasNext}}
+                    <li class="page-item" aria-current="page">
+                        <a class="page-link page-link-custom" href="?page={{add data.page 1}}">{{add
+                                data.page
+                                1
+                            }}</a>
+                    </li>
+                {{else}}
+                    <li class="page-item disabled" aria-current="page">
+                        <a class="page-link page-link-custom" href="#"></a>
+                    </li>
+                {{/if}}
+            </ul>
+        </nav>
+    </form>
+</div>
+
+{{#if data.notFound}}
+    <div
+        class="modal fade show d-block"
+        id="exampleModal"
+        tabindex="-1"
+        aria-labelledby="notFoundModal"
+        aria-modal="true"
+        role="dialog"
+    >
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body d-flex flex-column align-items-center">
+                    <div class="text-center mb-3">
+                        <i
+                            class="fas fa-exclamation-triangle text-warning"
+                            style="font-size: 5rem;"
+                        ></i>
+                    </div>
+
+                    <div class="text-center mb-3 fs-3">
+                        Product not found
+                    </div>
+
+                    <div class="text-center mb-3">
+                        {{data.message}}
+                    </div>
+
+                    <div class="text-center">
+                        <a
+                            role="button"
+                            class="btn btn-custom btn-custom-main"
+                            href="/seller/products"
+                        >
+                            Go back
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+{{/if}}

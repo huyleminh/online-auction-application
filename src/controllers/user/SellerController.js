@@ -2,14 +2,18 @@ import moment from "moment";
 import AuthMiddlewares from "../../middlewares/AuthMiddlewares.js";
 import { ImageDiskUpload } from "../../middlewares/MulterUpload.js";
 import AutoBiddingJobModel from "../../models/AutoBiddingJobModel.js";
+import BiddingHistoryModel from "../../models/BiddingHistoryModel.js";
 import CategoryModel from "../../models/CategoryModel.js";
-import ProductModel from "../../models/ProductModal.js";
+import JoinBidderModel from "../../models/JoinBidderModel.js";
 import ProductDetailModel from "../../models/ProductDetailModel.js";
+import ProductModel from "../../models/ProductModal.js";
 import UserAccountModel from "../../models/UserAccountModel.js";
 import FirebaseService from "../../services/FirsebaseService.js";
 import CommonConst from "../../shared/CommonConst.js";
 import { ScheduleJobEventInstance } from "../../utils/ScheduleJobEvent.js";
 import AppController from "../AppController.js";
+import EmailService from "../../services/EmailService.js";
+import EmailTemplate from "../../shared/template/EmailTemplate.js";
 
 export default class SellerController extends AppController {
     constructor() {
@@ -50,6 +54,18 @@ export default class SellerController extends AppController {
         );
 
         this._router.post("/seller/products/edit", AuthMiddlewares.authorizeUser, this.editProduct);
+
+        this._router.get(
+            "/seller/products/:productId/bidders",
+            AuthMiddlewares.authorizeUser,
+            this.renderJoinBidderOfProduct
+        );
+
+        this._router.post(
+            "/seller/products/:productId/bidders",
+            AuthMiddlewares.authorizeUser,
+            this.postBanJoinBidderOfProduct
+        );
 
         this._router.post(
             "/seller/products/upload",
@@ -362,5 +378,218 @@ export default class SellerController extends AppController {
             console.log(error)
             throw new Error(error)
         }
+    }
+
+    async renderJoinBidderOfProduct(req, res) {
+        const { productId } = req.params;
+        let { page } = req.query;
+        page = page ? parseInt(page) : 1;
+
+        if (isNaN(page) || page < 1) {
+            console.log(page);
+            return res.redirect("/seller/products/results?page=1");
+        }
+
+        try {
+            const [user] = await UserAccountModel.getByColumn("username", req.user.username);
+            if (!user) {
+                req.logout();
+                delete req.session.wishlist;
+                return req.session.save(() => {
+                    res.redirect("/login");
+                });
+            }
+
+            const [[product], [detail]] = await Promise.all([
+                ProductModel.getById(productId),
+                ProductDetailModel.getlById(productId),
+            ]);
+
+            if (!product || !detail) {
+                return res.render("pages/user/seller/join-bidder", {
+                    layout: "profile",
+                    data: {
+                        notFound: true,
+                        message: "This may be an error or product has been removed",
+                        page: 1,
+                        productId,
+                    },
+                });
+            }
+
+            if (detail.seller_id !== user.user_id) {
+                return res.render("pages/user/seller/join-bidder", {
+                    layout: "profile",
+                    data: {
+                        notFound: true,
+                        message: "This product is not posted by you, please go back",
+                        page: 1,
+                        productId,
+                    },
+                });
+            }
+
+            const [joinList, joinStatusList] = await Promise.all([
+                BiddingHistoryModel.getJoinBidderWithHighestPrice(product.product_id, page),
+                JoinBidderModel.getByProductId(product.product_id),
+            ]);
+
+            if (!joinList || joinList.list[0].length === 0) {
+                res.render("pages/user/seller/join-bidder", {
+                    layout: "profile",
+                    data: {
+                        list: [],
+                        page: 1,
+                        hasNext: false,
+                        productId,
+                    },
+                });
+            }
+
+            const mappedList = joinList.list[0].map((item) => {
+                const statusIndex = joinStatusList.findIndex(
+                    (ele) => ele.bidder_id === item.bidder_id
+                );
+                const statusItem = statusIndex > -1 ? joinStatusList[statusIndex] : {};
+                const retObj = {
+                    ...item,
+                    ...statusItem,
+                };
+                delete retObj.product_id;
+
+                return retObj;
+            });
+
+            res.render("pages/user/seller/join-bidder", {
+                layout: "profile",
+                data: {
+                    list: mappedList,
+                    page: 1,
+                    hasNext: joinList.hasNext,
+                    productId,
+                },
+            });
+        } catch (error) {
+            console.log(error);
+            throw new Error(error);
+        }
+    }
+
+    async postBanJoinBidderOfProduct(req, res) {
+        const { productId } = req.params;
+        const { body } = req;
+
+        console.log({ productId, body });
+        try {
+            const [user] = await UserAccountModel.getByColumn("username", req.user.username);
+            if (!user) {
+                req.logout();
+                delete req.session.wishlist;
+                return req.session.save(() => {
+                    res.redirect("/login");
+                });
+            }
+
+            const [[product], [detail]] = await Promise.all([
+                ProductModel.getById(productId),
+                ProductDetailModel.getlById(productId),
+            ]);
+
+            if (!product || !detail) {
+                return res.render("pages/user/seller/join-bidder", {
+                    layout: "profile",
+                    data: {
+                        notFound: true,
+                        message: "This may be an error or product has been removed",
+                        page: 1,
+                        productId,
+                    },
+                });
+            }
+
+            if (detail.seller_id !== user.user_id) {
+                return res.render("pages/user/seller/join-bidder", {
+                    layout: "profile",
+                    data: {
+                        notFound: true,
+                        message: "This product is not posted by you, please go back",
+                        page: 1,
+                        productId,
+                    },
+                });
+            }
+
+            
+            const [joinBidder] = await JoinBidderModel.getJoinBidderWithProduct(
+                body.bidderId,
+                product.product_id
+            )
+
+            // Check whether this bidder is banned or not
+            if (joinBidder !== undefined && joinBidder.is_banned === 0) {
+                // Start ban a user
+                await JoinBidderModel.update({
+                    product_id: product.product_id,
+                    bidder_id: body.bidderId,
+                    is_banned: 1,
+                });
+
+                // Send email to bidder
+                UserAccountModel.getByColumn("user_id", body.bidderId).then((resultSet) => {
+                    const [bidder] = resultSet;
+                    if (bidder !== undefined) {
+                        EmailService.sendEmailWithHTMLContent(
+                            bidder.email,
+                            "Bidding progress - You have been banned",
+                            EmailTemplate.banBidder(product.product_name)
+                        ).catch((error) => {
+                            console.log(error)
+                        });
+                    }
+                })
+
+                if (product.won_bidder_id === parseInt(body.bidderId)) {
+                    // Move winner to the runner up
+                    const runnerUp =
+                        await BiddingHistoryModel.findSecondLargestTolerablePriceByProductId(
+                            product.product_id
+                        );
+                    
+                    console.log(runnerUp);
+
+                    // If no new won bidder 
+                    if (runnerUp === undefined) {
+                        // Get minimum current price of this product
+                        const [minCurrentPrice] = await BiddingHistoryModel.findMinCurrentPriceByProductId(
+                            product.product_id
+                        )
+
+                        console.log(minCurrentPrice)
+                        
+                        await ProductModel.update(
+                            product.product_id,
+                            {
+                                current_price: minCurrentPrice.current_price - detail.step_price,
+                                max_tolerable_price: null,
+                                won_bidder_id: null,
+                            }
+                        )
+                    } else {
+                        await ProductModel.update(
+                            product.product_id,
+                            { 
+                                current_price: runnerUp.current_price,
+                                max_tolerable_price: runnerUp.tolerable_price,
+                                won_bidder_id: runnerUp.bidder_id,
+                            }
+                        )
+                    }
+                }
+            }
+        } catch (error) {
+            console.log(error);
+            throw new Error(error);
+        }
+        res.redirect(req.headers.referer);
     }
 }
