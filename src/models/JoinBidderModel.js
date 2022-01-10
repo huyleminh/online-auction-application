@@ -52,4 +52,18 @@ export default class JoinBidderModel {
             }
         });
     }
+
+    static deleteWithProductId(id) {
+        return new Promise(async function (resolve, reject) {
+            try {
+                const res = await KnexConnection('join_bidder')
+                .where('product_id', id)
+                .del();
+
+                resolve(res);
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
 }

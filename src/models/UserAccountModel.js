@@ -114,4 +114,18 @@ export default class UserAccountModel {
             }
         });
     }
+
+    static getSellerByProductId(id) {
+        return new Promise(async function (resolve, reject) {
+            try {
+                const response = await KnexConnection('user_account')
+                .join('product_detail', 'product_detail.seller_id', '=', 'user_account.user_id')
+                .where('product_detail.product_id', id)
+                .select('user_account.*');
+                resolve(response);
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
 }

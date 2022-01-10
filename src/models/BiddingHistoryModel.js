@@ -41,4 +41,18 @@ export default class BiddingHistoryModel {
             }
         });
     }
+
+    static deleteWithProductId(id) {
+        return new Promise(async function (resolve, reject) {
+            try {
+                const res = await KnexConnection('bidding_history')
+                .where('product_id', id)
+                .del();
+
+                resolve(res);
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
 }
