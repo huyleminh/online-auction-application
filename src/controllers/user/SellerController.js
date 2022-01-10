@@ -232,7 +232,9 @@ export default class SellerController extends AppController {
         res.redirect("/");
     }
 
-    renderAuctionResult(req, res) {
+    async renderAuctionResult(req, res) {
+        const [message] = req.flash("message");
+        const [type] = req.flash("type");
         let { page } = req.query;
 
         page = page ? parseInt(page) : 1;
@@ -241,24 +243,43 @@ export default class SellerController extends AppController {
             console.log(page);
             return res.redirect("/seller/products/results?page=1");
         }
-        res.render("pages/user/seller/result", {
-            layout: "profile",
-            data: {
-                list: [
-                    {
-                        product_name: "ABC",
-                        thumbnail:
-                            "https://firebasestorage.googleapis.com/v0/b/the-xanh-ecommerce.appspot.com/o/af3fcb5a-e40a-4d7d-9c71-025e6e83b063.jpeg?alt=media&token=af3fcb5a-e40a-4d7d-9c71-025e6e83b063",
-                        is_sold: 1,
-                        current_price: 1500000,
-                        bidder_name: "Hello",
-                        bidder_point: 80,
-                        expired_date: new Date().toJSON(),
-                    },
-                ],
-                page: 1,
-                hasNext: false,
-            },
-        });
+
+        try {
+            console.log(req.user)
+            const user = await UserAccountModel.getByColumn("username", req.user.username);
+            if (user === undefined) {
+                req.logout();
+                return req.session.save(() => {
+                    res.redirect("/login");
+                });
+            }
+            
+            const rawData = await ProductModel.getExpiredAndSoldProductsBySellerId(user[0].user_id, page)
+            const dataMapped = rawData.data[0].map(item => {
+                return {
+                    product_name: item.product_name,
+                    thumbnail: item.thumbnail,
+                    is_sold: item.is_sold,
+                    current_price: item.current_price,
+                    bidder_name: item.first_name === null ? "N/A" : `****${item.first_name}`,
+                    bidder_point: item.rating_point === null ? "N/A" : item.rating_point,
+                    expired_date: item.expiredDate,
+                    user_id: item.won_bidder_id
+                }
+            })
+            
+            return res.render("pages/user/seller/result", {
+                layout: "profile",
+                data: {
+                    list: dataMapped,
+                    page,
+                    hasNext: rawData.hasNext
+                },
+                msg: { message, type },
+            });
+        } catch (error) {
+            console.log(error)
+            throw new Error(error)
+        }
     }
 }
