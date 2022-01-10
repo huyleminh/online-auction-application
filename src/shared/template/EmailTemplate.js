@@ -122,10 +122,10 @@ export default class EmailTemplate {
     static biddingResultBidder(productName, price) {
         return this.generateTemplate(`
             <p style="font-size: 16px">
-                You have been won ${productName} with ${price} VND
+                You have won ${productName} with ${price} VND
             </p>
             <p style="font-size: 16px">
-                You can view detail information and evaluate the owner of this product at ${AppConstant.APP_URL}/bidder/won
+                You can view detail and rate the owner of this product at ${AppConstant.APP_URL}/bidder/won
             </p>
         `);
     }
@@ -133,7 +133,7 @@ export default class EmailTemplate {
     static biddingPriceWarningBidder() {
         return this.generateTemplate(`
             <p style="font-size: 16px">
-                Your max tolerable price has been passed
+                Your max tolerable price has been surpassed
             </p>
             <p style="font-size: 16px">
                 You can view at ${AppConstant.APP_URL}/bidder/bidding
@@ -149,6 +149,17 @@ export default class EmailTemplate {
             <p style="font-size: 16px">
                 You can view at ${AppConstant.APP_URL}/seller/products/results
             </p>
+        `);
+    }
+
+    static productHasBeenDeletedByAdmin(productName, emailAdmin) {
+        return this.generateTemplate(`
+        <p style="font-size: 16px">
+            Your product <b>${productName}</b> has been deleted by the administrator.
+        </p>
+        <p style="font-size: 16px">
+            For more detail, please email to <b>${emailAdmin}</b>.
+        </p>
         `);
     }
 

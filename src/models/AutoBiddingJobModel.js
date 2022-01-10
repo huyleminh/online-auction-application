@@ -51,6 +51,19 @@ export default class AutoBiddingJobModel {
         });
     }
 
+    static deleteWithProductId(productId) {
+        return new Promise(async function (resolve, reject) {
+            try {
+                const dataSet = await KnexConnection("auto_bidding_job")
+                    .where({ product_id: productId })
+                    .del();
+                resolve(dataSet);
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
+
     static insert(entity) {
         return new Promise(async function (resolve, reject) {
             try {

@@ -36,22 +36,6 @@ export default class WishlistModel {
         });
     }
 
-    static async removeWishlistById(userId, product_id) {
-        return new Promise(async function (resolve, reject) {
-            try {
-                const res = await KnexConnection("wishlist")
-                    .where({
-                        user_id: userId,
-                        product_id: product_id,
-                    })
-                    .del();
-                resolve(res);
-            } catch (err) {
-                reject(err);
-            }
-        });
-    }
-
     static async insert(entity) {
         return new Promise(async function (resolve, reject) {
             try {
@@ -71,6 +55,20 @@ export default class WishlistModel {
                     user_id: userId,
                     product_id: product_id
                 }).del();
+                resolve(res);
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
+
+    static deleteWithProductId(id) {
+        return new Promise(async function (resolve, reject) {
+            try {
+                const res = await KnexConnection('wishlist')
+                .where('product_id', id)
+                .del();
+
                 resolve(res);
             } catch (err) {
                 reject(err);
