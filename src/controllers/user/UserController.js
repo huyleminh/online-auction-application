@@ -353,13 +353,20 @@ export default class UserController extends AppController {
                     res.redirect("/login");
                 });
             }
+
+            if (body.ratedId == user[0].user_id) {
+                req.flash("message", "You cannot feedback on yourself")
+                req.flash("type", "warning")
+                return res.redirect(req.headers.referer);
+            }
+
             const feedback = {
                 rated_user_id: body.ratedId,
                 evaluator_id: user[0].user_id,
                 is_positive: body.isPositive === "true" ? true : false,
                 feedback: body.feedback,
             };
-
+            
             await RatingModel.insertFeedback(feedback);
 
             res.redirect(req.headers.referer);

@@ -24,6 +24,10 @@
     </div>
 
     <div class="card-body">
+        {{#if msg.message}}
+            <div class="alert alert-{{msg.type}}">{{msg.message}}</div>
+        {{/if}}
+
         <form action="/user/wishlist/delete" method="post" id="deleteWishlistItem">
             <input type="hidden" name="itemId" id="itemId">
         </form>
@@ -69,23 +73,28 @@
                             <td>{{this.bidder_name}}</td>
                             <td>{{this.bidder_point}}</td>
                             <td>
-                                <div class="action">
+                                <div class="action d-flex">
                                     <button
-                                        class="btn btn-custom btn-custom-main btn-sm shadow-0 feedback-btn"
+                                        class="btn btn-custom btn-custom-main btn-sm shadow-0 feedback-btn me-2"
                                         title="Feedback"
                                         data-mdb-toggle="tooltip"
-                                        data-rated-id={{this.seller_id}}
+                                        data-rated-id={{this.user_id}}
                                     >
                                         <i class="fas fa-comments"></i>
                                     </button>
-                                    <button
-                                        class="btn btn-danger btn-sm shadow-0 cancel-transaction-btn"
-                                        title="Cancel"
-                                        data-mdb-toggle="tooltip"
-                                        data-rated-id={{this.seller_id}}
-                                    >
-                                        <i class="fas fa-times-circle"></i>
-                                    </button>
+                                    <form action="/user/feedback" method="post" class="mb-0">
+                                        <input type="hidden" name="isPositive" value="false" required>
+                                        <input type="hidden" name="feedback" value="User did not pay" required>
+                                        <input type="hidden" name="ratedId" value="{{this.user_id}}" required>
+                                        <button
+                                            type="submit"
+                                            class="btn btn-danger btn-sm shadow-0 cancel-transaction-btn"
+                                            title="Cancel"
+                                            data-mdb-toggle="tooltip"
+                                        >
+                                            <i class="fas fa-times-circle"></i>
+                                        </button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>

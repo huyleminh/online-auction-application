@@ -309,4 +309,36 @@ export default class ProductModel {
             }
         });
     }
+
+    static getExpiredAndSoldProductsBySellerId(sellerId, page) {
+        return new Promise(async function (resolve, reject) {
+            const offset = (page - 1) * CommonConst.ITEMS_PER_TABLE_PAGE;
+            try {
+                const resultSet = await KnexConnection.raw(`
+                    select 
+                        product.product_name,
+                        product.current_price,
+                        product.thumbnail,
+                        product.is_sold,
+                        user_account.first_name,
+                        user_account.rating_point,
+                        product.expired_date,
+                        product.won_bidder_id
+                    from product join product_detail on product.product_id = product_detail.product_id
+                    left join user_account on product.won_bidder_id = user_account.user_id
+                    where product_detail.seller_id = ${sellerId} 
+                    and (product.expired_date <= current_timestamp or is_sold = 1)
+                    limit ${CommonConst.ITEMS_PER_TABLE_PAGE + 1} offset ${offset}
+                `);
+                
+                const hasNext = resultSet.length === CommonConst.ITEMS_PER_TABLE_PAGE + 1;
+                resolve({
+                    hasNext: hasNext,
+                    data: resultSet.slice(0, CommonConst.ITEMS_PER_TABLE_PAGE),
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
 }
