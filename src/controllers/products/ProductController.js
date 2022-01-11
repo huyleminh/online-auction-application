@@ -11,7 +11,6 @@ import UserAccountModel from "../../models/UserAccountModel.js";
 import EmailService from "../../services/EmailService.js";
 import CommomCont from "../../shared/CommonConst.js";
 import EmailTemplate from "../../shared/template/EmailTemplate.js";
-import CommomUtils from "../../utils/CommonUtils.js";
 import { ScheduleJobEventInstance } from "../../utils/ScheduleJobEvent.js";
 import AppController from "../AppController.js";
 
@@ -57,14 +56,16 @@ export default class ProductController extends AppController {
                     productList = await ProductModel.getAllWithKeyWord(
                         search,
                         DEFAULT_PAGE_SIZE,
-                        DEFAULT_PAGE_SIZE * (page - 1)
+                        DEFAULT_PAGE_SIZE * (page - 1),
+                        sort
                     );
                 }
                 if (type === "prod") {
                     productList = await ProductModel.getAllWithKeyWordProd(
                         search,
                         DEFAULT_PAGE_SIZE,
-                        DEFAULT_PAGE_SIZE * (page - 1)
+                        DEFAULT_PAGE_SIZE * (page - 1),
+                        sort
                     );
                 }
 
@@ -72,7 +73,8 @@ export default class ProductController extends AppController {
                     productList = await ProductModel.getAllWithKeyWordCat(
                         search,
                         DEFAULT_PAGE_SIZE,
-                        DEFAULT_PAGE_SIZE * (page - 1)
+                        DEFAULT_PAGE_SIZE * (page - 1),
+                        sort
                     );
                 }
 
@@ -83,7 +85,8 @@ export default class ProductController extends AppController {
                 productList = await ProductModel.getAllWithCatId(
                     parseInt(catId),
                     DEFAULT_PAGE_SIZE,
-                    DEFAULT_PAGE_SIZE * (page - 1)
+                    DEFAULT_PAGE_SIZE * (page - 1),
+                    sort
                 );
                 totalRows = await ProductModel.countTotalProductByCat(catId);
             }
@@ -91,12 +94,13 @@ export default class ProductController extends AppController {
             if (search === undefined && catId === "all") {
                 productList = await ProductModel.getAllWithAllCat(
                     DEFAULT_PAGE_SIZE,
-                    DEFAULT_PAGE_SIZE * (page - 1)
+                    DEFAULT_PAGE_SIZE * (page - 1),
+                    sort
                 );
                 totalRows = await ProductModel.countTotalProductByCat(catId);
             }
 
-            const productListMap = CommomUtils.sortProductUtil(productList[0], sort).map((item) => {
+            const productListMap = productList[0].map((item) => {
                 const createdDate = moment(item.created_date).locale("en").fromNow();
                 const minDiff = moment().diff(moment(item.created_date), "minutes");
                 const retObj = {
