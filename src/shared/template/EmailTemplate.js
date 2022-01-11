@@ -216,4 +216,18 @@ export default class EmailTemplate {
             </p>
         `);
     }
+
+    static hidPriceSuccessBidder(productName, price) {
+        return this.generateTemplate(`
+            <p style="font-size: 16px; color: green">
+                You have been hit with <b>${price} VND</b> for ${productName}
+            </p>
+            <p style="font-size: 16px;">
+                You can visit ${AppConstant.APP_URL}/bidder/bidding to view you bidding product list.
+            </p>
+            <p style="font-size: 16px;">
+                We send this email to confirm that you have done this action.
+            </p>
+        `);
+    }
 }

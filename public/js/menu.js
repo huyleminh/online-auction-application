@@ -82,4 +82,25 @@ $(document).ready(function () {
         const src = $(this).attr("src");
         $("#main-image").attr("src", src);
     });
+
+    $("#hidBidPriceForm").on("submit", function (e) {
+        e.preventDefault();
+
+        const money = $("#money").val();
+
+        Swal.fire({
+            title: `Bid with ${money} VND`,
+            text: "Once you confirm, our system will save this price and start automation bidding for you",
+            icon: "info",
+            confirmButtonText: "Ok",
+            confirmButtonColor: "#6963ff",
+            showCancelButton: true,
+            cancelButtonText: "Cancel",
+            cancelButtonColor: "#f82b89",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                return $("#hidBidPriceForm").off("submit").submit();
+            }
+        });
+    });
 });

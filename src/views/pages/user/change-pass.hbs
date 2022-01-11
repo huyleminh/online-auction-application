@@ -39,14 +39,16 @@
             </div>
 
             <div class="form-text mb-3" id="newPasswordText">
-                New password must be different from the old one
+                New password must be at least 6 characters and different from the old one
             </div>
 
-            <div class="form-outline mb-3">
+            <div class="form-outline">
                 <i class="fas fa-key trailing"></i>
                 <input type="password" id="confirm" class="form-control form-icon-trailing" required />
                 <label class="form-label" for="confirm">Confirm new password</label>
             </div>
+
+            <div class="form-text mb-3" id="confirmNewPasswordText"></div>
 
             <div class="d-flex align-items-center justify-content-center">
                 <button type="submit" class="btn btn-primary btn-block shadow-0">Save change</button>
