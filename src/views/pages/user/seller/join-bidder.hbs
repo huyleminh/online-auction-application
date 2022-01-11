@@ -70,7 +70,7 @@
                                             title="Ban this bidder"
                                             type="submit"
                                             data-mdb-toggle="tooltip"
-                                            {{#if this.is_banned}}
+                                            {{#if (or this.is_banned ../data.is_sold)}}
                                                 disabled
                                             {{/if}}
                                         >

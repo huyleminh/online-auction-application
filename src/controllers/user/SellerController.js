@@ -467,6 +467,7 @@ export default class SellerController extends AppController {
                     page: 1,
                     hasNext: joinList.hasNext,
                     productId,
+                    is_sold: product.is_sold,
                 },
             });
         } catch (error) {
@@ -519,6 +520,10 @@ export default class SellerController extends AppController {
                 });
             }
 
+            // If product is sold, the seller will not ban.
+            if (product.is_sold === 1) {
+                return res.redirect(req.headers.referer);
+            }
             
             const [joinBidder] = await JoinBidderModel.getJoinBidderWithProduct(
                 body.bidderId,
