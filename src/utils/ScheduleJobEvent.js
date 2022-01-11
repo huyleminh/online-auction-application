@@ -21,10 +21,25 @@ class ScheduleJobEvent {
             async function (id) {
                 console.log(`>>> JOB START: JOB_ID ${id} ${new Date()}`);
                 const [job] = await AutoBiddingJobModel.getByJobId(id);
+                if (!job) {
+                    console.log(`>>> JOB_ID ${id} - NOT FOUND`);
+                    return;
+                }
                 const [product] = await ProductModel.getById(job.product_id);
                 const [detail] = await ProductDetailModel.getlById(job.product_id);
 
+                if (!product || !detail) {
+                    console.log(`>>> JOB_ID ${id} - PRODUCT NOT FOUND`);
+                    return;
+                }
+
                 if (product.won_bidder_id) {
+                    ProductModel.update(product.product_id, {
+                        is_sold: 1,
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+
                     UserAccountModel.getByColumn("user_id", product.won_bidder_id).then((res) => {
                         const [bidder] = res;
                         if (bidder) {
@@ -62,7 +77,9 @@ class ScheduleJobEvent {
                     UserAccountModel.getByColumn("user_id", detail.seller_id).then((sellerList) => {
                         const [seller] = sellerList;
                         if (seller) {
-                            console.log(`>>> JOB SEND SELLER - NO WINNER: JOB_ID ${id} - ${new Date()}`);
+                            console.log(
+                                `>>> JOB SEND SELLER - NO WINNER: JOB_ID ${id} - ${new Date()}`
+                            );
                             EmailService.sendEmailWithHTMLContent(
                                 seller.email,
                                 "Bidding result - Time for your bidding product has been expired",
@@ -80,7 +97,7 @@ class ScheduleJobEvent {
                 if (this._scheduleJobs[jobId]) {
                     delete this._scheduleJobs[id];
                 }
-                console.log(`>>> JOB SEND WINNER: JOB_ID ${id} - ${new Date()}`);
+                console.log(`>>> JOB END: JOB_ID ${id} - ${new Date()}`);
             }.bind(this, jobId)
         );
     }

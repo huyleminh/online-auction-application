@@ -81,4 +81,27 @@
 
         </div>
     </div>
+
+    {{#if localUser}}
+        <script type="text/javascript">
+            Swal.fire({
+                title: "You are already logged in",
+                icon: "warning",
+                confirmButtonText: "Logout",
+                confirmButtonColor: "#6963ff",
+                showCancelButton: true,
+                cancelButtonText: "Go back",
+                cancelButtonColor: "#f82b89",
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    return window.location.href = "/login/redirect";
+                }
+                if (result.isDismissed) {
+                    return window.history.back();
+                }
+            });
+        </script>
+    {{/if}}
 </body>

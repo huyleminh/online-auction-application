@@ -4,8 +4,17 @@ import { unlink } from "fs";
 import { v4 } from "uuid";
 import FirebaseConfig from "../config/FirebaseConfig.js";
 
+// admin.initializeApp({
+//     credential: admin.credential.applicationDefault(),
+//     storageBucket: FirebaseConfig.BUCKET,
+// });
+
 admin.initializeApp({
-    credential: admin.credential.applicationDefault(),
+    credential: admin.credential.cert({
+        projectId: FirebaseConfig.PROJECT_ID,
+        private_key: FirebaseConfig.PRIVATE_KEY.replace(/\\n/g, "\n"),
+        client_email: FirebaseConfig.CLIENT_EMAIL,
+    }),
     storageBucket: FirebaseConfig.BUCKET,
 });
 

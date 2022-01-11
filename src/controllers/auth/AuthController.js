@@ -226,6 +226,7 @@ export default class AuthController extends AppController {
 
         // Logout
         this._router.post("/logout", this.handleLogout);
+        this._router.get("/login/redirect", AuthMiddlewares.setReturnURL, this.handleLogout);
     }
 
     loginPage(req, res) {

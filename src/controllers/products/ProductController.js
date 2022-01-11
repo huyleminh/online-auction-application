@@ -305,7 +305,7 @@ export default class ProductController extends AppController {
             // Redirect if user cannot bid with current rating point
             if (!product.is_allow_all && userFromDb.rating_point <= 80) {
                 req.flash("message", "Your point is not high enough to join bidding this product");
-                req.flash("type", "danger");
+                req.flash("type", "error");
                 return res.redirect(`/menu/products/${body.productId}`);
             }
 
@@ -317,7 +317,7 @@ export default class ProductController extends AppController {
             // console.log({ banResult });
             if (banResult && banResult.is_banned) {
                 req.flash("message", "You are banned by the seller in bidding this product");
-                req.flash("type", "danger");
+                req.flash("type", "error");
                 return res.redirect(`/menu/products/${body.productId}`);
             }
 
@@ -362,7 +362,7 @@ export default class ProductController extends AppController {
                     moment().add(10, "seconds").toDate()
                 );
 
-                req.flash("message", "Buy product successfully");
+                req.flash("message", "Congratulation, you are the owner of this product");
                 req.flash("type", "success");
                 return res.redirect(`/menu/products/${body.productId}`);
             }
@@ -449,7 +449,19 @@ export default class ProductController extends AppController {
                 }
             }
 
-            req.flash("message", "Hit a price successfully");
+            // Send email when hid a bid successfully
+            EmailService.sendEmailWithHTMLContent(
+                userFromDb.email,
+                "Bidding progess - Hit a bid successfully",
+                EmailTemplate.hidPriceSuccessBidder(
+                    product.product_name,
+                    numeral(body.money).format("0,0")
+                )
+            ).catch((error) => {
+                console.log(error);
+            });
+
+            req.flash("message", "Hit a bid successfully");
             req.flash("type", "success");
             return res.redirect(`/menu/products/${body.productId}`);
         } catch (error) {

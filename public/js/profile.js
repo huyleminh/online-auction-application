@@ -59,15 +59,18 @@ $(document).ready(function () {
         const newPass = $("#newPassword").val();
 
         if (curr === newPass) {
-            alert("New password cannot as same as the old one");
+            $("#newPasswordText").addClass("text-danger");
             return;
         }
+        $("#newPasswordText").removeClass("text-danger");
 
         const confirmNewPass = $("#confirm").val();
         if (newPass !== confirmNewPass) {
-            alert("Confirm password does not match");
+            $("#confirmNewPasswordText").addClass("text-danger");
+            $("#confirmNewPasswordText").html("Confirm password does not match");
             return;
         }
+        $("#confirmNewPasswordText").removeClass("text-danger");
 
         $("#updatePassForm").off("submit").submit();
     });
@@ -128,7 +131,9 @@ $(document).ready(function () {
                 const file = target.files[i];
                 if ([...file.type.matchAll(/^(image\/)\w*/g)].length === 0) {
                     if ($("#warning-image-details").hasClass("d-none")) {
-                        $("#warning-image-details").text("Invalid file's type. Please choose again.");
+                        $("#warning-image-details").text(
+                            "Invalid file's type. Please choose again."
+                        );
                         flag = true;
                         $("#preview-detail").html("");
                         $("#warning-image-details").removeClass("d-none");
@@ -158,7 +163,7 @@ $(document).ready(function () {
                 };
             }
             if (flag) {
-                $("#detailImages").val('');
+                $("#detailImages").val("");
             }
         });
     }
@@ -176,10 +181,10 @@ $(document).ready(function () {
             if ([...file.type.matchAll(/^(image\/)\w*/g)].length === 0) {
                 if ($("#warning-image-thumbnail").hasClass("d-none")) {
                     $("#warning-image-thumbnail").text("Invalid file's type. Please choose again.");
-                    $("#thumbnailImg").val('');
+                    $("#thumbnailImg").val("");
                     $("#preview-thumbnail").html("");
-                    if ($('#upload-thumbnail').hasClass("opacity-0")) {
-                        $('#upload-thumbnail').removeClass("opacity-0");
+                    if ($("#upload-thumbnail").hasClass("opacity-0")) {
+                        $("#upload-thumbnail").removeClass("opacity-0");
                     }
                     $("#warning-image-thumbnail").removeClass("d-none");
                 }
@@ -204,8 +209,8 @@ $(document).ready(function () {
 
                 $("#preview-thumbnail").html("");
                 $("#preview-thumbnail").html(tmp);
-                if (!$('#upload-thumbnail').hasClass("opacity-0")) {
-                    $('#upload-thumbnail').addClass("opacity-0");
+                if (!$("#upload-thumbnail").hasClass("opacity-0")) {
+                    $("#upload-thumbnail").addClass("opacity-0");
                 }
             };
         });
@@ -215,7 +220,7 @@ $(document).ready(function () {
     if ($("#catSelected")) {
         $("#catSelected").on("change", function () {
             $("#prodCategory").val(this.value);
-        })
+        });
     }
 
     // Validate images before submit
@@ -296,7 +301,7 @@ $(document).ready(function () {
 
             // Prefetch district
             if (!$("#province").val()) {
-                return
+                return;
             }
             const provinceOption = $("#provinceList").find(
                 `option[value="${$("#province").val()}"]`
