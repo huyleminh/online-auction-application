@@ -116,7 +116,7 @@ export default class ProductController extends AppController {
                     expiredDate: item.expired_date,
                     firstName: item.first_name,
                     createdDate,
-                    isNew: minDiff <= 30,
+                    isNew: minDiff <= 60,
                     isSold: item.is_sold,
                 };
 
