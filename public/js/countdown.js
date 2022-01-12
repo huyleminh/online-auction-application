@@ -5,6 +5,18 @@ $(document).ready(function () {
         activeCountDownTimer();
     }
 
+    if ($(".add-wishlist-already")) {
+        $(".add-wishlist-already").on('click', (e) => {
+            Swal.fire({
+                title: 'Information',
+                text: 'This product has already been in your wishlist.',
+                icon: 'info',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#6963ff'
+            });
+        })
+    }
+
     function activeCountDownTimer() {
         document.querySelectorAll(".countdown").forEach(function (item) {
             const date = item.textContent;

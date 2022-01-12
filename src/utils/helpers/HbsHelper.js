@@ -48,6 +48,13 @@ export default class HbsHelper {
         return left || right;
     }
 
+    static isIn(element, parent) {
+        if (parent.findIndex((item) => item.product_id === element) !== -1) {
+            return true;
+        }
+        return false;
+    }
+
     static getAll() {
         return {
             isEqual: this.isEqual,
@@ -61,6 +68,7 @@ export default class HbsHelper {
             subtract: this.subtract,
             and: this.and,
             or: this.or,
+            isIn: this.isIn
         };
     }
 }
