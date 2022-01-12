@@ -10,17 +10,18 @@ create table if not exists `heroku_9a602603f4f0dfb`.`user_account` (
 	`username` varchar(40) not null,
     `password` varchar(255) not null,
     `email` varchar(40) not null,
-    `address` nvarchar(100) not null, -- a string contains of all information of an address
+    `address` text, -- a string contains of all information of an address
 	`dob` date,
     `role` tinyint(1) not null default 0,
-    `first_name` nvarchar(20) not null,
-    `last_name` nvarchar(30) not null,
+    `first_name` varchar(20) not null,
+    `last_name` varchar(30) not null,
     `rating_point` int,
     `seller_expired_date` timestamp,
     `created_date` timestamp default current_timestamp,
-    
+
     constraint `PK_USER_ACCOUNT` primary key(`user_id`),
-    constraint `UC_USER_ACCOUNT` unique (`email`)
+    constraint `UC_USER_ACCOUNT` unique (`email`),
+    constraint `UC_USER_ACCOUNT_USERNAME` unique(`username`)
 )
 engine = InnoDB
 default character set = utf8mb4
@@ -33,7 +34,7 @@ default collate = utf8mb4_bin;
 create table if not exists `heroku_9a602603f4f0dfb`.`upgrade_request` (
 	`user_id` int unsigned not null,
     `requested_at` timestamp default current_timestamp,
-    
+
     constraint `PK_UPGRADE_REQUEST` primary key (`user_id`)
 )
 engine = InnoDB
@@ -51,7 +52,7 @@ create table if not exists `heroku_9a602603f4f0dfb`.`rating` (
     `feedback` text not null,
     `is_positive` tinyint(1) not null,
     `rated_date` timestamp default current_timestamp,
-    
+
     constraint `PK_RATING` primary key (`rating_id`)
 )
 engine = InnoDB
@@ -64,11 +65,12 @@ default collate = utf8mb4_bin;
 -- -----------------------------------------------------
 create table if not exists `heroku_9a602603f4f0dfb`.`category` (
 	`cat_id` int unsigned auto_increment,
-    `cat_name` nvarchar(50) not null,
+    `cat_name` varchar(50) not null collate utf8mb4_0900_ai_ci,
     `super_cat_id` int unsigned,
     `created_date` timestamp default current_timestamp,
-    
-    constraint `PK_CATEGORY` primary key (`cat_id`)
+
+    constraint `PK_CATEGORY` primary key (`cat_id`),
+    fulltext `FULLTEXT_INDEX_CATEGORY` (`cat_name`)
 )
 engine = InnoDB
 default character set = utf8mb4
@@ -80,7 +82,7 @@ default collate = utf8mb4_bin;
 -- -----------------------------------------------------
 create table if not exists `heroku_9a602603f4f0dfb`.`product` (
 	`product_id` int unsigned auto_increment,
-    `product_name` nvarchar(60) not null,
+    `product_name` text not null collate utf8mb4_0900_ai_ci,
     `thumbnail` text not null,
     `current_price` int unsigned not null, -- bidding price at the current time
 	`buy_now_price` int unsigned,
@@ -91,8 +93,10 @@ create table if not exists `heroku_9a602603f4f0dfb`.`product` (
     `won_bidder_id` int unsigned,
     `current_bidding_count` int unsigned default 0,
     `created_date` timestamp default current_timestamp,
-    
-    constraint `PK_PRODUCT` primary key (`product_id`)
+    `is_allow_all` tinyint(1),
+
+    constraint `PK_PRODUCT` primary key (`product_id`),
+    fulltext `FULLTEXT_INDEX_PRODUCT` (`product_name`)
 )
 engine = InnoDB
 default character set = utf8mb4
@@ -110,7 +114,7 @@ create table if not exists `heroku_9a602603f4f0dfb`.`product_detail` (
     `image_links` text not null,
     `description` text not null, -- rich content as html
     `seller_id` int unsigned not null,
-    
+
     constraint `PK_PRODUCT_DETAIL` primary key (`product_id`)
 )
 engine = InnoDB
@@ -124,7 +128,7 @@ default collate = utf8mb4_bin;
 create table if not exists `heroku_9a602603f4f0dfb`.`wishlist` (
 	`user_id` int unsigned not null,
     `product_id` int unsigned not null,
-    
+
     constraint `PK_WISHLIST` primary key (`user_id`, `product_id`)
 )
 engine = InnoDB
@@ -138,7 +142,7 @@ default collate = utf8mb4_bin;
 create table if not exists `heroku_9a602603f4f0dfb`.`newsletter_subscriber` (
 	`subscriber_id` int unsigned auto_increment,
     `subscriber_email` varchar(40) not null,
-    
+
     constraint `PK_NEWSLETTER_SUBCRIBER` primary key (`subscriber_id`)
 )
 engine = InnoDB
@@ -153,7 +157,7 @@ create table if not exists `heroku_9a602603f4f0dfb`.`auto_bidding_job` (
 	`job_id` int unsigned auto_increment,
     `product_id` int unsigned not null,
     `expired_date` timestamp not null,
-    
+
     constraint `PK_AUTO_BIDDING_JOB` primary key (`job_id`)
 )
 engine = InnoDB
@@ -170,9 +174,9 @@ create table if not exists `heroku_9a602603f4f0dfb`.`bidding_history` (
     `bidder_id` int unsigned not null,
     `current_price` int unsigned not null, -- current price of product when user bidding
     `bid_date` timestamp default current_timestamp,
-	`bidder_fname` nvarchar(20) not null,
+	`bidder_fname` varchar(20) not null,
     `tolerable_price` int unsigned not null, -- tolerable price of bidder at bid time
-    
+
     constraint `PK_BIDDING_HISTORY` primary key (`bidding_id`)
 )
 engine = InnoDB
@@ -187,7 +191,7 @@ create table if not exists `heroku_9a602603f4f0dfb`.`join_bidder` (
     `product_id` int unsigned not null,
     `bidder_id` int unsigned not null,
     `is_banned` tinyint(1) not null,
-    
+
     constraint `PK_JOIN_BIDDER` primary key (`product_id`, `bidder_id`)
 )
 engine = InnoDB
@@ -284,7 +288,7 @@ references `heroku_9a602603f4f0dfb`.`product`(product_id);
 alter table `heroku_9a602603f4f0dfb`.`bidding_history`
 add constraint `FK_BIDDING_HISTORY_USER`
 foreign key (bidder_id)
-references `heroku_9a602603f4f0dfb`.`user`(user_id);
+references `heroku_9a602603f4f0dfb`.`user_account`(user_id);
 
 
 alter table `heroku_9a602603f4f0dfb`.`bidding_history`

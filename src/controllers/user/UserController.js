@@ -68,6 +68,8 @@ export default class UserController extends AppController {
 
     async renderProfilePage(req, res) {
         const { user } = req;
+        const [message] = req.flash("message");
+        const [type] = req.flash("type");
 
         try {
             const [userRes] = await UserAccountModel.getByColumn("username", user.username);
@@ -92,6 +94,7 @@ export default class UserController extends AppController {
                 data: {
                     userInfo,
                 },
+                msg: { message: "hello", type: "success" },
             });
         } catch (error) {
             console.log(error);
@@ -227,6 +230,8 @@ export default class UserController extends AppController {
                 "password",
                 PasswordHelper.generateHashPassword(newPassword)
             );
+            req.flash("message", "Change password successfully.");
+            req.flash("type", "success");
             res.redirect("/user/account");
         } catch (error) {
             console.log(error);
@@ -355,8 +360,8 @@ export default class UserController extends AppController {
             }
 
             if (body.ratedId == user[0].user_id) {
-                req.flash("message", "You cannot feedback on yourself")
-                req.flash("type", "warning")
+                req.flash("message", "You cannot feedback on yourself");
+                req.flash("type", "warning");
                 return res.redirect(req.headers.referer);
             }
 

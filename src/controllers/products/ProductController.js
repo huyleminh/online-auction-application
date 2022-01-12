@@ -11,7 +11,6 @@ import UserAccountModel from "../../models/UserAccountModel.js";
 import EmailService from "../../services/EmailService.js";
 import CommomCont from "../../shared/CommonConst.js";
 import EmailTemplate from "../../shared/template/EmailTemplate.js";
-import CommomUtils from "../../utils/CommonUtils.js";
 import { ScheduleJobEventInstance } from "../../utils/ScheduleJobEvent.js";
 import AppController from "../AppController.js";
 
@@ -57,14 +56,16 @@ export default class ProductController extends AppController {
                     productList = await ProductModel.getAllWithKeyWord(
                         search,
                         DEFAULT_PAGE_SIZE,
-                        DEFAULT_PAGE_SIZE * (page - 1)
+                        DEFAULT_PAGE_SIZE * (page - 1),
+                        sort
                     );
                 }
                 if (type === "prod") {
                     productList = await ProductModel.getAllWithKeyWordProd(
                         search,
                         DEFAULT_PAGE_SIZE,
-                        DEFAULT_PAGE_SIZE * (page - 1)
+                        DEFAULT_PAGE_SIZE * (page - 1),
+                        sort
                     );
                 }
 
@@ -72,7 +73,8 @@ export default class ProductController extends AppController {
                     productList = await ProductModel.getAllWithKeyWordCat(
                         search,
                         DEFAULT_PAGE_SIZE,
-                        DEFAULT_PAGE_SIZE * (page - 1)
+                        DEFAULT_PAGE_SIZE * (page - 1),
+                        sort
                     );
                 }
 
@@ -83,7 +85,8 @@ export default class ProductController extends AppController {
                 productList = await ProductModel.getAllWithCatId(
                     parseInt(catId),
                     DEFAULT_PAGE_SIZE,
-                    DEFAULT_PAGE_SIZE * (page - 1)
+                    DEFAULT_PAGE_SIZE * (page - 1),
+                    sort
                 );
                 totalRows = await ProductModel.countTotalProductByCat(catId);
             }
@@ -91,12 +94,13 @@ export default class ProductController extends AppController {
             if (search === undefined && catId === "all") {
                 productList = await ProductModel.getAllWithAllCat(
                     DEFAULT_PAGE_SIZE,
-                    DEFAULT_PAGE_SIZE * (page - 1)
+                    DEFAULT_PAGE_SIZE * (page - 1),
+                    sort
                 );
                 totalRows = await ProductModel.countTotalProductByCat(catId);
             }
 
-            const productListMap = CommomUtils.sortProductUtil(productList[0], sort).map((item) => {
+            const productListMap = productList[0].map((item) => {
                 const createdDate = moment(item.created_date).locale("en").fromNow();
                 const minDiff = moment().diff(moment(item.created_date), "minutes");
                 const retObj = {
@@ -112,7 +116,7 @@ export default class ProductController extends AppController {
                     expiredDate: item.expired_date,
                     firstName: item.first_name,
                     createdDate,
-                    isNew: minDiff <= 30,
+                    isNew: minDiff <= 60,
                     isSold: item.is_sold,
                 };
 
@@ -305,7 +309,7 @@ export default class ProductController extends AppController {
             // Redirect if user cannot bid with current rating point
             if (!product.is_allow_all && userFromDb.rating_point <= 80) {
                 req.flash("message", "Your point is not high enough to join bidding this product");
-                req.flash("type", "danger");
+                req.flash("type", "error");
                 return res.redirect(`/menu/products/${body.productId}`);
             }
 
@@ -317,7 +321,7 @@ export default class ProductController extends AppController {
             // console.log({ banResult });
             if (banResult && banResult.is_banned) {
                 req.flash("message", "You are banned by the seller in bidding this product");
-                req.flash("type", "danger");
+                req.flash("type", "error");
                 return res.redirect(`/menu/products/${body.productId}`);
             }
 
@@ -362,7 +366,7 @@ export default class ProductController extends AppController {
                     moment().add(10, "seconds").toDate()
                 );
 
-                req.flash("message", "Buy product successfully");
+                req.flash("message", "Congratulation, you are the owner of this product");
                 req.flash("type", "success");
                 return res.redirect(`/menu/products/${body.productId}`);
             }
@@ -449,7 +453,19 @@ export default class ProductController extends AppController {
                 }
             }
 
-            req.flash("message", "Hit a price successfully");
+            // Send email when hid a bid successfully
+            EmailService.sendEmailWithHTMLContent(
+                userFromDb.email,
+                "Bidding progess - Hit a bid successfully",
+                EmailTemplate.hidPriceSuccessBidder(
+                    product.product_name,
+                    numeral(body.money).format("0,0")
+                )
+            ).catch((error) => {
+                console.log(error);
+            });
+
+            req.flash("message", "Hit a bid successfully");
             req.flash("type", "success");
             return res.redirect(`/menu/products/${body.productId}`);
         } catch (error) {

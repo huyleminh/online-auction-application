@@ -9,6 +9,9 @@ $(document).ready(function () {
 
     $("#username").on("change", function () {
         const username = $("#username").val();
+        if (!username || !username.trim()) {
+            return;
+        }
         if (username.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)) {
             $("#usernameText").html("You cannot use an email as username");
             return;
@@ -32,6 +35,19 @@ $(document).ready(function () {
         if (!validatePassword()) {
             return;
         }
+
+        // Check value off OTP
+        const otpValue = $("#otpCode").val();
+        if (
+            !otpValue ||
+            !otpValue.trim() ||
+            !otpValue.match(/^[0-9]{6}$/g) ||
+            $("#otpCode").prop("disabled")
+        ) {
+            $("#otpText").html("OTP code is required and must be a 6-digit number");
+            return;
+        }
+
         $("#signupForm").off("submit").submit();
     });
 
@@ -69,22 +85,36 @@ $(document).ready(function () {
 
     $("#province").on("change", function () {
         const value = this.value;
+        if (!value || !value.trim()) {
+            return;
+        }
         const option = $("#provinceList").find(`option[value="${value}"]`);
         if (!option) {
             return;
         }
         const code = option.data("code");
 
+        $("#district").val("");
+        $("#district").removeClass("active");
+        $("#ward").val("");
+        $("#ward").removeClass("active");
+
         getAllDistrictByProvinceCode(code);
     });
 
     $("#district").on("change", function () {
         const value = this.value;
+        if (!value || !value.trim()) {
+            return;
+        }
         const option = $("#districtList").find(`option[value="${value}"]`);
         if (!option) {
             return;
         }
         const code = option.data("code");
+
+        $("#ward").val("");
+        $("#ward").removeClass("active");
 
         getAllWardByDistrictCode(code);
     });

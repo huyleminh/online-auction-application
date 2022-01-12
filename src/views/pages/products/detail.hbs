@@ -23,46 +23,18 @@
     <div class="container pb-5">
         {{! Product detail - start }}
         {{#if data.notFound}}
-            <div
-                class="modal fade show d-block"
-                id="exampleModal"
-                tabindex="-1"
-                aria-labelledby="notFoundModal"
-                aria-modal="true"
-                role="dialog"
-            >
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-body d-flex flex-column align-items-center">
-                            <div class="text-center mb-3">
-                                <i
-                                    class="fas fa-exclamation-triangle text-warning"
-                                    style="font-size: 5rem;"
-                                ></i>
-                            </div>
-
-                            <div class="text-center mb-3 fs-3">
-                                Product not found
-                            </div>
-
-                            <div class="text-center mb-3">
-                                This may be an error or product has been removed
-                            </div>
-
-                            <div class="text-center">
-                                <a
-                                    role="button"
-                                    class="btn btn-custom btn-custom-main"
-                                    href="/menu/categories/all"
-                                >
-                                    Back to menu
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-backdrop fade show"></div>
+            <script type="text/javascript">
+                Swal.fire({
+                    title: "Product not found",
+                    text: "This may be an error or product has been removed",
+                    icon: "warning",
+                    confirmButtonText: "Back to product list",
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                }).then((result) => {
+                    window.location.href = "/menu/categories/all";
+                });
+            </script>
         {{else}}
             {{#unless localUser.isAuth}}
                 <div class="alert alert-info">Your have to
@@ -70,7 +42,16 @@
                     to bid this product</div>
             {{/unless}}
             {{#if msg.message}}
-                <div class="alert alert-{{msg.type}}">{{msg.message}}</div>
+                <div class="d-none" data-message="{{msg.message}}" data-type="{{msg.type}}" id="msg"></div>
+                <script type="text/javascript">
+                    Swal.fire({
+                        title: "Bidding progress",
+                        text: $("#msg").data("message"),
+                        icon: $("#msg").data("type"),
+                    }).then(() => {
+                        $("#msg").remove();
+                    });
+                </script>
             {{/if}}
             <div class="row mb-4">
                 <div class="col-lg-7 col-sm-12">
@@ -111,7 +92,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-5 col-sm-12 d-flex flex-column justify-content-between">
+                <div class="col-lg-5 col-sm-12 d-flex flex-column">
                     <div class="card border shadow-0 mb-3 product-details">
                         <div class="card-body card-body-info">
                             <h2 class="card-title mb-3">{{data.productDetail.product_name}}</h2>
@@ -321,7 +302,7 @@
                                             80
                                         )
                                     }}
-                                        <form action="" method="post">
+                                        <form action="" method="post" id="hidBidPriceForm">
                                             <div class="input-group mb-3">
                                                 <input
                                                     min="{{add
@@ -334,6 +315,7 @@
                                                     placeholder="Enter your money"
                                                     aria-describedby="btn-bid"
                                                     name="money"
+                                                    id="money"
                                                     required
                                                 />
                                                 <input
