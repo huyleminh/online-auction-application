@@ -75,12 +75,34 @@ export default class SellerController extends AppController {
     }
 
     async createProductPage(req, res) {
-        let catList = await CategoryModel.getAllChild();
+        try {
+            const [user] = await UserAccountModel.getByColumn("username", req.user.username);
+            if (!user) {
+                req.logout();
+                delete req.session.wishlist;
+                return req.session.save(() => {
+                    res.redirect("/login");
+                });
+            }
 
-        res.render("pages/user/seller/create-product", {
-            layout: "profile",
-            data: catList,
-        });
+            if (!user.seller_expired_date || moment().isAfter(moment(user.seller_expired_date))) {
+                return res.render("pages/user/seller/create-product", {
+                    layout: "profile",
+                    data: [],
+                    is_not_seller: true,
+                });
+            }
+
+            const catList = await CategoryModel.getAllChild();
+
+            res.render("pages/user/seller/create-product", {
+                layout: "profile",
+                data: catList,
+            });
+        } catch (error) {
+            console.log(error);
+            throw new Error(error);
+        }
     }
 
     async postCreateNewProduct(req, res) {
@@ -239,7 +261,7 @@ export default class SellerController extends AppController {
         if (isNaN(productId)) {
             return res.render("pages/user/seller/edit-product", {
                 layout: "profile",
-                notFound: true
+                notFound: true,
             });
         }
 
@@ -258,25 +280,25 @@ export default class SellerController extends AppController {
                 return res.render("pages/user/seller/edit-product", {
                     layout: "profile",
                     id: productId,
-                    notFound: true
+                    notFound: true,
                 });
             }
 
             if (data[0].seller_id !== user[0].user_id) {
-                return res.redirect("/403")
+                return res.redirect("/403");
             }
 
             return res.render("pages/user/seller/edit-product", {
                 layout: "profile",
                 id: productId,
-                data: data[0].description
+                data: data[0].description,
             });
         } catch (err) {
             console.log(err);
             return res.render("pages/user/seller/edit-product", {
                 layout: "profile",
                 id: productId,
-                notFound: true
+                notFound: true,
             });
         }
     }
@@ -300,14 +322,14 @@ export default class SellerController extends AppController {
             let data = await ProductDetailModel.getlById(parseInt(productId));
 
             if (data[0].seller_id !== user[0].user_id) {
-                return res.redirect("/403")
+                return res.redirect("/403");
             }
 
             if (data === undefined || data.length === 0) {
                 return res.render("pages/user/seller/edit-product", {
                     layout: "profile",
                     id: productId,
-                    notFound: true
+                    notFound: true,
                 });
             }
 
@@ -317,14 +339,14 @@ export default class SellerController extends AppController {
             return res.render("pages/user/seller/edit-product", {
                 layout: "profile",
                 id: productId,
-                success: true
+                success: true,
             });
         } catch (err) {
             console.log(err);
             return res.render("pages/user/seller/edit-product", {
                 layout: "profile",
                 id: productId,
-                notFound: true
+                notFound: true,
             });
         }
     }
@@ -349,8 +371,11 @@ export default class SellerController extends AppController {
                 });
             }
 
-            const rawData = await ProductModel.getExpiredAndSoldProductsBySellerId(user[0].user_id, page)
-            const dataMapped = rawData.data[0].map(item => {
+            const rawData = await ProductModel.getExpiredAndSoldProductsBySellerId(
+                user[0].user_id,
+                page
+            );
+            const dataMapped = rawData.data[0].map((item) => {
                 return {
                     product_name: item.product_name,
                     thumbnail: item.thumbnail,
@@ -359,22 +384,22 @@ export default class SellerController extends AppController {
                     bidder_name: item.first_name === null ? "N/A" : `****${item.first_name}`,
                     bidder_point: item.rating_point === null ? "N/A" : item.rating_point,
                     expired_date: item.expiredDate,
-                    user_id: item.won_bidder_id
-                }
-            })
+                    user_id: item.won_bidder_id,
+                };
+            });
 
             return res.render("pages/user/seller/result", {
                 layout: "profile",
                 data: {
                     list: dataMapped,
                     page,
-                    hasNext: rawData.hasNext
+                    hasNext: rawData.hasNext,
                 },
                 msg: { message, type },
             });
         } catch (error) {
-            console.log(error)
-            throw new Error(error)
+            console.log(error);
+            throw new Error(error);
         }
     }
 
@@ -522,11 +547,11 @@ export default class SellerController extends AppController {
             if (product.is_sold === 1) {
                 return res.redirect(req.headers.referer);
             }
-            
+
             const [joinBidder] = await JoinBidderModel.getJoinBidderWithProduct(
                 body.bidderId,
                 product.product_id
-            )
+            );
 
             // Check whether this bidder is banned or not
             if (joinBidder !== undefined && joinBidder.is_banned === 0) {
@@ -546,10 +571,10 @@ export default class SellerController extends AppController {
                             "Bidding progress - You have been banned",
                             EmailTemplate.banBidder(product.product_name)
                         ).catch((error) => {
-                            console.log(error)
+                            console.log(error);
                         });
                     }
-                })
+                });
 
                 if (product.won_bidder_id === parseInt(body.bidderId)) {
                     // Move winner to the runner up
@@ -557,35 +582,30 @@ export default class SellerController extends AppController {
                         await BiddingHistoryModel.findSecondLargestTolerablePriceByProductId(
                             product.product_id
                         );
-                    
+
                     console.log(runnerUp);
 
-                    // If no new won bidder 
+                    // If no new won bidder
                     if (runnerUp === undefined) {
                         // Get minimum current price of this product
-                        const [minCurrentPrice] = await BiddingHistoryModel.findMinCurrentPriceByProductId(
-                            product.product_id
-                        )
+                        const [minCurrentPrice] =
+                            await BiddingHistoryModel.findMinCurrentPriceByProductId(
+                                product.product_id
+                            );
 
-                        console.log(minCurrentPrice)
-                        
-                        await ProductModel.update(
-                            product.product_id,
-                            {
-                                current_price: minCurrentPrice.current_price - detail.step_price,
-                                max_tolerable_price: null,
-                                won_bidder_id: null,
-                            }
-                        )
+                        console.log(minCurrentPrice);
+
+                        await ProductModel.update(product.product_id, {
+                            current_price: minCurrentPrice.current_price - detail.step_price,
+                            max_tolerable_price: null,
+                            won_bidder_id: null,
+                        });
                     } else {
-                        await ProductModel.update(
-                            product.product_id,
-                            { 
-                                current_price: runnerUp.current_price,
-                                max_tolerable_price: runnerUp.tolerable_price,
-                                won_bidder_id: runnerUp.bidder_id,
-                            }
-                        )
+                        await ProductModel.update(product.product_id, {
+                            current_price: runnerUp.current_price,
+                            max_tolerable_price: runnerUp.tolerable_price,
+                            won_bidder_id: runnerUp.bidder_id,
+                        });
                     }
                 }
             }

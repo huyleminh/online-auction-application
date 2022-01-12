@@ -24,16 +24,10 @@
         {{! Product detail - start }}
         {{#if data.notFound}}
             <script type="text/javascript">
-                Swal.fire({
-                    title: "Product not found",
-                    text: "This may be an error or product has been removed",
-                    icon: "warning",
-                    confirmButtonText: "Back to product list",
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                }).then((result) => {
-                    window.location.href = "/menu/categories/all";
-                });
+                Swal.fire({ title: "Product not found", text: "This may be an error or product has
+                been removed", icon: "warning", confirmButtonText: "Back to product list",
+                allowOutsideClick: false, allowEscapeKey: false, }).then((result) => {
+                window.location.href = "/menu/categories/all"; });
             </script>
         {{else}}
             {{#unless localUser.isAuth}}
@@ -42,15 +36,15 @@
                     to bid this product</div>
             {{/unless}}
             {{#if msg.message}}
-                <div class="d-none" data-message="{{msg.message}}" data-type="{{msg.type}}" id="msg"></div>
+                <div
+                    class="d-none"
+                    data-message="{{msg.message}}"
+                    data-type="{{msg.type}}"
+                    id="msg"
+                ></div>
                 <script type="text/javascript">
-                    Swal.fire({
-                        title: "Bidding progress",
-                        text: $("#msg").data("message"),
-                        icon: $("#msg").data("type"),
-                    }).then(() => {
-                        $("#msg").remove();
-                    });
+                    Swal.fire({ title: "Bidding progress", text: $("#msg").data("message"), icon:
+                    $("#msg").data("type"), }).then(() => { $("#msg").remove(); });
                 </script>
             {{/if}}
             <div class="row mb-4">
@@ -241,23 +235,27 @@
                                                 name="expired_date"
                                                 value="{{data.productDetail.expired_date}}"
                                             />
-                                            {{#if (isIn data.productDetail.product_id wishlist.wishlist)}}
-                                                    <button
-                                                        class="btn btn-danger me-3 p-3 add-wishlist-already"
-                                                        title="Add to wishlist"
-                                                        type="button"
-                                                    >
-                                                        <i class="fas fa-heart"></i>
-                                                    </button>
-                                                {{else}}
-                                                    <button
-                                                        class="btn btn-outline-danger me-3 p-3"
-                                                        title="Add to wishlist"
-                                                        id="add-wishlist"
-                                                        type="submit"
-                                                    >
-                                                        <i class="fas fa-heart"></i>
-                                                    </button>
+                                            {{#if
+                                                (isIn
+                                                    data.productDetail.product_id wishlist.wishlist
+                                                )
+                                            }}
+                                                <button
+                                                    class="btn btn-danger me-3 p-3 add-wishlist-already"
+                                                    title="Add to wishlist"
+                                                    type="button"
+                                                >
+                                                    <i class="fas fa-heart"></i>
+                                                </button>
+                                            {{else}}
+                                                <button
+                                                    class="btn btn-outline-danger me-3 p-3"
+                                                    title="Add to wishlist"
+                                                    id="add-wishlist"
+                                                    type="submit"
+                                                >
+                                                    <i class="fas fa-heart"></i>
+                                                </button>
                                             {{/if}}
                                         </form>
                                     {{/if}}
@@ -343,11 +341,16 @@
                                             <div class="d-flex justify-content-center"><span
                                                 >Or</span></div>
 
-                                            <form action="" class="mb-0 mt-3">
+                                            <form action="" class="mb-0 mt-3" method="post">
                                                 <input
                                                     type="hidden"
                                                     name="productId"
                                                     value={{data.productDetail.product_id}}
+                                                />
+                                                <input
+                                                    type="hidden"
+                                                    name="money"
+                                                    value={{data.productDetail.buy_now_price}}
                                                 />
                                                 <button
                                                     type="submit"

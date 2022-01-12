@@ -74,4 +74,17 @@ export default class AutoBiddingJobModel {
             }
         });
     }
+
+    static update(jobId, entity) {
+        return new Promise(async function (resolve, reject) {
+            try {
+                const dataSet = await KnexConnection("auto_bidding_job")
+                    .where({ job_id: jobId })
+                    .update(entity);
+                resolve(dataSet);
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
 }

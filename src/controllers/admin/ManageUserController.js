@@ -6,6 +6,7 @@ import EmailService from "../../services/EmailService.js";
 import CommonConst from "../../shared/CommonConst.js";
 import EmailTemplate from "../../shared/template/EmailTemplate.js";
 import AppController from "../AppController.js";
+import PasswordHelper from "../../utils/helpers/PasswordHelper.js";
 
 export default class ManageUserController extends AppController {
     constructor() {
@@ -31,18 +32,10 @@ export default class ManageUserController extends AppController {
             this.postDenyBidder
         );
 
-        this._router.get(
-            "/admin/sellers",
-            AuthMiddlewares.authorizeAdmin,
-            this.sellerPage
-        );
+        this._router.get("/admin/sellers", AuthMiddlewares.authorizeAdmin, this.sellerPage);
         this._router.post("/admin/sellers", AuthMiddlewares.authorizeAdmin, this.downgradeSeller);
 
-        this._router.get(
-            "/admin/users",
-            AuthMiddlewares.authorizeAdmin,
-            this.userPage
-        );
+        this._router.get("/admin/users", AuthMiddlewares.authorizeAdmin, this.userPage);
 
         this._router.get(
             "/admin/users/:userId",
@@ -245,14 +238,18 @@ export default class ManageUserController extends AppController {
 
     async userPage(req, res) {
         let { page, search } = req.query;
+        const [message] = req.flash("message");
+        const [type] = req.flash("type");
 
         page = page ? parseInt(page) : 1;
         if (isNaN(page) || page < 1) {
-            res.redirect("/admin/users?page=1")
+            res.redirect("/admin/users?page=1");
         }
 
         try {
-            const data = search ? await UserAccountModel.searchByColumnWithPagination(page, 'username', search) : await UserAccountModel.searchByColumnWithPagination(page);
+            const data = search
+                ? await UserAccountModel.searchByColumnWithPagination(page, "username", search)
+                : await UserAccountModel.searchByColumnWithPagination(page);
 
             if (data === undefined || data.data.length === 0) {
                 return res.render("pages/admin/user-list", {
@@ -260,7 +257,7 @@ export default class ManageUserController extends AppController {
                     data: {
                         list: null,
                         hasNext: false,
-                        page
+                        page,
                     },
                 });
             }
@@ -270,9 +267,9 @@ export default class ManageUserController extends AppController {
                     user_id: element.user_id,
                     username: element.username,
                     email: element.email,
-                    name: element.first_name + ' ' + element.last_name
-                }
-            })
+                    name: element.first_name + " " + element.last_name,
+                };
+            });
 
             return res.render("pages/admin/user-list", {
                 layout: "admin",
@@ -280,8 +277,9 @@ export default class ManageUserController extends AppController {
                     search,
                     list: result,
                     hasNext: data.hasNext,
-                    page
+                    page,
                 },
+                msg: { message, type },
             });
         } catch (err) {
             console.log(err);
@@ -303,32 +301,76 @@ export default class ManageUserController extends AppController {
             }
 
             const result = {
-                    userId: user.user_id,
-                    lName: user.last_name,
-                    fName: user.first_name,
-                    dob: moment(user.dob).format(CommonConst.MOMENT_BASE_USER_FORMAT),
-                    email: user.email,
-                    username: user.username,
-                    createdDate: moment(user.created_date).format(CommonConst.MOMENT_BASE_USER_FORMAT),
-                    role: user.role === 0 ? user.seller_expired_date && moment(user.seller_expired_date).isAfter(moment()) ?
-                    `Seller until ${moment(user.seller_expired_date).format(CommonConst.MOMENT_BASE_USER_FORMAT)}`
-                    : 'Bidder' : 'Admin',
-                    ratingPoint: user.rating_point
+                userId: user.user_id,
+                lName: user.last_name,
+                fName: user.first_name,
+                dob: moment(user.dob).format(CommonConst.MOMENT_BASE_USER_FORMAT),
+                email: user.email,
+                username: user.username,
+                createdDate: moment(user.created_date).format(CommonConst.MOMENT_BASE_USER_FORMAT),
+                role:
+                    user.role === 0
+                        ? user.seller_expired_date &&
+                          moment(user.seller_expired_date).isAfter(moment())
+                            ? `Seller until ${moment(user.seller_expired_date).format(
+                                  CommonConst.MOMENT_BASE_USER_FORMAT
+                              )}`
+                            : "Bidder"
+                        : "Admin",
+                ratingPoint: user.rating_point,
             };
 
             return res.render("pages/admin/user-detail", {
                 layout: "admin",
                 data: result,
-                isMe: user.username === req.user.username
-            })
+                isMe: user.username === req.user.username,
+            });
         } catch (err) {
             console.log(err);
         }
     }
 
-    resetPassword(req, res) {
-        const userId = parseInt(req.params.userId);
-        console.log(userId);
-        res.redirect("/admin/users")
+    async resetPassword(req, res) {
+        const { userId } = req.params;
+
+        try {
+            const [user] = await UserAccountModel.getByColumn("username", req.user.username);
+            if (!user) {
+                req.logout();
+                delete req.session.wishlist;
+                return req.session.save(() => {
+                    res.redirect("/login");
+                });
+            }
+
+            const [bidder] = await UserAccountModel.getByUserId(parseInt(userId));
+            if (!bidder) {
+                req.flash("message", "User not found");
+                req.flash("type", "error");
+                return res.redirect("/admin/users");
+            }
+
+            // Reset password
+            const randomPassword = Math.round(Math.random() * 899999) + 100000;
+
+            await UserAccountModel.updateColumnById(
+                bidder.user_id,
+                "password",
+                PasswordHelper.generateHashPassword(`${randomPassword}`)
+            );
+
+            EmailService.sendEmailWithHTMLContent(
+                bidder.email,
+                "Reset password - Your password has been reset by administrators",
+                EmailTemplate.resetPasswordUser(randomPassword)
+            );
+
+            req.flash("message", "Reset password successfully");
+            req.flash("type", "success");
+            res.redirect("/admin/users");
+        } catch (error) {
+            console.log(error);
+            throw new Error(error);
+        }
     }
 }

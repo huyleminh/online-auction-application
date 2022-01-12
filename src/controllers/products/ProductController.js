@@ -377,7 +377,7 @@ export default class ProductController extends AppController {
                 product.product_id
             );
             // console.log({ userBidHistory });
-            if (userBidHistory && userBidHistory.tolerable_price >= parseInt(body.money)) {
+            if (userBidHistory[0] && userBidHistory[0].tolerable_price >= parseInt(body.money)) {
                 req.flash("message", "You have bidded with higher price for this product");
                 req.flash("type", "warning");
                 return res.redirect(`/menu/products/${body.productId}`);
@@ -448,7 +448,10 @@ export default class ProductController extends AppController {
 
                     // Update job
                     const [job] = await AutoBiddingJobModel.getByProductId(product.product_id);
-                    console.log({ job });
+                    // console.log({ job });
+                    await AutoBiddingJobModel.update(job.job_id, {
+                        expired_date: newExpiredDate.format(CommomCont.MOMENT_BASE_DB_FORMAT),
+                    });
                     ScheduleJobEventInstance.reScheduleJob(job.job_id, newExpiredDate.toDate());
                 }
             }

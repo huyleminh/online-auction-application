@@ -13,266 +13,290 @@
     </nav>
 {{/section}}
 
-<div class="card border shadow-0">
-    <div class="card-header">
-        <h3 class="mb-0">Post a product</h3>
-    </div>
+{{#if is_not_seller}}
+    <script>
+        Swal.fire({
+            title: "You are not a seller",
+            html: "Please go to <a href='/bidder/account/upgrade'>Upgrade request page</a> to send an upgrade request",
+            icon: "warning",
+            confirmButtonText: "Ok",
+            confirmButtonColor: "#6963ff",
+            showCancelButton: true,
+            cancelButtonText: "Cancel",
+            cancelButtonColor: "#f82b89",
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                    return window.location.href = "/bidder/account/upgrade";
+            }
+            if (result.isDismissed) {
+                return window.history.back();
+            }
+        });
+    </script>
+{{else}}
+    <div class="card border shadow-0">
+        <div class="card-header">
+            <h3 class="mb-0">Post a product</h3>
+        </div>
 
-    <div class="card-body d-flex flex-column align-items-center">
-        <div class="alert alert-info w-100 d-none" id="alert-bar"></div>
-        <form action="" method="post" enctype="multipart/form-data" class="mb-0" id="create-product-form">
-            <div class="mb-3">
-                    <label class="form-label text-dark fw-bolder">Required Information
-                        <span class="text-danger">*</span></label>
-            </div>
-            <div class="row mb-3">
-                <div class="col-sm-6 mb-sm-0 mb-3">
-                    <div class="form-outline">
-                        <input
-                            type="text"
-                            class="form-control"
-                            name="prodName"
-                            id="prodName"
-                            autocomplete="off"
-                            required
-                            maxlength="60"
-                        />
-                        <label for="prodName" class="form-label">Product name</label>
-                    </div>
+        <div class="card-body d-flex flex-column align-items-center">
+            <div class="alert alert-info w-100 d-none" id="alert-bar"></div>
+            <form action="" method="post" enctype="multipart/form-data" class="mb-0" id="create-product-form">
+                <div class="mb-3">
+                        <label class="form-label text-dark fw-bolder">Required Information
+                            <span class="text-danger">*</span></label>
                 </div>
+                <div class="row mb-3">
+                    <div class="col-sm-6 mb-sm-0 mb-3">
+                        <div class="form-outline">
+                            <input
+                                type="text"
+                                class="form-control"
+                                name="prodName"
+                                id="prodName"
+                                autocomplete="off"
+                                required
+                                maxlength="60"
+                            />
+                            <label for="prodName" class="form-label">Product name</label>
+                        </div>
+                    </div>
 
-                <div class="col-sm-6">
-                    <div class="form-outline">
-                        <input
-                            type="hidden"
-                            class="form-control"
-                            name="prodCategory"
-                            id="prodCategory"
-                            list="prodCategoryList"
-                            autocomplete="off"
-                            required
-                        />
-                        <div>
-                            <select class="form-select" id="catSelected" required>
-                                <option value="" selected>Choose a category</option>
-                                {{#each data}}
-                                    <option value={{this.cat_id}}>{{this.cat_name}}</option>
-                                {{/each}}
-                            </select>
+                    <div class="col-sm-6">
+                        <div class="form-outline">
+                            <input
+                                type="hidden"
+                                class="form-control"
+                                name="prodCategory"
+                                id="prodCategory"
+                                list="prodCategoryList"
+                                autocomplete="off"
+                                required
+                            />
+                            <div>
+                                <select class="form-select" id="catSelected" required>
+                                    <option value="" selected>Choose a category</option>
+                                    {{#each data}}
+                                        <option value={{this.cat_id}}>{{this.cat_name}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="row mb-3">
-                <div class="col-sm-6 mb-sm-0 mb-3">
-                    <div class="form-outline">
+                <div class="row mb-3">
+                    <div class="col-sm-6 mb-sm-0 mb-3">
+                        <div class="form-outline">
+                            <input
+                                type="number"
+                                min="0"
+                                class="form-control"
+                                name="startPrice"
+                                id="startPrice"
+                                aria-describedby="startPriceText"
+                                required
+                            />
+                            <label for="startPrice" class="form-label">Start price</label>
+                        </div>
+                        <div class="form-text" id="startPriceText">
+                            The initial price for the product.
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-outline">
+                            <input
+                                type="number"
+                                min="0"
+                                class="form-control"
+                                name="stepPrice"
+                                id="stepPrice"
+                                aria-describedby="stepPriceText"
+                                required
+                            />
+                            <label for="stepPrice" class="form-label">Step price</label>
+                        </div>
+                        <div class="form-text" id="stepPriceText">
+                            The additional amount of money that is required for the bidder who joins later.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-sm-6 mb-sm-0 mb-3">
+                        <div class="form-outline">
+                            <i class="fas fa-calendar-alt trailing"></i>
+                            <input
+                                type="text"
+                                id="expiredDate"
+                                class="form-control form-icon-trailing"
+                                name="expiredDate"
+                                autocomplete="off"
+                            />
+                            <label class="form-label" for="expiredDate">Expired date</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-outline">
+                            <i class="fas fa-clock trailing"></i>
+                            <input
+                                type="text"
+                                id="expiredTime"
+                                class="form-control form-icon-trailing"
+                                name="expiredTime"
+                                autocomplete="off"
+                            />
+                            <label class="form-label" for="expiredTime">Expired time</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                        <label class="form-label text-dark fw-bolder">Optional</label>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-sm-6 mb-sm-0 mb-3">
+                        <div class="form-check">
+                            <input
+                                class="form-check-input"
+                                type="checkbox"
+                                value="on"
+                                id="autoExtend"
+                                aria-describedby="autoExtendText"
+                                name="autoExtend"
+                            />
+                            <label class="form-check-label" for="autoExtend">
+                                Auto extend duration
+                            </label>
+                        </div>
+                        <div class="form-text mb-3" id="autoExtendText">If there is a new bidding before
+                            the end time 5 minutes, the expired time will be automatically extended for 10 minutes longer.
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 mb-sm-0 mb-3">
+                        <div class="form-check">
+                            <input
+                                class="form-check-input"
+                                type="checkbox"
+                                value="on"
+                                id="allowAll"
+                                aria-describedby="allowAllText"
+                                name="allowAll"
+                            />
+                            <label class="form-check-label" for="allowAll">
+                                Allow all bidders
+                            </label>
+                        </div>
+                        <div class="form-text mb-3" id="allowAllText">
+                            The system will allow all bidders whose rating point below 80 to bid for your product (by default, the system only allows bidder with rating point higher than 80).
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-sm-6 mb-sm-0 mb-3">
+                        <div class="form-outline">
+                            <input
+                                type="number"
+                                min="0"
+                                class="form-control"
+                                name="buynowPrice"
+                                id="buynowPrice"
+                                aria-describedby="buyNowText"
+                            />
+                            <label for="buynowPrice" class="form-label">Buy now price</label>
+                        </div>
+                        <div class="form-text mb-3" id="buyNowText">
+                            The bidder who enters this price or higher will win the auction immediately (Buy now price must be higher than start price, you should set the buy now price at least equals to start price + step price).
+                        </div>
+                    </div>
+                </div>
+
+                {{! Upload thumbnail }}
+                <div class="mb-3 image-uploads d-flex">
+                    <label class="form-label text-dark fw-bolder">Upload thumbnail
+                        <span class="text-danger">*</span></label>
+                    <div class="image-uploads-item d-flex">
+                        <div class="image-preview mb-2" id="preview-thumbnail"></div>
+                        <label
+                            for="thumbnailImg"
+                            class="d-flex justify-content-center align-items-center"
+                            id="upload-thumbnail"
+                        >
+                            <i class="fas fa-plus"></i>
+                        </label>
                         <input
-                            type="number"
-                            min="0"
-                            class="form-control"
-                            name="startPrice"
-                            id="startPrice"
-                            aria-describedby="startPriceText"
+                            type="file"
+                            class="image-uploads-input"
+                            accept="image/*"
+                            name="thumbnailImg"
+                            id="thumbnailImg"
                             required
                         />
-                        <label for="startPrice" class="form-label">Start price</label>
                     </div>
-                    <div class="form-text" id="startPriceText">
-                        The initial price for the product.
-                    </div>
+                    <div class="form-text text-danger d-none" id="warning-image-thumbnail"></div>
                 </div>
+                {{! Upload thumbnail }}
 
-                <div class="col-sm-6">
-                    <div class="form-outline">
+                {{! Upload detail }}
+                <div class="mb-3 image-uploads">
+                    <label class="form-label text-dark fw-bolder">Upload detail images (at least 3
+                        images)
+                        <span class="text-danger">*</span></label>
+                    <div class="image-uploads-item">
+                        <div class="image-preview mb-2" id="preview-detail"></div>
+                        <label
+                            for="detailImages"
+                            class="d-flex justify-content-center align-items-center"
+                        >
+                            <i class="fas fa-plus"></i>
+                        </label>
                         <input
-                            type="number"
-                            min="0"
-                            class="form-control"
-                            name="stepPrice"
-                            id="stepPrice"
-                            aria-describedby="stepPriceText"
+                            type="file"
+                            class="image-uploads-input"
+                            accept="image/*"
+                            name="detailImages"
+                            id="detailImages"
+                            multiple
                             required
                         />
-                        <label for="stepPrice" class="form-label">Step price</label>
                     </div>
-                    <div class="form-text" id="stepPriceText">
-                        The additional amount of money that is required for the bidder who joins later.
-                    </div>
+                    <div class="form-text d-none text-danger" id="warning-image-details"></div>
                 </div>
-            </div>
+                {{! Upload detail }}
 
-            <div class="row mb-3">
-                <div class="col-sm-6 mb-sm-0 mb-3">
-                    <div class="form-outline">
-                        <i class="fas fa-calendar-alt trailing"></i>
-                        <input
-                            type="text"
-                            id="expiredDate"
-                            class="form-control form-icon-trailing"
-                            name="expiredDate"
-                            autocomplete="off"
-                        />
-                        <label class="form-label" for="expiredDate">Expired date</label>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-outline">
-                        <i class="fas fa-clock trailing"></i>
-                        <input
-                            type="text"
-                            id="expiredTime"
-                            class="form-control form-icon-trailing"
-                            name="expiredTime"
-                            autocomplete="off"
-                        />
-                        <label class="form-label" for="expiredTime">Expired time</label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mb-3">
-                    <label class="form-label text-dark fw-bolder">Optional</label>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-sm-6 mb-sm-0 mb-3">
-                    <div class="form-check">
-                        <input
-                            class="form-check-input"
-                            type="checkbox"
-                            value="on"
-                            id="autoExtend"
-                            aria-describedby="autoExtendText"
-                            name="autoExtend"
-                        />
-                        <label class="form-check-label" for="autoExtend">
-                            Auto extend duration
-                        </label>
-                    </div>
-                    <div class="form-text mb-3" id="autoExtendText">If there is a new bidding before
-                        the end time 5 minutes, the expired time will be automatically extended for 10 minutes longer.
-                    </div>
-                </div>
-
-                <div class="col-sm-6 mb-sm-0 mb-3">
-                    <div class="form-check">
-                        <input
-                            class="form-check-input"
-                            type="checkbox"
-                            value="on"
-                            id="allowAll"
-                            aria-describedby="allowAllText"
-                            name="allowAll"
-                        />
-                        <label class="form-check-label" for="allowAll">
-                            Allow all bidders
-                        </label>
-                    </div>
-                    <div class="form-text mb-3" id="allowAllText">
-                        The system will allow all bidders whose rating point below 80 to bid for your product (by default, the system only allows bidder with rating point higher than 80).
-                    </div>
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-sm-6 mb-sm-0 mb-3">
-                    <div class="form-outline">
-                        <input
-                            type="number"
-                            min="0"
-                            class="form-control"
-                            name="buynowPrice"
-                            id="buynowPrice"
-                            aria-describedby="buyNowText"
-                        />
-                        <label for="buynowPrice" class="form-label">Buy now price</label>
-                    </div>
-                    <div class="form-text mb-3" id="buyNowText">
-                        The bidder who enters this price or higher will win the auction immediately (Buy now price must be higher than start price, you should set the buy now price at least equals to start price + step price).
-                    </div>
-                </div>
-            </div>
-
-            {{! Upload thumbnail }}
-            <div class="mb-3 image-uploads d-flex">
-                <label class="form-label text-dark fw-bolder">Upload thumbnail
+                <label class="form-label text-dark fw-bolder">Description
                     <span class="text-danger">*</span></label>
-                <div class="image-uploads-item d-flex">
-                    <div class="image-preview mb-2" id="preview-thumbnail"></div>
-                    <label
-                        for="thumbnailImg"
-                        class="d-flex justify-content-center align-items-center"
-                        id="upload-thumbnail"
+                <textarea class="form-control" id="editor" name="description"></textarea>
+
+                <div class="d-flex justify-content-center mt-3">
+                    <button
+                        type="submit"
+                        class="shadow-0 btn btn-custom btn-custom-main me-3"
+                        id="saveProductBtn"
                     >
-                        <i class="fas fa-plus"></i>
-                    </label>
-                    <input
-                        type="file"
-                        class="image-uploads-input"
-                        accept="image/*"
-                        name="thumbnailImg"
-                        id="thumbnailImg"
-                        required
-                    />
+                        Save
+                    </button>
+
+                    <a type="button" class="shadow-0 btn btn-outline-secondary" href="/seller/products">
+                        Cancel
+                    </a>
                 </div>
-                <div class="form-text text-danger d-none" id="warning-image-thumbnail"></div>
-            </div>
-            {{! Upload thumbnail }}
-
-            {{! Upload detail }}
-            <div class="mb-3 image-uploads">
-                <label class="form-label text-dark fw-bolder">Upload detail images (at least 3
-                    images)
-                    <span class="text-danger">*</span></label>
-                <div class="image-uploads-item">
-                    <div class="image-preview mb-2" id="preview-detail"></div>
-                    <label
-                        for="detailImages"
-                        class="d-flex justify-content-center align-items-center"
-                    >
-                        <i class="fas fa-plus"></i>
-                    </label>
-                    <input
-                        type="file"
-                        class="image-uploads-input"
-                        accept="image/*"
-                        name="detailImages"
-                        id="detailImages"
-                        multiple
-                        required
-                    />
-                </div>
-                <div class="form-text d-none text-danger" id="warning-image-details"></div>
-            </div>
-            {{! Upload detail }}
-
-            <label class="form-label text-dark fw-bolder">Description
-                <span class="text-danger">*</span></label>
-            <textarea class="form-control" id="editor" name="description"></textarea>
-
-            <div class="d-flex justify-content-center mt-3">
-                <button
-                    type="submit"
-                    class="shadow-0 btn btn-custom btn-custom-main me-3"
-                    id="saveProductBtn"
-                >
-                    Save
-                </button>
-
-                <a type="button" class="shadow-0 btn btn-outline-secondary" href="/seller/products">
-                    Cancel
-                </a>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
-</div>
 
-{{#section "js"}}
-    <script src="/ckeditor/ckeditor.js"></script>
-    <script>
-        ClassicEditor.create( document.querySelector( '#editor' ), { simpleUpload: { types: ["png",
-        "jpeg"], uploadUrl: `/seller/products/upload`, } } ) .then( editor => { window.editor = editor; } ) .catch(
-        error => { console.error( 'There was a problem initializing the editor.', error ); } );
-    </script>
-{{/section}}
+    {{#section "js"}}
+        <script src="/ckeditor/ckeditor.js"></script>
+        <script>
+            ClassicEditor.create( document.querySelector( '#editor' ), { simpleUpload: { types: ["png",
+            "jpeg"], uploadUrl: `/seller/products/upload`, } } ) .then( editor => { window.editor = editor; } ) .catch(
+            error => { console.error( 'There was a problem initializing the editor.', error ); } );
+        </script>
+    {{/section}}
+{{/if}}

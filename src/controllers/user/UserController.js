@@ -68,8 +68,6 @@ export default class UserController extends AppController {
 
     async renderProfilePage(req, res) {
         const { user } = req;
-        const [message] = req.flash("message");
-        const [type] = req.flash("type");
 
         try {
             const [userRes] = await UserAccountModel.getByColumn("username", user.username);
@@ -94,7 +92,6 @@ export default class UserController extends AppController {
                 data: {
                     userInfo,
                 },
-                msg: { message: "hello", type: "success" },
             });
         } catch (error) {
             console.log(error);
