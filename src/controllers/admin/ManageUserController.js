@@ -33,10 +33,27 @@ export default class ManageUserController extends AppController {
 
         this._router.get(
             "/admin/sellers",
-             AuthMiddlewares.authorizeAdmin,
+            AuthMiddlewares.authorizeAdmin,
             this.sellerPage
         );
         this._router.post("/admin/sellers", AuthMiddlewares.authorizeAdmin, this.downgradeSeller);
+
+        this._router.get(
+            "/admin/users",
+            AuthMiddlewares.authorizeAdmin,
+            this.userPage
+        );
+
+        this._router.get(
+            "/admin/users/:userId",
+            AuthMiddlewares.authorizeAdmin,
+            this.userDetailPage
+        );
+        this._router.post(
+            "/admin/users/:userId/reset-password",
+            AuthMiddlewares.authorizeAdmin,
+            this.resetPassword
+        );
 
         this._router.get("/admin", AuthMiddlewares.authorizeAdmin, this.adminDashboard);
     }
@@ -224,5 +241,94 @@ export default class ManageUserController extends AppController {
         res.render("pages/admin/index", {
             layout: "admin",
         });
+    }
+
+    async userPage(req, res) {
+        let { page, search } = req.query;
+
+        page = page ? parseInt(page) : 1;
+        if (isNaN(page) || page < 1) {
+            res.redirect("/admin/users?page=1")
+        }
+
+        try {
+            const data = search ? await UserAccountModel.searchByColumnWithPagination(page, 'username', search) : await UserAccountModel.searchByColumnWithPagination(page);
+
+            if (data === undefined || data.data.length === 0) {
+                return res.render("pages/admin/user-list", {
+                    layout: "admin",
+                    data: {
+                        list: null,
+                        hasNext: false,
+                        page
+                    },
+                });
+            }
+
+            const result = data.data.map((element) => {
+                return {
+                    user_id: element.user_id,
+                    username: element.username,
+                    email: element.email,
+                    name: element.first_name + ' ' + element.last_name
+                }
+            })
+
+            return res.render("pages/admin/user-list", {
+                layout: "admin",
+                data: {
+                    search,
+                    list: result,
+                    hasNext: data.hasNext,
+                    page
+                },
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    async userDetailPage(req, res) {
+        const userId = parseInt(req.params.userId);
+
+        if (isNaN(userId)) {
+            return res.redirect("/admin/users");
+        }
+
+        try {
+            const [user] = await UserAccountModel.getByUserId(userId);
+
+            if (user === undefined) {
+                return res.redirect("/admin/users");
+            }
+
+            const result = {
+                    userId: user.user_id,
+                    lName: user.last_name,
+                    fName: user.first_name,
+                    dob: moment(user.dob).format(CommonConst.MOMENT_BASE_USER_FORMAT),
+                    email: user.email,
+                    username: user.username,
+                    createdDate: moment(user.created_date).format(CommonConst.MOMENT_BASE_USER_FORMAT),
+                    role: user.role === 0 ? user.seller_expired_date && moment(user.seller_expired_date).isAfter(moment()) ?
+                    `Seller until ${moment(user.seller_expired_date).format(CommonConst.MOMENT_BASE_USER_FORMAT)}`
+                    : 'Bidder' : 'Admin',
+                    ratingPoint: user.rating_point
+            };
+
+            return res.render("pages/admin/user-detail", {
+                layout: "admin",
+                data: result,
+                isMe: user.username === req.user.username
+            })
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    resetPassword(req, res) {
+        const userId = parseInt(req.params.userId);
+        console.log(userId);
+        res.redirect("/admin/users")
     }
 }

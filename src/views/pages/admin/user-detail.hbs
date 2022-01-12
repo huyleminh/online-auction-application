@@ -1,0 +1,193 @@
+<section aria-label="breadcrumb" class="d-flex align-items-center justify-content-between mb-3">
+    <h3 class="mb-0">User detail</h3>
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item">
+            <a href="javascript:void(0);">
+                <i class="fas fa-tachometer-alt"></i>
+                Dashboard
+            </a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="/admin/users">
+                User list
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">User detail</li>
+    </ol>
+</section>
+
+<div class="card border shadow-0">
+    <div class="card-body d-flex flex-column align-items-center">
+        <div class="w-100">
+            <div class="mb-3">
+                <label class="form-label text-dark fw-bolder">Personal Information</label>
+            </div>
+            <div class="row mb-4">
+                <div class="col-sm-6 mb-sm-0 mb-3">
+                    <div class="form-outline">
+                        <input
+                            type="text"
+                            class="form-control form-control-lg"
+                            name="fName"
+                            id="fName"
+                            autocomplete="off"
+                            value="{{data.fName}}"
+                            required
+                            disabled
+                        />
+                        <label for="fName" class="form-label">First name</label>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-outline">
+                        <input
+                            type="text"
+                            class="form-control form-control-lg"
+                            name="lName"
+                            id="lName"
+                            autocomplete="off"
+                            value="{{data.lName}}"
+                            required
+                            disabled
+                        />
+                        <label for="lName" class="form-label">Last name</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-sm-6 mb-sm-0 mb-3">
+                    <div class="form-outline">
+                        <input
+                            type="text"
+                            class="form-control form-control-lg"
+                            name="email"
+                            id="email"
+                            autocomplete="off"
+                            value="{{data.email}}"
+                            required
+                            disabled
+                        />
+                        <label for="email" class="form-label">Email</label>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-outline">
+                        <input
+                            type="text"
+                            class="form-control form-control-lg"
+                            name="dob"
+                            id="dob"
+                            autocomplete="off"
+                            value={{data.dob}}
+                            required
+                            disabled
+                        />
+                        <label for="dob" class="form-label">Date of birth</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label text-dark fw-bolder">Account Information</label>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-sm-6 mb-sm-0 mb-3">
+                    <div class="form-outline">
+                        <input
+                            type="text"
+                            class="form-control form-control-lg"
+                            name="username"
+                            id="username"
+                            autocomplete="off"
+                            value="{{data.username}}"
+                            required
+                            disabled
+                        />
+                        <label for="username" class="form-label">Username</label>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 mb-sm-0 mb-3">
+                    <div class="form-outline">
+                        <input
+                            type="text"
+                            class="form-control form-control-lg"
+                            name="createdDate"
+                            id="createdDate"
+                            autocomplete="off"
+                            value="{{data.createdDate}}"
+                            required
+                            disabled
+                        />
+                        <label for="createdDate" class="form-label">Created at</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-sm-6 mb-sm-0 mb-3">
+                    <div class="form-outline">
+                        <input
+                            type="text"
+                            class="form-control form-control-lg"
+                            name="ratingPoint"
+                            id="ratingPoint"
+                            autocomplete="off"
+                            value="{{data.ratingPoint}}"
+                            required
+                            disabled
+                        />
+                        <label for="ratingPoint" class="form-label">Rating point</label>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 mb-sm-0 mb-3">
+                    <div class="form-outline">
+                        <input
+                            type="text"
+                            class="form-control form-control-lg"
+                            name="role"
+                            id="role"
+                            autocomplete="off"
+                            value="{{data.role}}"
+                            required
+                            disabled
+                        />
+                        <label for="role" class="form-label">Role</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-5">
+                <form action="/admin/users/{{data.userId}}/reset-password" method="post" class="d-flex" id="user-reset-pw-form">
+                    <a type="button" class="shadow-0 btn btn-custom btn-custom-main shadow-0 me-2" href="/admin/users">
+                        <i class="fas fa-chevron-left me-2"></i>
+                        Go back
+                    </a>
+                    {{#if isMe}}
+                        <button
+                            type="submit"
+                            class="shadow-0 btn btn-danger shadow-0"
+                            disabled
+                        >
+                            <i class="fas fa-sync me-2"></i>
+                            Reset password
+                        </button>
+                    {{else}}
+                        <button
+                            type="submit"
+                            class="shadow-0 btn btn-danger shadow-0"
+                        >
+                            <i class="fas fa-sync me-2"></i>
+                            Reset password
+                        </button>
+                    {{/if}}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

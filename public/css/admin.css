@@ -177,10 +177,13 @@ body {
     vertical-align: middle;
     white-space: nowrap;
     text-overflow: ellipsis;
+    transition: visibility 0.2s ease, opaticy 0.2s ease;
+    margin-left: 35px;
 }
 
 .sidebar .menu .menu-item > a > i {
     font-size: 1.2rem;
+    position: absolute;
 }
 
 .sidebar .menu .menu-item.active::before {
@@ -243,8 +246,7 @@ body {
     border-radius: 5px;
     visibility: hidden;
     opacity: 0;
-
-    transition: visibility 0.2s ease, opaticy 0.2s ease;
+    margin-left: 0px;
 }
 
 .sidebar.collapsed .menu .menu-item > a:hover::before {
