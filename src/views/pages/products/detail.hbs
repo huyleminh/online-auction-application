@@ -241,14 +241,24 @@
                                                 name="expired_date"
                                                 value="{{data.productDetail.expired_date}}"
                                             />
-                                            <button
-                                                class="btn btn-outline-danger me-3 p-3"
-                                                title="Add to wishlist"
-                                                id="add-wishlist"
-                                                type="submit"
-                                            >
-                                                <i class="fas fa-heart"></i>
-                                            </button>
+                                            {{#if (isIn data.productDetail.product_id wishlist.wishlist)}}
+                                                    <button
+                                                        class="btn btn-danger me-3 p-3 add-wishlist-already"
+                                                        title="Add to wishlist"
+                                                        type="button"
+                                                    >
+                                                        <i class="fas fa-heart"></i>
+                                                    </button>
+                                                {{else}}
+                                                    <button
+                                                        class="btn btn-outline-danger me-3 p-3"
+                                                        title="Add to wishlist"
+                                                        id="add-wishlist"
+                                                        type="submit"
+                                                    >
+                                                        <i class="fas fa-heart"></i>
+                                                    </button>
+                                            {{/if}}
                                         </form>
                                     {{/if}}
 
@@ -455,7 +465,7 @@
             <div class="card-body">
                 <div class="product-related-carousel owl-carousel owl-theme">
                     {{#each data.related}}
-                        <div class="card border product-card">
+                        <div class="card border product-card w-100">
                             <div class="p-3 position-relative">
                                 {{#if this.isSold}}
                                     <div class="ribbon bg-danger">SOLD</div>
@@ -570,4 +580,5 @@
     <script src="/owlcarousel/owl.carousel.min.js"></script>
     <script src="/js/menu.js"></script>
     <script src="/js/countdown.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {{/section}}

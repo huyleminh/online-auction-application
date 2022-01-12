@@ -337,12 +337,10 @@ export default class SellerController extends AppController {
         page = page ? parseInt(page) : 1;
 
         if (isNaN(page) || page < 1) {
-            console.log(page);
             return res.redirect("/seller/products/results?page=1");
         }
 
         try {
-            console.log(req.user)
             const user = await UserAccountModel.getByColumn("username", req.user.username);
             if (user === undefined) {
                 req.logout();
@@ -350,7 +348,7 @@ export default class SellerController extends AppController {
                     res.redirect("/login");
                 });
             }
-            
+
             const rawData = await ProductModel.getExpiredAndSoldProductsBySellerId(user[0].user_id, page)
             const dataMapped = rawData.data[0].map(item => {
                 return {
@@ -364,7 +362,7 @@ export default class SellerController extends AppController {
                     user_id: item.won_bidder_id
                 }
             })
-            
+
             return res.render("pages/user/seller/result", {
                 layout: "profile",
                 data: {

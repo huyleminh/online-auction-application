@@ -19,10 +19,61 @@
 
 <div class="card border shadow-0">
     <div class="card-header">
-        <h3 class="mb-0">Feebacks</h3>
+        <h3 class="mb-0">Feedback</h3>
     </div>
 
     <div class="card-body">
+        <div class="mb-3">
+            <label class="form-label text-dark fw-bolder">Overall Information</label>
+        </div>
+            <div class="mb-3">
+                <div class="container">
+                    <div class="row">
+                        <div class="border-start border-4 col-md-4 pt-1 pb-1" style="border-color: #6963ff!important">
+                            <div class="row">
+                                <div class="col-2 d-flex align-items-center justify-content-center">
+                                    <i class="far fa-smile fs-5 text-warning"></i>
+                                </div>
+                                <div class="col-7">
+                                    Your rating point
+                                </div>
+                                <div class="col-3">
+                                    <span><b>{{data.ratingPoint}}</b></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="border-start border-4 col-md-4 pt-1 pb-1" style="border-color: #6963ff!important">
+                            <div class="row">
+                                <div class="col-2 d-flex align-items-center justify-content-center">
+                                    <i class="far fa-thumbs-up fs-5 text-primary"></i>
+                                </div>
+                                <div class="col-7">
+                                    Positive rating
+                                </div>
+                                <div class="col-3">
+                                    <span><b>{{data.positiveNum}}</b></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="border-start border-4 col-md-4 pt-1 pb-1" style="border-color: #6963ff!important">
+                            <div class="row">
+                                <div class="col-2 d-flex align-items-center justify-content-center">
+                                    <i class="far fa-thumbs-down fs-5 text-danger"></i>
+                                </div>
+                                <div class="col-7">
+                                    Negative rating
+                                </div>
+                                <div class="col-3">
+                                    <span><b>{{data.negativeNum}}</b></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div class="mb-3">
+            <label class="form-label text-dark fw-bolder">Details</label>
+        </div>
         <form action="/user/wishlist/delete" method="post" id="deleteWishlistItem">
             <input type="hidden" name="itemId" id="itemId">
         <div class="table-responsive">
@@ -33,8 +84,7 @@
                         <th scope="col">Evaluator name</th>
                         <th scope="col">Status</th>
                         <th scope="col">Comment</th>
-                        <th scope="col">Feeback date</th>
-                        {{!-- <th scope="col">Action</th> --}}
+                        <th scope="col">Feedback date</th>
                     </tr>
                 </thead>
                 <tbody>

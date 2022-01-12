@@ -56,8 +56,16 @@
                             <td>{{this.seller_rating_point}}</td>
                             <td>
                                 <div class="action">
+                                    <a
+                                            href="/menu/products/{{this.product_id}}"
+                                            class="btn btn-custom btn-custom-main btn-sm shadow-0"
+                                            title="View details"
+                                            data-mdb-toggle="tooltip"
+                                        >
+                                            <i class="fas fa-eye"></i>
+                                    </a>
                                     <button
-                                        class="btn btn-custom btn-custom-main btn-sm shadow-0 feedback-btn"
+                                        class="btn btn-success btn-sm shadow-0 feedback-btn"
                                         title="Feedback"
                                         data-mdb-toggle="tooltip"
                                         data-rated-id={{this.seller_id}}

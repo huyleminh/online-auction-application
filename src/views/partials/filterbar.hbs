@@ -41,20 +41,19 @@
 </div>
 
 <div class="card border shadow-0 mb-3">
+    <div
+        class="card-header border-0 d-flex justify-content-between"
+        type="button"
+        data-mdb-toggle="collapse"
+        data-mdb-target="#collapseFilter"
+        aria-expanded="true"
+        aria-controls="collapseFilter"
+    >
+        <h6 class="m-0">Pick a filter</h6>
+        <i class="fas fa-chevron-down ms-auto"></i>
+    </div>
     <form action="" method="get" id="filterProdForm">
         <input type="hidden" name="page" id="filterPage" value="{{page}}" />
-        <div
-            class="card-header border-0 d-flex justify-content-between"
-            type="button"
-            data-mdb-toggle="collapse"
-            data-mdb-target="#collapseFilter"
-            aria-expanded="true"
-            aria-controls="collapseFilter"
-        >
-            <h6 class="m-0">Pick a filter</h6>
-            <i class="fas fa-chevron-down ms-auto"></i>
-        </div>
-
         <div class="card-body collapse show py-0" id="collapseFilter">
             <div class="py-3">
                 <h6>Price</h6>

@@ -224,22 +224,30 @@ $(document).ready(function () {
     }
 
     // Validate images before submit
-    // $("#saveProductBtn").submit(function (event) {
-    //     if (!$("#warning-image-thumbnail").hasClass("d-none") || !$("#warning-image-details").hasClass("d-none")) {
-    //         alert("Please check your information again.")
-    //         event.preventDefault();
-    //     }
-
-    //     // if ($("#warning-image-details").hasClass("d-none")) {
-    //     //     $("#warning-image-details").text("Please choose at least 3 images.");
-    //     //     $("#warning-image-details").removeClass("d-none");
-    //     // }
-    // })
+    $("#create-product-form").on('submit', function (event) {
+        if ($('#buynowPrice').val() === "") {
+            return true;
+        } else {
+            if ($('#buynowPrice').val() <= $('#startPrice').val()) {
+                Swal.fire({
+                    title: 'Warning',
+                    text: 'Buy now price must be higher than start price',
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#6963ff'
+                })
+                return false;
+            } else {
+                return true;
+            }
+        }
+    })
 
     // Init product expired date datepicker
     if (document.querySelector("#expiredDate")) {
         const expiredDateDialog = new mdDateTimePicker.default({
             type: "date",
+            past: moment(),
             future: moment().add(10, "year"),
         });
 
@@ -274,11 +282,25 @@ $(document).ready(function () {
 
         document.querySelector("#expiredTime").addEventListener("onOk", function () {
             // Detail format option here: https://momentjs.com/docs/#/displaying/format/
-            this.value = expiredTimeDialog.time.format("HH:mm:ss");
-            this.focus();
+            if (moment(expiredTimeDialog.time).diff(moment()) > 0) {
+                this.value = expiredTimeDialog.time.format("HH:mm:ss");
+                this.focus();
 
-            // Hide backdrop
-            $(".custom-modal-backdrop").removeClass("show");
+                // Hide backdrop
+                $(".custom-modal-backdrop").removeClass("show");
+            } else {
+                Swal.fire({
+                    title: 'Warning',
+                    text: 'Expired time cannot be now or before now!',
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                })
+
+                this.value = "";
+
+                // Hide backdrop
+                $(".custom-modal-backdrop").removeClass("show");
+            }
         });
 
         document.querySelector("#expiredTime").addEventListener("onCancel", function () {

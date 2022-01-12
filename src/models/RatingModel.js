@@ -40,4 +40,17 @@ export default class RatingModel {
             }
         });
     }
+
+    static countPositiveByUserId(id) {
+        return new Promise(async function (resolve, reject) {
+            try {
+                const res = await KnexConnection("rating")
+                    .where({ rated_user_id: id, is_positive: 1 })
+                    .count("rated_user_id", { as: "count" });
+                resolve(res);
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
 }

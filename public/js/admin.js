@@ -99,6 +99,25 @@ $(document).ready(function () {
         $("#cancelUpdateCatBtn").prop("disabled", true);
     });
 
+    $('.admin-delete-product-form').on('submit', function (e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Warning',
+            titleText: 'Delete a product',
+            html: '<p>All the related information will also be be deleted.</p>' +
+            '<p>Do you want to continue?</p>',
+            icon: 'warning',
+            confirmButtonText: 'OK',
+            denyButtonText: 'Cancel',
+            showDenyButton: true,
+            confirmButtonColor: '#6963ff'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                this.submit();
+            }
+        })
+    })
+
     document.querySelectorAll(`[data-mdb-toggle="tooltip"]`).forEach((t) => {
         new mdb.Tooltip(t, {
             container: "body",
