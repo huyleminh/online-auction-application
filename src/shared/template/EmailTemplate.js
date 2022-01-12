@@ -230,4 +230,38 @@ export default class EmailTemplate {
             </p>
         `);
     }
+
+    static resetPasswordUser(password) {
+        return this.generateTemplate(`
+            <p style="font-size: 16px">
+                <b>H2A Bid</b> administrators have
+                <b style="color: green">reset</b> your password.
+            </p>
+
+            <p style="font-size: 16px;">
+                This is your new password
+            </p>
+
+            <div style="padding: 40px; margin: auto; text-align: center">
+                <div
+                    style="
+                        width: fit-content;
+                        border: 1px solid #6963ff;
+                        color: #6963ff;
+                        font-weight: bold;
+                        text-align: center;
+                        padding: 10px 15px;
+                        border-radius: 3px;
+                        margin: auto;
+                        font-size: large;
+                    "
+                >
+                    ${password}
+                </div>
+                <div style="color: red; font-weight: bolder; margin-top: 10px">
+                    <i>* You must change your password as soon as login to our system.</i>
+                </div>
+            </div>
+        `);
+    }
 }

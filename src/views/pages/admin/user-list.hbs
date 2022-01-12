@@ -11,6 +11,18 @@
     </ol>
 </section>
 
+{{#if msg.message}}
+    <div class="d-none" data-message="{{msg.message}}" data-type="{{msg.type}}" id="msg"></div>
+    <script type="text/javascript">
+        Swal.fire({
+            title: $("#msg").data("message"),
+            icon: $("#msg").data("type"),
+        }).then(() => {
+            $("#msg").remove();
+        });
+    </script>
+{{/if}}
+
 <div class="card shadow-custom d-flex flex-column">
     <div class="card-body">
         <div class="mb-3">
