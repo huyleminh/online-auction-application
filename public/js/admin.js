@@ -118,6 +118,25 @@ $(document).ready(function () {
         })
     })
 
+    $("#user-reset-pw-form").on('submit', function (e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Warning',
+            titleText: 'Reset password',
+            html: '<p>The password of this account will be reset to default.</p>' +
+            '<p>Do you want to continue?</p>',
+            icon: 'warning',
+            confirmButtonText: 'OK',
+            denyButtonText: 'Cancel',
+            showDenyButton: true,
+            confirmButtonColor: '#6963ff'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                this.submit();
+            }
+        })
+    })
+
     document.querySelectorAll(`[data-mdb-toggle="tooltip"]`).forEach((t) => {
         new mdb.Tooltip(t, {
             container: "body",
