@@ -366,7 +366,7 @@ export default class UserController extends AppController {
                 is_positive: body.isPositive === "true" ? true : false,
                 feedback: body.feedback,
             };
-            
+
             await RatingModel.insertFeedback(feedback);
 
             res.redirect(req.headers.referer);
@@ -389,6 +389,7 @@ export default class UserController extends AppController {
             }
 
             const [totalRows] = await RatingModel.countRowsByRatedUserId(user.user_id);
+            const [positiveRows] = await RatingModel.countPositiveByUserId(user.user_id);
             page = page ? parseInt(page) : 1;
 
             const totalPages =
@@ -410,6 +411,9 @@ export default class UserController extends AppController {
             res.render("pages/user/feedback", {
                 layout: "profile",
                 data: {
+                    positiveNum: positiveRows.count,
+                    negativeNum: totalRows.count - positiveRows.count,
+                    ratingPoint: user.rating_point,
                     list: ratingHistory,
                     page,
                     hasNext: page !== totalPages,

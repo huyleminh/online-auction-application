@@ -36,6 +36,11 @@
                             >
                                 <div class="col-9">
                                     <div class="input-group">
+                                        <select class="form-control" name="type">
+                                            <option value="all">All</option>
+                                            <option value="prod">By product</option>
+                                            <option value="cat">By categories</option>
+                                        </select>
                                         <input
                                             type="text"
                                             id="search"
@@ -43,15 +48,10 @@
                                             name="search"
                                             placeholder="Type to search..."
                                         />
-                                        <select class="form-control" name="type">
-                                            <option value="all">All</option>
-                                            <option value="prod">By product</option>
-                                            <option value="cat">By categories</option>
-                                        </select>
                                     </div>
                                 </div>
 
-                                <div class="col-3">
+                                <div class="col-2 d-flex align-items-center justify-content-center">
                                     <button
                                         type="submit"
                                         class="btn btn-primary px-2"
