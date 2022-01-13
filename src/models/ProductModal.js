@@ -336,6 +336,7 @@ export default class ProductModel {
             try {
                 const resultSet = await KnexConnection.raw(`
                     select
+                        product.product_id,
                         product.product_name,
                         product.current_price,
                         product.thumbnail,

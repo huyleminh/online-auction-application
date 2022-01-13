@@ -24,7 +24,15 @@
 
     <div class="card-body">
         {{#if msg.message}}
-            <div class="alert alert-{{msg.type}}">{{msg.message}}</div>
+            <div class="d-none" data-message="{{msg.message}}" data-type="{{msg.type}}" id="msg"></div>
+            <script type="text/javascript">
+                Swal.fire({
+                    title: $("#msg").data("message"),
+                    icon: $("#msg").data("type"),
+                }).then(() => {
+                    $("#msg").remove();
+                });
+            </script>
         {{/if}}
 
         <form action="/user/wishlist/delete" method="post" id="deleteWishlistItem">
@@ -55,7 +63,7 @@
                                 </div>
                             </td>
                             <td>{{this.product_name}}</td>
-                            <td>
+                            {{!-- <td>
                                 {{#if (isEqual this.is_sold 1)}}
                                     <div class="">
                                         <span class="tag bg-danger">Sold</span>
@@ -65,6 +73,23 @@
                                     <div class="">
                                         <span class="tag bg-success">Selling</span>
                                     </div>
+                                {{/if}}
+                            </td> --}}
+                            <td>
+                                {{#if (isEqual this.is_sold 1)}}
+                                    <div>
+                                        <span class="tag tag-danger">Sold</span>
+                                    </div>
+                                {{else}}
+                                    {{#if (isEqual this.is_sold 2)}}
+                                        <div>
+                                            <span class="tag bg-primary">No Winner</span>
+                                        </div>
+                                    {{else}}
+                                        <div>
+                                            <span class="tag tag-success">Selling</span>
+                                        </div>
+                                    {{/if}}
                                 {{/if}}
                             </td>
                             <td>{{formatMoney this.current_price}} VND</td>
@@ -81,15 +106,17 @@
                                     >
                                         <i class="fas fa-comments"></i>
                                     </button>
-                                    <form action="/user/feedback" method="post" class="mb-0">
-                                        <input type="hidden" name="isPositive" value="false" required>
-                                        <input type="hidden" name="feedback" value="User did not pay" required>
+                                    <form action="" method="post" class="mb-0 cancel-transaction-from">
+                                        <input type="hidden" name="productId" value="{{this.product_id}}" required>
                                         <input type="hidden" name="ratedId" value="{{this.user_id}}" required>
                                         <button
                                             type="submit"
                                             class="btn btn-danger btn-sm shadow-0 cancel-transaction-btn"
                                             title="Cancel"
                                             data-mdb-toggle="tooltip"
+                                            {{#if (isEqual this.is_sold 2)}}
+                                                disabled
+                                            {{/if}}
                                         >
                                             <i class="fas fa-times-circle"></i>
                                         </button>

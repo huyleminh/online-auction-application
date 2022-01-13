@@ -264,4 +264,12 @@ export default class EmailTemplate {
             </div>
         `);
     }
+
+    static cancelAuctionResultBidder(productName) {
+        return this.generateTemplate(`
+            <p style="font-size: 16px;">
+                Your bid result on <b>${productName}</b> has been cancel by the seller
+            </p>
+        `);
+    }
 }
