@@ -224,24 +224,24 @@ $(document).ready(function () {
     }
 
     // Validate images before submit
-    $("#create-product-form").on('submit', function (event) {
-        if ($('#buynowPrice').val() === "") {
+    $("#create-product-form").on("submit", function (event) {
+        if ($("#buynowPrice").val() === "") {
             return true;
         } else {
-            if ($('#buynowPrice').val() <= $('#startPrice').val()) {
+            if ($("#buynowPrice").val() <= $("#startPrice").val()) {
                 Swal.fire({
-                    title: 'Warning',
-                    text: 'Buy now price must be higher than start price',
-                    icon: 'warning',
-                    confirmButtonText: 'OK',
-                    confirmButtonColor: '#6963ff'
-                })
+                    title: "Warning",
+                    text: "Buy now price must be higher than start price",
+                    icon: "warning",
+                    confirmButtonText: "OK",
+                    confirmButtonColor: "#6963ff",
+                });
                 return false;
             } else {
                 return true;
             }
         }
-    })
+    });
 
     // Init product expired date datepicker
     if (document.querySelector("#expiredDate")) {
@@ -290,11 +290,11 @@ $(document).ready(function () {
                 $(".custom-modal-backdrop").removeClass("show");
             } else {
                 Swal.fire({
-                    title: 'Warning',
-                    text: 'Expired time cannot be now or before now!',
-                    icon: 'warning',
-                    confirmButtonText: 'OK'
-                })
+                    title: "Warning",
+                    text: "Expired time cannot be now or before now!",
+                    icon: "warning",
+                    confirmButtonText: "OK",
+                });
 
                 this.value = "";
 
@@ -344,10 +344,13 @@ $(document).ready(function () {
                     return;
                 }
                 const wardcode = disOption.data("code");
-                $.getJSON(`https://provinces.open-api.vn/api/d/${wardcode}?depth=2`, function (res) {
-                    const wards = res.wards;
-                    insertOptionsToTarget($("#wardList"), wards);
-                }).fail(function (error) {
+                $.getJSON(
+                    `https://provinces.open-api.vn/api/d/${wardcode}?depth=2`,
+                    function (res) {
+                        const wards = res.wards;
+                        insertOptionsToTarget($("#wardList"), wards);
+                    }
+                ).fail(function (error) {
                     console.log(error);
                     $("#provinceList").html("<option disabled value='Empty'>");
                 });
@@ -415,6 +418,27 @@ $(document).ready(function () {
             toggleDatepickerDialog(dobDialog);
         });
     }
+
+    $(".cancel-transaction-from").on("submit", function (e) {
+        e.preventDefault();
+
+        Swal.fire({
+            title: "Cancel auction result?",
+            text:
+                "Once you cancel this result, if product is not out of date, expired date will be set time equal now",
+            icon: "warning",
+            confirmButtonText: "OK",
+            denyButtonText: "Cancel",
+            showDenyButton: true,
+            confirmButtonColor: "#6963ff",
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                this.submit();
+            }
+        });
+    });
 });
 
 function closeProfileModal() {
