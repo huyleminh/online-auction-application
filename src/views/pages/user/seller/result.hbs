@@ -63,23 +63,6 @@
                                 </div>
                             </td>
                             <td>{{this.product_name}}</td>
-                            {{!-- <td>
-                                {{#if (isEqual this.is_sold 1)}}
-                                    <div>
-                                        <span class="tag tag-danger">Sold</span>
-                                    </div>
-                                {{else}}
-                                    {{#if (isEqual this.is_sold 2)}}
-                                        <div>
-                                            <span class="tag bg-primary">No Winner</span>
-                                        </div>
-                                    {{else}}
-                                        <div>
-                                            <span class="tag tag-success">Selling</span>
-                                        </div>
-                                    {{/if}}
-                                {{/if}}
-                            </td> --}}
                             <td>
                                 {{#if (isEqual this.is_sold 1)}}
                                     <div>
@@ -99,8 +82,20 @@
                             </td>
                             <td>{{formatMoney this.current_price}} VND</td>
                             <td>{{formatDate this.expired_date}}</td>
-                            <td>{{this.bidder_name}}</td>
-                            <td>{{this.bidder_point}}</td>
+                            <td>
+                                {{#if (isEqual this.is_sold 2)}}
+                                    N/A
+                                {{else}}
+                                    {{this.bidder_name}}
+                                {{/if}}
+                            </td>
+                            <td>
+                                {{#if (isEqual this.is_sold 2)}}
+                                    N/A
+                                {{else}}
+                                    {{this.bidder_point}}
+                                {{/if}}
+                            </td>
                             <td>
                                 <div class="action d-flex">
                                     <button
@@ -108,6 +103,9 @@
                                         title="Feedback"
                                         data-mdb-toggle="tooltip"
                                         data-rated-id={{this.user_id}}
+                                        {{#if (isEqual this.is_sold 2)}}
+                                            disabled
+                                        {{/if}}
                                     >
                                         <i class="fas fa-comments"></i>
                                     </button>
