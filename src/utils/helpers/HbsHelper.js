@@ -55,6 +55,10 @@ export default class HbsHelper {
         return false;
     }
 
+    static checkBan(ban, isSold, expiredDate) {
+        return ban || isSold || (isSold === 0 && moment(expiredDate).isBefore(moment()));
+    }
+
     static getAll() {
         return {
             isEqual: this.isEqual,
@@ -68,7 +72,8 @@ export default class HbsHelper {
             subtract: this.subtract,
             and: this.and,
             or: this.or,
-            isIn: this.isIn
+            isIn: this.isIn,
+            checkBan: this.checkBan
         };
     }
 }

@@ -241,6 +241,8 @@ export default class ManageUserController extends AppController {
         const [message] = req.flash("message");
         const [type] = req.flash("type");
 
+        search = search ? search.trim() : "";
+
         page = page ? parseInt(page) : 1;
         if (isNaN(page) || page < 1) {
             res.redirect("/admin/users?page=1");

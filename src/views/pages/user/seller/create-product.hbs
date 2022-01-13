@@ -48,7 +48,7 @@
                         <label class="form-label text-dark fw-bolder">Required Information
                             <span class="text-danger">*</span></label>
                 </div>
-                <div class="row mb-3">
+                <div class="row mb-4">
                     <div class="col-sm-6 mb-sm-0 mb-3">
                         <div class="form-outline">
                             <input
@@ -57,10 +57,12 @@
                                 name="prodName"
                                 id="prodName"
                                 autocomplete="off"
-                                required
+                                data-mdb-showcounter="true"
                                 maxlength="60"
+                                required
                             />
                             <label for="prodName" class="form-label">Product name</label>
+                            <div class="form-helper"></div>
                         </div>
                     </div>
 
@@ -87,7 +89,7 @@
                     </div>
                 </div>
 
-                <div class="row mb-3">
+                <div class="row mb-4">
                     <div class="col-sm-6 mb-sm-0 mb-3">
                         <div class="form-outline">
                             <input
@@ -97,6 +99,7 @@
                                 name="startPrice"
                                 id="startPrice"
                                 aria-describedby="startPriceText"
+                                max="2147483647"
                                 required
                             />
                             <label for="startPrice" class="form-label">Start price</label>
@@ -115,6 +118,7 @@
                                 name="stepPrice"
                                 id="stepPrice"
                                 aria-describedby="stepPriceText"
+                                max="2147483647"
                                 required
                             />
                             <label for="stepPrice" class="form-label">Step price</label>
@@ -125,7 +129,7 @@
                     </div>
                 </div>
 
-                <div class="row mb-3">
+                <div class="row mb-4">
                     <div class="col-sm-6 mb-sm-0 mb-3">
                         <div class="form-outline">
                             <i class="fas fa-calendar-alt trailing"></i>
@@ -158,7 +162,7 @@
                         <label class="form-label text-dark fw-bolder">Optional</label>
                 </div>
 
-                <div class="row mb-3">
+                <div class="row mb-4">
                     <div class="col-sm-6 mb-sm-0 mb-3">
                         <div class="form-check">
                             <input
@@ -198,7 +202,7 @@
                     </div>
                 </div>
 
-                <div class="row mb-3">
+                <div class="row mb-4">
                     <div class="col-sm-6 mb-sm-0 mb-3">
                         <div class="form-outline">
                             <input
@@ -208,6 +212,7 @@
                                 name="buynowPrice"
                                 id="buynowPrice"
                                 aria-describedby="buyNowText"
+                                max="2147483647"
                             />
                             <label for="buynowPrice" class="form-label">Buy now price</label>
                         </div>
