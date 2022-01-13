@@ -49,4 +49,3 @@ npm-debug.log
 package-lock.json
 *.http
 .firebase
-uploads
