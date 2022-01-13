@@ -53,6 +53,7 @@ export default class ProductController extends AppController {
             if (search !== undefined) {
                 // Search with keyword
                 if (type === "all") {
+                    console.log({limit: DEFAULT_PAGE_SIZE, offset: DEFAULT_PAGE_SIZE * (page - 1),})
                     productList = await ProductModel.getAllWithKeyWord(
                         search,
                         DEFAULT_PAGE_SIZE,
@@ -162,6 +163,7 @@ export default class ProductController extends AppController {
                 ProductModel.getById(productId),
                 ProductDetailModel.getlById(productId),
             ]);
+            console.log({ product, detail })
 
             if (!product || !detail) {
                 return res.render("pages/products/detail", {
