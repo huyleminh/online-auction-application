@@ -118,6 +118,21 @@ $(document).ready(function () {
         })
     })
 
+    $("#username-search-form").on('submit', function (e) {
+        e.preventDefault();
+        if (!$("#search").val().trim()) {
+            Swal.fire({
+                title: 'Warning',
+                text: 'Search value cannot be empty.',
+                icon: 'warning',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#6963ff'
+            })
+        } else {
+            this.submit();
+        }
+    })
+
     $("#user-reset-pw-form").on('submit', function (e) {
         e.preventDefault();
         Swal.fire({

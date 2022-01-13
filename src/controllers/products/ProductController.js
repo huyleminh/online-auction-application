@@ -163,7 +163,6 @@ export default class ProductController extends AppController {
                 ProductModel.getById(productId),
                 ProductDetailModel.getlById(productId),
             ]);
-            console.log({ product, detail })
 
             if (!product || !detail) {
                 return res.render("pages/products/detail", {

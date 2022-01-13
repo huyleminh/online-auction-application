@@ -7,14 +7,13 @@ import CategoryModel from "../../models/CategoryModel.js";
 import JoinBidderModel from "../../models/JoinBidderModel.js";
 import ProductDetailModel from "../../models/ProductDetailModel.js";
 import ProductModel from "../../models/ProductModal.js";
-import RatingModel from "../../models/RatingModel.js";
 import UserAccountModel from "../../models/UserAccountModel.js";
-import EmailService from "../../services/EmailService.js";
 import FirebaseService from "../../services/FirsebaseService.js";
 import CommonConst from "../../shared/CommonConst.js";
-import EmailTemplate from "../../shared/template/EmailTemplate.js";
 import { ScheduleJobEventInstance } from "../../utils/ScheduleJobEvent.js";
 import AppController from "../AppController.js";
+import EmailService from "../../services/EmailService.js";
+import EmailTemplate from "../../shared/template/EmailTemplate.js";
 
 export default class SellerController extends AppController {
     constructor() {
@@ -46,12 +45,6 @@ export default class SellerController extends AppController {
             "/seller/products/results",
             AuthMiddlewares.authorizeUser,
             this.renderAuctionResult
-        );
-
-        this._router.post(
-            "/seller/products/results",
-            AuthMiddlewares.authorizeUser,
-            this.cancelAuctionResult
         );
 
         this._router.get(
@@ -227,10 +220,7 @@ export default class SellerController extends AppController {
                 });
             }
 
-            const data = await ProductModel.getSellingProductsByUserId(
-                user[0].user_id,
-                page
-            );
+            let data = await ProductModel.getSellingProductsByUserId(user[0].user_id, page);
 
             if (data === undefined || data.data.length === 0) {
                 return res.render("pages/user/seller/manage-selling", {
@@ -242,7 +232,7 @@ export default class SellerController extends AppController {
                     },
                 });
             }
-            
+
             const result = data.data.map((element) => {
                 element.is_sold = element.is_sold === 0 ? moment(element.expired_date).isAfter(moment()) ? 0 : 2 : element.is_sold;
                 return element;
@@ -257,7 +247,14 @@ export default class SellerController extends AppController {
             });
         } catch (err) {
             console.log(err);
-            throw new Error(error);
+            return res.render("pages/user/seller/manage-selling", {
+                layout: "profile",
+                data: {
+                    list: [],
+                    hasNext: false,
+                    page: 1,
+                },
+            });
         }
     }
 
@@ -384,7 +381,6 @@ export default class SellerController extends AppController {
             );
             const dataMapped = rawData.data[0].map((item) => {
                 return {
-                    product_id: item.product_id,
                     product_name: item.product_name,
                     thumbnail: item.thumbnail,
                     is_sold: item.is_sold === 0 ? moment(item.expired_date).isAfter(moment()) ? 0 : 2 : item.is_sold,
@@ -499,6 +495,7 @@ export default class SellerController extends AppController {
                     hasNext: joinList.hasNext,
                     productId,
                     is_sold: product.is_sold,
+                    expired_date: product.expired_date
                 },
             });
         } catch (error) {
@@ -622,70 +619,5 @@ export default class SellerController extends AppController {
             throw new Error(error);
         }
         res.redirect(req.headers.referer);
-    }
-
-    async cancelAuctionResult(req, res) {
-        const { body } = req;
-
-        try {
-            const [seller] = await UserAccountModel.getByColumn("username", req.user.username);
-            if (!seller) {
-                req.logout();
-                delete req.session.wishlist;
-                return req.session.save(() => {
-                    res.redirect("/login");
-                });
-            }
-
-            const [bidder] = await UserAccountModel.getByUserId(body.ratedId);
-            if (!bidder) {
-                req.flash("message", "Bidder not found");
-                req.flash("type", "error");
-                return res.redirect(req.headers.referer);
-            }
-
-            if (parseInt(body.ratedId) === seller.user_id) {
-                req.flash("message", "You cannot feedback on yourself");
-                req.flash("type", "warning");
-                return res.redirect(req.headers.referer);
-            }
-
-            const [product] = await ProductModel.getById(parseInt(body.productId));
-            if (!product) {
-                req.flash("message", "Product not found");
-                req.flash("type", "error");
-                return res.redirect(req.headers.referer);
-            }
-
-            const feedback = {
-                rated_user_id: body.ratedId,
-                evaluator_id: seller.user_id,
-                is_positive: false,
-                feedback: "User did not pay",
-            };
-
-            await RatingModel.insertFeedback(feedback);
-
-            const productEntity = { is_sold: 0 };
-            if (moment(product.expired_date).isAfter(moment())) {
-                productEntity.expired_date = moment().format(CommonConst.MOMENT_BASE_DB_FORMAT);
-            }
-
-            await ProductModel.update(product.product_id, productEntity);
-
-            // Send email to user
-            EmailService.sendEmailWithHTMLContent(
-                bidder.email,
-                "Bidding result - Your result has been cancel by the seller",
-                EmailTemplate.cancelAuctionResultBidder(product.product_name)
-            );
-
-            req.flash("message", "Cancel result successfully");
-            req.flash("type", "success");
-            res.redirect(req.headers.referer);
-        } catch (error) {
-            console.log(error);
-            throw new Error(error);
-        }
     }
 }

@@ -100,7 +100,7 @@ function loadTop5Due() {
                                     class="card-info mb-3 d-flex align-items-center timer"
                                 >
                                     <span class="${expType} fw-bolder">Expired ${item.expiredDate}</span>
-                                    <span class="flex-grow-1 text-end">${item.totalBids} Bids</span>
+                                    <span class="flex-grow-1 text-end">${item.totalBids} Bid(s)</span>
                                 </div>
                                 <a href="/menu/products/${item.productId}" type="button" class="btn btn-primary btn-block bidnow">
                                     <i class="fas fa-gavel me-2"></i>
@@ -186,7 +186,7 @@ function loadTop5Highest() {
                                     class="card-info mb-3 d-flex align-items-center timer"
                                 >
                                     <span class="${expType} fw-bolder">Expired ${item.expiredDate}</span>
-                                    <span class="flex-grow-1 text-end">${item.totalBids} Bids</span>
+                                    <span class="flex-grow-1 text-end">${item.totalBids} Bid(s)</span>
                                 </div>
                                 <a href="/menu/products/${item.productId}" type="button" class="btn btn-primary btn-block bidnow">
                                     <i class="fas fa-gavel me-2"></i>
@@ -272,7 +272,7 @@ function loadTop5Bid() {
                                     class="card-info mb-3 d-flex align-items-center timer"
                                 >
                                     <span class="${expType} fw-bolder">Expired ${item.expiredDate}</span>
-                                    <span class="flex-grow-1 text-end">${item.totalBids} Bids</span>
+                                    <span class="flex-grow-1 text-end">${item.totalBids} Bid(s)</span>
                                 </div>
                                 <a href="/menu/products/${item.productId}" type="button" class="btn btn-primary btn-block bidnow">
                                     <i class="fas fa-gavel me-2"></i>

@@ -224,24 +224,48 @@ $(document).ready(function () {
     }
 
     // Validate images before submit
-    $("#create-product-form").on("submit", function (event) {
-        if ($("#buynowPrice").val() === "") {
+    $("#create-product-form").on('submit', function (event) {
+        let description = $("#editor").val();
+        let productName = $("#prodName").val();
+        if (!productName.trim()) {
+            Swal.fire({
+                title: 'Warning',
+                text: 'Product name cannot be empty.',
+                icon: 'warning',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#6963ff'
+            })
+            return false;
+        }
+        if (!description.trim()) {
+            Swal.fire({
+                title: 'Warning',
+                text: 'Description cannot be empty.',
+                icon: 'warning',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#6963ff'
+            })
+            return false;
+        }
+        let buyNow = parseInt($('#buynowPrice').val());
+        let startPrice = parseInt($('#startPrice').val());
+        if (isNaN(buyNow)) {
             return true;
         } else {
-            if ($("#buynowPrice").val() <= $("#startPrice").val()) {
+            if (buyNow <= startPrice) {
                 Swal.fire({
-                    title: "Warning",
-                    text: "Buy now price must be higher than start price",
-                    icon: "warning",
-                    confirmButtonText: "OK",
-                    confirmButtonColor: "#6963ff",
-                });
+                    title: 'Warning',
+                    text: 'Buy now price must be higher than start price',
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#6963ff'
+                })
                 return false;
             } else {
                 return true;
             }
         }
-    });
+    })
 
     // Init product expired date datepicker
     if (document.querySelector("#expiredDate")) {
@@ -282,25 +306,27 @@ $(document).ready(function () {
 
         document.querySelector("#expiredTime").addEventListener("onOk", function () {
             // Detail format option here: https://momentjs.com/docs/#/displaying/format/
-            if (moment(expiredTimeDialog.time).diff(moment()) > 0) {
+            if (parseInt(moment($("#expiredDate").val(), "DD-MM-YYYY").get('date')) === parseInt(moment().get('date'))) {
+                if (moment(expiredTimeDialog.time).diff(moment()) > 0) {
+                    this.value = expiredTimeDialog.time.format("HH:mm:ss");
+                    this.focus();
+                } else {
+                    Swal.fire({
+                        title: 'Warning',
+                        text: 'Expired time cannot be now or before now!',
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    })
+
+                    this.value = "";
+                }
+            } else {
                 this.value = expiredTimeDialog.time.format("HH:mm:ss");
                 this.focus();
-
-                // Hide backdrop
-                $(".custom-modal-backdrop").removeClass("show");
-            } else {
-                Swal.fire({
-                    title: "Warning",
-                    text: "Expired time cannot be now or before now!",
-                    icon: "warning",
-                    confirmButtonText: "OK",
-                });
-
-                this.value = "";
-
-                // Hide backdrop
-                $(".custom-modal-backdrop").removeClass("show");
             }
+
+            // Hide backdrop
+            $(".custom-modal-backdrop").removeClass("show");
         });
 
         document.querySelector("#expiredTime").addEventListener("onCancel", function () {
@@ -310,7 +336,17 @@ $(document).ready(function () {
         });
 
         $("#expiredTime").on("click", function () {
-            toggleDatepickerDialog(expiredTimeDialog);
+            if ($("#expiredDate").val() === "") {
+                Swal.fire({
+                    title: 'Warning',
+                    text: 'Please select expired date first!',
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    returnFocus: false
+                });
+            } else {
+                toggleDatepickerDialog(expiredTimeDialog);
+            }
         });
     }
 
@@ -344,13 +380,10 @@ $(document).ready(function () {
                     return;
                 }
                 const wardcode = disOption.data("code");
-                $.getJSON(
-                    `https://provinces.open-api.vn/api/d/${wardcode}?depth=2`,
-                    function (res) {
-                        const wards = res.wards;
-                        insertOptionsToTarget($("#wardList"), wards);
-                    }
-                ).fail(function (error) {
+                $.getJSON(`https://provinces.open-api.vn/api/d/${wardcode}?depth=2`, function (res) {
+                    const wards = res.wards;
+                    insertOptionsToTarget($("#wardList"), wards);
+                }).fail(function (error) {
                     console.log(error);
                     $("#provinceList").html("<option disabled value='Empty'>");
                 });
@@ -418,27 +451,6 @@ $(document).ready(function () {
             toggleDatepickerDialog(dobDialog);
         });
     }
-
-    $(".cancel-transaction-from").on("submit", function (e) {
-        e.preventDefault();
-
-        Swal.fire({
-            title: "Cancel auction result?",
-            text:
-                "Once you cancel this result, if product is not out of date, expired date will be set time equal now",
-            icon: "warning",
-            confirmButtonText: "OK",
-            denyButtonText: "Cancel",
-            showDenyButton: true,
-            confirmButtonColor: "#6963ff",
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-        }).then((result) => {
-            if (result.isConfirmed) {
-                this.submit();
-            }
-        });
-    });
 });
 
 function closeProfileModal() {
