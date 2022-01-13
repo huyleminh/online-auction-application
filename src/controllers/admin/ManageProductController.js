@@ -9,6 +9,7 @@ import ProductDetailModel from "../../models/ProductDetailModel.js";
 import EmailService from "../../services/EmailService.js"
 import EmailTemplate from "../../shared/template/EmailTemplate.js";
 import AutoBiddingJobModel from "../../models/AutoBiddingJobModel.js";
+import moment from 'moment';
 
 export default class ManageProductController extends AppController {
     constructor() {
@@ -59,6 +60,7 @@ export default class ManageProductController extends AppController {
 
             const result = data.data.map((element, index) => {
                 element.seller_name = additionalInfo[index][0].first_name + ' ' + additionalInfo[index][0].last_name;
+                element.is_sold = element.is_sold === 0 ? moment(element.expired_date).isAfter(moment()) ? 0 : 2 : element.is_sold;
                 return element;
             });
 

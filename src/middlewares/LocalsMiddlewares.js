@@ -40,8 +40,13 @@ export default class LocalsMiddlewares {
                 }
 
                 const wishlist = await WishlistModel.getWishlistByUsername(userFull.user_id);
+                const result = wishlist.map((element) => {
+                    element.is_sold = element.is_sold === 0 ? moment(element.expired_date).isAfter(moment()) ? 0 : 2 : element.is_sold;
+                    return element;
+                });
+                console.log(result)
                 req.session.wishlist = {
-                    wishlist: wishlist,
+                    wishlist: result,
                     length: wishlist.length,
                 };
             }

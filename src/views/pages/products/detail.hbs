@@ -24,10 +24,14 @@
         {{! Product detail - start }}
         {{#if data.notFound}}
             <script type="text/javascript">
-                Swal.fire({ title: "Product not found", text: "This may be an error or product has
-                been removed", icon: "warning", confirmButtonText: "Back to product list",
-                allowOutsideClick: false, allowEscapeKey: false, }).then((result) => {
-                window.location.href = "/menu/categories/all"; });
+                Swal.fire({ 
+                    title: "Product not found", 
+                    text: "This may be an error or product has been removed", 
+                    icon: "warning",
+                    confirmButtonText: "Back to product list",
+                    allowOutsideClick: false,
+                    allowEscapeKey: false, 
+                }).then((result) => { window.location.href = "/menu/categories/all"; });
             </script>
         {{else}}
             {{#unless localUser.isAuth}}

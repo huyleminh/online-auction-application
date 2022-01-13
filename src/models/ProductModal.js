@@ -65,7 +65,7 @@ export default class ProductModel {
                         select product_id, product_name, thumbnail, current_price, buy_now_price, expired_date, won_bidder_id, current_bidding_count as bid_count, created_date, is_sold
                         from product
                         order by current_bidding_count desc limit 5
-                    ) as top join user_account user on top.won_bidder_id = user.user_id ;
+                    ) as top left join user_account user on top.won_bidder_id = user.user_id ;
                 `);
                 resolve(dataSet);
             } catch (err) {
@@ -77,16 +77,16 @@ export default class ProductModel {
     static getAllWithKeyWord(key, limit, offset, sortType) {
         return new Promise(async function (resolve, reject) {
             try {
-                const orderByStatement = makeOrderByStatement(sortType, "product");
+                const orderByStatement = makeOrderByStatement(sortType, "p");
                 const dataSet = await KnexConnection.raw(`
                     select prod.product_id, prod.product_name, prod.thumbnail, prod.current_price,
                     prod.buy_now_price, prod.expired_date, prod.created_date, user.first_name, prod.bid_count, prod.is_sold
                     from (
                         select product_id, product_name, thumbnail, current_price, buy_now_price, expired_date, p.created_date, won_bidder_id, current_bidding_count as bid_count, is_sold
                         from product p join category c on p.cat_id = c.cat_id
-                        where (MATCH(cat_name) AGAINST('${key}')) or MATCH(product_name) AGAINST('${key}')
+                        where (MATCH(c.cat_name) AGAINST('${key}')) or MATCH(p.product_name) AGAINST('${key}')
                         ${orderByStatement} limit ${limit} offset ${offset}
-                    ) as prod join user_account user on prod.won_bidder_id = user.user_id;
+                    ) as prod left join user_account user on prod.won_bidder_id = user.user_id;
                 `);
                 resolve(dataSet);
             } catch (err) {
@@ -106,7 +106,7 @@ export default class ProductModel {
                         select product_id, product_name, thumbnail, current_price, buy_now_price, expired_date, created_date, won_bidder_id, current_bidding_count as bid_count, is_sold
                         from product where match(product_name) against('${key}')
                         ${orderByStatement} limit ${limit} offset ${offset}
-                    ) as prod join user_account user on prod.won_bidder_id = user.user_id;
+                    ) as prod left join user_account user on prod.won_bidder_id = user.user_id;
                 `);
                 resolve(dataSet);
             } catch (err) {
@@ -118,16 +118,16 @@ export default class ProductModel {
     static getAllWithKeyWordCat(key, limit, offset, sortType) {
         return new Promise(async function (resolve, reject) {
             try {
-                const orderByStatement = makeOrderByStatement(sortType, "product");
+                const orderByStatement = makeOrderByStatement(sortType, "p");
                 const dataSet = await KnexConnection.raw(`
                     select prod.product_id, prod.product_name, prod.thumbnail, prod.current_price,
                     prod.buy_now_price, prod.expired_date, prod.created_date, user.first_name, prod.bid_count, prod.is_sold
                     from (
                         select product_id, product_name, thumbnail, current_price, buy_now_price, expired_date, p.created_date, won_bidder_id, current_bidding_count as bid_count, is_sold
                         from product p join category c on p.cat_id = c.cat_id
-                        where match(cat_name) against('${key}')
+                        where match(c.cat_name) against('${key}')
                         ${orderByStatement} limit ${limit} offset ${offset}
-                    ) as prod join user_account user on prod.won_bidder_id = user.user_id;
+                    ) as prod left join user_account user on prod.won_bidder_id = user.user_id;
                 `);
                 resolve(dataSet);
             } catch (err) {
