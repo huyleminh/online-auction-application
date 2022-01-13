@@ -82,12 +82,13 @@
 .product-images .card-images-preview .owl-stage,
 .product-related .owl-stage {
     display: flex;
+    max-height: 250px;
 }
 
 .card-images-preview .card-sub-images-item img {
     border: 1px solid #cfcfcf;
     border-radius: 5px;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .owl-item.cloned, .owl-item {

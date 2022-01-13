@@ -26,7 +26,7 @@ export default class ProductModel {
                         top.won_bidder_id, top.bid_count, first_name, top.created_date, top.is_sold
                     from (
                         select product_id, product_name, thumbnail, current_price, buy_now_price, expired_date, won_bidder_id, current_bidding_count as bid_count, created_date, is_sold
-                        from product where is_sold = 0
+                        from product where is_sold = 0 and expired_date > current_timestamp
                         order by current_price desc limit 5
                     ) as top left join user_account user on top.won_bidder_id = user.user_id ;
                 `);
@@ -44,7 +44,7 @@ export default class ProductModel {
                     select top.product_id, top.product_name, top.thumbnail, top.current_price, top.buy_now_price, top.expired_date, top.won_bidder_id, top.bid_count, first_name, top.created_date
                     from (
                         select product_id, product_name, thumbnail, current_price, buy_now_price, expired_date, won_bidder_id, current_bidding_count as bid_count, created_date
-                        from product where is_sold = 0
+                        from product where is_sold = 0 and expired_date > current_timestamp
                         order by expired_date asc limit 5
                     ) as top left join user_account user on top.won_bidder_id = user.user_id ;
                 `);
