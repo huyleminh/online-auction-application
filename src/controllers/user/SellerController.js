@@ -227,12 +227,12 @@ export default class SellerController extends AppController {
                 });
             }
 
-            const productList = await ProductModel.getSellingProductsByUserId(
+            const data = await ProductModel.getSellingProductsByUserId(
                 user[0].user_id,
                 page
             );
 
-            if (productList === undefined || productList.data.length === 0) {
+            if (data === undefined || data.data.length === 0) {
                 return res.render("pages/user/seller/manage-selling", {
                     layout: "profile",
                     data: {
@@ -242,12 +242,16 @@ export default class SellerController extends AppController {
                     },
                 });
             }
-
+            
+            const result = data.data.map((element) => {
+                element.is_sold = element.is_sold === 0 ? moment(element.expired_date).isAfter(moment()) ? 0 : 2 : element.is_sold;
+                return element;
+            });
             return res.render("pages/user/seller/manage-selling", {
                 layout: "profile",
                 data: {
-                    list: productList.data,
-                    hasNext: productList.hasNext,
+                    list: result,
+                    hasNext: data.hasNext,
                     page,
                 },
             });
@@ -383,12 +387,7 @@ export default class SellerController extends AppController {
                     product_id: item.product_id,
                     product_name: item.product_name,
                     thumbnail: item.thumbnail,
-                    is_sold:
-                        item.is_sold === 0
-                            ? moment(item.expired_date).isAfter(moment())
-                                ? 0
-                                : 2
-                            : item.is_sold,
+                    is_sold: item.is_sold === 0 ? moment(item.expired_date).isAfter(moment()) ? 0 : 2 : item.is_sold,
                     current_price: item.current_price,
                     bidder_name: item.first_name === null ? "N/A" : `****${item.first_name}`,
                     bidder_point: item.rating_point === null ? "N/A" : item.rating_point,

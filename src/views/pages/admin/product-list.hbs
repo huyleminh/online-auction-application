@@ -47,14 +47,20 @@
                             <td>{{this.seller_name}}</td>
                             <td>{{formatDate this.created_date}}</td>
                             <td>
-                                {{#if this.is_sold}}
+                                {{#if (isEqual this.is_sold 1)}}
                                     <div>
                                         <span class="tag tag-danger">Sold</span>
                                     </div>
                                 {{else}}
-                                    <div>
-                                        <span class="tag tag-success">Selling</span>
-                                    </div>
+                                    {{#if (isEqual this.is_sold 2)}}
+                                        <div>
+                                            <span class="tag bg-primary">No Winner</span>
+                                        </div>
+                                    {{else}}
+                                        <div>
+                                            <span class="tag tag-success">Selling</span>
+                                        </div>
+                                    {{/if}}
                                 {{/if}}
                             </td>
                             <td>{{formatDate this.expired_date}}</td>

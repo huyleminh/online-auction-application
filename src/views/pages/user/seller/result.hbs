@@ -65,14 +65,19 @@
                             <td>{{this.product_name}}</td>
                             {{!-- <td>
                                 {{#if (isEqual this.is_sold 1)}}
-                                    <div class="">
-                                        <span class="tag bg-danger">Sold</span>
+                                    <div>
+                                        <span class="tag tag-danger">Sold</span>
                                     </div>
-                                {{/if}}
-                                {{#if (isEqual this.is_sold 0)}}
-                                    <div class="">
-                                        <span class="tag bg-success">Selling</span>
-                                    </div>
+                                {{else}}
+                                    {{#if (isEqual this.is_sold 2)}}
+                                        <div>
+                                            <span class="tag bg-primary">No Winner</span>
+                                        </div>
+                                    {{else}}
+                                        <div>
+                                            <span class="tag tag-success">Selling</span>
+                                        </div>
+                                    {{/if}}
                                 {{/if}}
                             </td> --}}
                             <td>
