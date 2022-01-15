@@ -2,8 +2,8 @@ import multer from "multer";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 
-const __dirname = dirname(fileURLToPath(import.meta.url)).replace("/src/middlewares", "");
-// const __dirname = dirname(fileURLToPath(import.meta.url)).replace("\\src\\middlewares", "");
+// const __dirname = dirname(fileURLToPath(import.meta.url)).replace("/src/middlewares", "");
+const __dirname = dirname(fileURLToPath(import.meta.url)).replace("\\src\\middlewares", "");
 
 const diskStorage = multer.diskStorage({
     destination: function (req, file, cb) {

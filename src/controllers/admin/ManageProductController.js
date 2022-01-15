@@ -1,15 +1,15 @@
+import moment from "moment";
 import AuthMiddlewares from "../../middlewares/AuthMiddlewares.js";
-import UserAccountModel from "../../models/UserAccountModel.js";
-import ProductModel from "../../models/ProductModal.js";
-import AppController from "../AppController.js";
-import JoinBidderModel from "../../models/JoinBidderModel.js";
-import WishlistModel from "../../models/WishlistModel.js";
-import BiddingHistoryModel from "../../models/BiddingHistoryModel.js";
-import ProductDetailModel from "../../models/ProductDetailModel.js";
-import EmailService from "../../services/EmailService.js"
-import EmailTemplate from "../../shared/template/EmailTemplate.js";
 import AutoBiddingJobModel from "../../models/AutoBiddingJobModel.js";
-import moment from 'moment';
+import BiddingHistoryModel from "../../models/BiddingHistoryModel.js";
+import JoinBidderModel from "../../models/JoinBidderModel.js";
+import ProductDetailModel from "../../models/ProductDetailModel.js";
+import ProductModel from "../../models/ProductModal.js";
+import UserAccountModel from "../../models/UserAccountModel.js";
+import WishlistModel from "../../models/WishlistModel.js";
+import EmailService from "../../services/EmailService.js";
+import EmailTemplate from "../../shared/template/EmailTemplate.js";
+import AppController from "../AppController.js";
 
 export default class ManageProductController extends AppController {
     constructor() {
@@ -20,13 +20,13 @@ export default class ManageProductController extends AppController {
 
     init() {
         this._router.get(
-            '/admin/products',
+            "/admin/products",
             AuthMiddlewares.authorizeAdmin,
             this.renderProductManagement
         );
 
         this._router.post(
-            '/admin/products/delete',
+            "/admin/products/delete",
             AuthMiddlewares.authorizeAdmin,
             this.deleteProduct
         );
@@ -42,7 +42,7 @@ export default class ManageProductController extends AppController {
         }
 
         try {
-            const user = await UserAccountModel.getByColumn('username', req.user.username);
+            const user = await UserAccountModel.getByColumn("username", req.user.username);
             if (user === undefined) {
                 req.logout();
                 return req.session.save(() => {
@@ -54,13 +54,19 @@ export default class ManageProductController extends AppController {
 
             let promises = data.data.map((element) => {
                 return UserAccountModel.getSellerByProductId(element.product_id);
-            })
+            });
 
             const additionalInfo = await Promise.all(promises);
 
             const result = data.data.map((element, index) => {
-                element.seller_name = additionalInfo[index][0].first_name + ' ' + additionalInfo[index][0].last_name;
-                element.is_sold = element.is_sold === 0 ? moment(element.expired_date).isAfter(moment()) ? 0 : 2 : element.is_sold;
+                element.seller_name =
+                    additionalInfo[index][0].first_name + " " + additionalInfo[index][0].last_name;
+                element.is_sold =
+                    element.is_sold === 0
+                        ? moment(element.expired_date).isAfter(moment())
+                            ? 0
+                            : 2
+                        : element.is_sold;
                 return element;
             });
 
@@ -70,8 +76,8 @@ export default class ManageProductController extends AppController {
                     data: {
                         list: [],
                         hasNext: false,
-                        page: 1
-                    }
+                        page: 1,
+                    },
                 });
             }
 
@@ -80,9 +86,9 @@ export default class ManageProductController extends AppController {
                 data: {
                     list: result,
                     hasNext: data.hasNext,
-                    page
-                }
-            })
+                    page,
+                },
+            });
         } catch (err) {
             console.log(err);
             return res.render("pages/admin/product-list", {
@@ -90,8 +96,8 @@ export default class ManageProductController extends AppController {
                 data: {
                     list: [],
                     hasNext: false,
-                    page: 1
-                }
+                    page: 1,
+                },
             });
         }
     }
@@ -104,7 +110,7 @@ export default class ManageProductController extends AppController {
         }
 
         try {
-            const user = await UserAccountModel.getByColumn('username', req.user.username);
+            const user = await UserAccountModel.getByColumn("username", req.user.username);
             if (user === undefined) {
                 req.logout();
                 return req.session.save(() => {
@@ -122,15 +128,16 @@ export default class ManageProductController extends AppController {
                 WishlistModel.deleteWithProductId(id),
                 BiddingHistoryModel.deleteWithProductId(id),
                 ProductDetailModel.deleteWithProductId(id),
-                AutoBiddingJobModel.deleteWithProductId(id)
-            ]
+                AutoBiddingJobModel.deleteWithProductId(id),
+            ];
             await Promise.all(promises);
             await ProductModel.deleteWithProductId(id);
 
             await EmailService.sendEmailWithHTMLContent(
-                seller[0].email, 'Bidding inform - Your product has been deleted by the administrator',
-                EmailTemplate.productHasBeenDeletedByAdmin(product[0].product_name, user[0].email
-                ));
+                seller[0].email,
+                "Bidding inform - Your product has been deleted by the administrator",
+                EmailTemplate.productHasBeenDeletedByAdmin(product[0].product_name, user[0].email)
+            );
 
             return res.redirect(`/admin/products`);
         } catch (err) {

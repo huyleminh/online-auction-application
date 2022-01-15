@@ -299,6 +299,7 @@ export default class UserController extends AppController {
                 }
             }
         } catch (err) {
+            console.log(err);
             res.redirect("/user/wishlist");
         }
     }
@@ -373,7 +374,8 @@ export default class UserController extends AppController {
 
             res.redirect(req.headers.referer);
         } catch (err) {
-            res.redirect(req.headers.referer);
+            console.log(err);
+            throw new Error(err);
         }
     }
 

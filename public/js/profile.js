@@ -451,6 +451,27 @@ $(document).ready(function () {
             toggleDatepickerDialog(dobDialog);
         });
     }
+
+    $(".cancel-transaction-from").on("submit", function (e) {
+        e.preventDefault();
+
+        Swal.fire({
+            title: "Cancel auction result?",
+            text:
+                "Once you cancel this result, if product is not out of date, expired date will be set time equal now",
+            icon: "warning",
+            confirmButtonText: "OK",
+            denyButtonText: "Cancel",
+            showDenyButton: true,
+            confirmButtonColor: "#6963ff",
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                this.submit();
+            }
+        });
+    });
 });
 
 function closeProfileModal() {

@@ -208,16 +208,11 @@ foreign key (user_id)
 references `user_account`(user_id);
 
 
-alter table `newsletter_subscriber`
-add constraint `FK_SUBSCRIBER_USER_ACCOUNT`
-foreign key (subscriber_id)
-references `user_account`(user_id);
-
-
 alter table `rating`
 add constraint `FK_RATED_USER_ACOUNT`
 foreign key (rated_user_id)
 references `user_account`(user_id);
+
 
 alter table `rating`
 add constraint `FK_EVALUATOR_USER_ACCOUNT`

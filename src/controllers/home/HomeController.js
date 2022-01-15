@@ -1,8 +1,7 @@
 import moment from "moment";
+import numeral from "numeral";
 import ProductModel from "../../models/ProductModal.js";
 import AppController from "../AppController.js";
-import CommonConst from "../../shared/CommonConst.js";
-import numeral from "numeral";
 
 export default class HomeController extends AppController {
     constructor() {
@@ -50,7 +49,14 @@ export default class HomeController extends AppController {
                         totalBids: item.bid_count !== null ? item.bid_count : 0,
                         createdDate,
                         expiredDate: moment(item.expired_date).locale("en").from(),
-                        firstName: item.first_name !== null ? `****${item.first_name}` : "N/A",
+                        firstName:
+                            item.first_name !== null
+                                ? item.is_sold === 0
+                                    ? moment(item.expired_date).isAfter(moment())
+                                        ? `****${item.first_name}`
+                                        : "N/A"
+                                    : `****${item.first_name}`
+                                : "N/A",
                         dayDiff,
                     };
 
@@ -88,7 +94,14 @@ export default class HomeController extends AppController {
                         totalBids: item.bid_count !== null ? item.bid_count : 0,
                         createdDate,
                         expiredDate: moment(item.expired_date).locale("en").from(),
-                        firstName: item.first_name !== null ? `****${item.first_name}` : "N/A",
+                        firstName:
+                            item.first_name !== null
+                                ? item.is_sold === 0
+                                    ? moment(item.expired_date).isAfter(moment())
+                                        ? `****${item.first_name}`
+                                        : "N/A"
+                                    : `****${item.first_name}`
+                                : "N/A",
                         dayDiff,
                         isSold: item.is_sold,
                     };
@@ -127,9 +140,16 @@ export default class HomeController extends AppController {
                         totalBids: item.bid_count !== null ? item.bid_count : 0,
                         createdDate,
                         expiredDate: moment(item.expired_date).locale("en").from(),
-                        firstName: item.first_name,
+                        firstName:
+                            item.first_name !== null
+                                ? item.is_sold === 0
+                                    ? moment(item.expired_date).isAfter(moment())
+                                        ? `****${item.first_name}`
+                                        : "N/A"
+                                    : `****${item.first_name}`
+                                : "N/A",
                         dayDiff,
-                        isSold: item.is_sold
+                        isSold: item.is_sold,
                     };
 
                     if (item.buy_now_price !== null) {

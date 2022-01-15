@@ -53,7 +53,10 @@ export default class ProductController extends AppController {
             if (search !== undefined) {
                 // Search with keyword
                 if (type === "all") {
-                    console.log({limit: DEFAULT_PAGE_SIZE, offset: DEFAULT_PAGE_SIZE * (page - 1),})
+                    console.log({
+                        limit: DEFAULT_PAGE_SIZE,
+                        offset: DEFAULT_PAGE_SIZE * (page - 1),
+                    });
                     productList = await ProductModel.getAllWithKeyWord(
                         search,
                         DEFAULT_PAGE_SIZE,
@@ -115,7 +118,12 @@ export default class ProductController extends AppController {
                             : "N/A",
                     totalBids: item.bid_count,
                     expiredDate: item.expired_date,
-                    firstName: item.first_name,
+                    firstName:
+                        item.is_sold === 0
+                            ? moment(item.expired_date).isAfter(moment())
+                                ? item.first_name
+                                : null
+                            : item.first_name,
                     createdDate,
                     isNew: minDiff <= 60,
                     isSold: item.is_sold,
@@ -184,12 +192,22 @@ export default class ProductController extends AppController {
                 ...detail,
                 image_links: JSON.parse(detail.image_links),
                 created_date: moment(product.created_date).locale("en").fromNow(),
-                bidder: bidder
-                    ? {
-                          name: bidder.first_name,
-                          point: bidder.rating_point,
-                      }
-                    : null,
+                bidder:
+                    product.is_sold === 0
+                        ? moment(product.expired_date).isAfter(moment())
+                            ? bidder
+                                ? {
+                                      name: bidder.first_name,
+                                      point: bidder.rating_point,
+                                  }
+                                : null
+                            : null
+                        : bidder
+                        ? {
+                              name: bidder.first_name,
+                              point: bidder.rating_point,
+                          }
+                        : null,
                 seller: {
                     name: `${seller.first_name} ${seller.last_name}`,
                     point: seller.rating_point,
@@ -284,7 +302,6 @@ export default class ProductController extends AppController {
         try {
             // Find if product is available
             const [product] = await ProductModel.getById(body.productId);
-            // console.log({ product });
             if (!product) {
                 return res.redirect(`/menu/products/${body.productId}`);
             }
@@ -298,7 +315,6 @@ export default class ProductController extends AppController {
 
             // Get user id
             const [userFromDb] = await UserAccountModel.getByColumn("username", user.username);
-            // console.log({ userFromDb });
             if (!userFromDb) {
                 req.logout();
                 delete req.session.wishlist;
@@ -319,7 +335,6 @@ export default class ProductController extends AppController {
                 userFromDb.user_id,
                 body.productId
             );
-            // console.log({ banResult });
             if (banResult && banResult.is_banned) {
                 req.flash("message", "You are banned by the seller in bidding this product");
                 req.flash("type", "error");
@@ -328,7 +343,6 @@ export default class ProductController extends AppController {
 
             // Start bidding
             const [detail] = await ProductDetailModel.getlById(product.product_id);
-            // console.log({ detail });
 
             // Insert to join bid table
             if (!banResult) {
@@ -360,8 +374,6 @@ export default class ProductController extends AppController {
 
                 // Update job
                 const [job] = await AutoBiddingJobModel.getByProductId(product.product_id);
-                // console.log({ job });
-                // ! job undefined
                 ScheduleJobEventInstance.reScheduleJob(
                     job.job_id,
                     moment().add(10, "seconds").toDate()
@@ -377,7 +389,6 @@ export default class ProductController extends AppController {
                 userFromDb.user_id,
                 product.product_id
             );
-            // console.log({ userBidHistory });
             if (userBidHistory[0] && userBidHistory[0].tolerable_price >= parseInt(body.money)) {
                 req.flash("message", "You have bidded with higher price for this product");
                 req.flash("type", "warning");
@@ -449,7 +460,6 @@ export default class ProductController extends AppController {
 
                     // Update job
                     const [job] = await AutoBiddingJobModel.getByProductId(product.product_id);
-                    // console.log({ job });
                     await AutoBiddingJobModel.update(job.job_id, {
                         expired_date: newExpiredDate.format(CommomCont.MOMENT_BASE_DB_FORMAT),
                     });

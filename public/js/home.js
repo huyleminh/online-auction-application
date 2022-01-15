@@ -266,7 +266,7 @@ function loadTop5Bid() {
                                 <div class="card-info mb-3 d-flex align-items-center">
                                     <i class="fas fa-crown text-warning"></i>
                                     <span class="text-warning">Top Bidder:</span>
-                                    <span class="flex-grow-1 text-end">****${item.firstName}</span>
+                                    <span class="flex-grow-1 text-end">${item.firstName}</span>
                                 </div>
                                 <div
                                     class="card-info mb-3 d-flex align-items-center timer"

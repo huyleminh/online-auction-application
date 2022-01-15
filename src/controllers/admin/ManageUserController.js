@@ -5,8 +5,8 @@ import UserAccountModel from "../../models/UserAccountModel.js";
 import EmailService from "../../services/EmailService.js";
 import CommonConst from "../../shared/CommonConst.js";
 import EmailTemplate from "../../shared/template/EmailTemplate.js";
-import AppController from "../AppController.js";
 import PasswordHelper from "../../utils/helpers/PasswordHelper.js";
+import AppController from "../AppController.js";
 
 export default class ManageUserController extends AppController {
     constructor() {
@@ -285,6 +285,7 @@ export default class ManageUserController extends AppController {
             });
         } catch (err) {
             console.log(err);
+            throw new Error(err);
         }
     }
 
@@ -329,6 +330,7 @@ export default class ManageUserController extends AppController {
             });
         } catch (err) {
             console.log(err);
+            throw new Error(err);
         }
     }
 

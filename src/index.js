@@ -102,8 +102,6 @@ class AppServer {
         });
     }
 
-    initializeScheduleWorker() {}
-
     async start() {
         this.initializeGlobalMiddlewares();
         this.initializeViewEngine();

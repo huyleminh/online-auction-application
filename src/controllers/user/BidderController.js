@@ -43,7 +43,7 @@ export default class BidderController extends AppController {
         }
 
         try {
-            const user = await UserAccountModel.getByColumn('username', req.user.username);
+            const user = await UserAccountModel.getByColumn("username", req.user.username);
             if (user === undefined) {
                 req.logout();
                 return req.session.save(() => {
@@ -59,14 +59,17 @@ export default class BidderController extends AppController {
                     data: {
                         list: [],
                         hasNext: false,
-                        page: 1
-                    }
+                        page: 1,
+                    },
                 });
             }
 
             const promises = data.data.map((element) => {
-                return BiddingHistoryModel.getTolerablePriceAndBidDate(user[0].user_id, element.product_id)
-            })
+                return BiddingHistoryModel.getTolerablePriceAndBidDate(
+                    user[0].user_id,
+                    element.product_id
+                );
+            });
             const additionalInfo = await Promise.all(promises);
 
             let result = data.data.map((element, index) => {
@@ -80,8 +83,8 @@ export default class BidderController extends AppController {
                 data: {
                     list: result,
                     hasNext: data.hasNext,
-                    page: page
-                }
+                    page: page,
+                },
             });
         } catch (err) {
             res.render("pages/user/bidder/bidding", {
@@ -89,8 +92,8 @@ export default class BidderController extends AppController {
                 data: {
                     list: [],
                     hasNext: false,
-                    page: 1
-                }
+                    page: 1,
+                },
             });
         }
     }
@@ -185,7 +188,7 @@ export default class BidderController extends AppController {
         }
 
         try {
-            const user = await UserAccountModel.getByColumn('username', req.user.username);
+            const user = await UserAccountModel.getByColumn("username", req.user.username);
             if (user === undefined) {
                 req.logout();
                 return req.session.save(() => {
@@ -201,14 +204,17 @@ export default class BidderController extends AppController {
                     data: {
                         list: [],
                         hasNext: false,
-                        page: 1
-                    }
+                        page: 1,
+                    },
                 });
             }
 
             const promises = data.data.map((element) => {
-                return BiddingHistoryModel.getTolerablePriceAndBidDate(user[0].user_id, element.product_id)
-            })
+                return BiddingHistoryModel.getTolerablePriceAndBidDate(
+                    user[0].user_id,
+                    element.product_id
+                );
+            });
             const additionalInfo = await Promise.all(promises);
 
             let result = data.data.map((element, index) => {
@@ -221,8 +227,8 @@ export default class BidderController extends AppController {
                 data: {
                     list: result,
                     hasNext: data.hasNext,
-                    page: page
-                }
+                    page: page,
+                },
             });
         } catch (err) {
             res.render("pages/user/bidder/wonlist", {
@@ -230,8 +236,8 @@ export default class BidderController extends AppController {
                 data: {
                     list: [],
                     hasNext: false,
-                    page: 1
-                }
+                    page: 1,
+                },
             });
         }
     }

@@ -74,14 +74,9 @@ export default class BiddingHistoryModel {
             try {
                 const resultSet = await KnexConnection("bidding_history")
                     .where({ product_id: productId })
-                    .orderBy([
-                        { column: "tolerable_price", order: "desc" },
-                        { column: "bid_date" }
-                    ])
+                    .orderBy([{ column: "tolerable_price", order: "desc" }, { column: "bid_date" }])
                     .limit(2)
                     .select();
-
-                console.log(resultSet);
 
                 resolve(resultSet.length < 2 ? undefined : resultSet[1]);
             } catch (error) {
@@ -95,9 +90,7 @@ export default class BiddingHistoryModel {
             try {
                 const resultSet = await KnexConnection("bidding_history")
                     .where({ product_id: productId })
-                    .orderBy("current_price")
-
-                console.log(resultSet);
+                    .orderBy("current_price");
 
                 resolve(resultSet);
             } catch (error) {
@@ -105,13 +98,11 @@ export default class BiddingHistoryModel {
             }
         });
     }
-    
+
     static deleteWithProductId(id) {
         return new Promise(async function (resolve, reject) {
             try {
-                const res = await KnexConnection('bidding_history')
-                .where('product_id', id)
-                .del();
+                const res = await KnexConnection("bidding_history").where("product_id", id).del();
 
                 resolve(res);
             } catch (err) {

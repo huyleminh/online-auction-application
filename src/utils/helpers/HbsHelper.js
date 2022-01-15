@@ -33,7 +33,7 @@ export default class HbsHelper {
     }
 
     static calcNo(index, page) {
-        return (page - 1) * CommonConst.ITEMS_PER_TABLE_PAGE + index + 1
+        return (page - 1) * CommonConst.ITEMS_PER_TABLE_PAGE + index + 1;
     }
 
     static subtract(left, right) {
@@ -73,7 +73,7 @@ export default class HbsHelper {
             and: this.and,
             or: this.or,
             isIn: this.isIn,
-            checkBan: this.checkBan
+            checkBan: this.checkBan,
         };
     }
 }
