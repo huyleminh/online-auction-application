@@ -6,6 +6,10 @@
     <link rel="stylesheet" href="/css/table.css" />
 {{/section}}
 
+{{#section "docTitle"}}
+    <title>{{data.productDetail.product_name}} | Online Auction</title>
+{{/section}}
+
 <section class="container-fluid bg-light menu-container" id="top-menu-container">
     <div class="container pt-4">
         <h3>Product Detail</h3>
@@ -24,13 +28,13 @@
         {{! Product detail - start }}
         {{#if data.notFound}}
             <script type="text/javascript">
-                Swal.fire({ 
-                    title: "Product not found", 
-                    text: "This may be an error or product has been removed", 
+                Swal.fire({
+                    title: "Product not found",
+                    text: "This may be an error or product has been removed",
                     icon: "warning",
                     confirmButtonText: "Back to product list",
                     allowOutsideClick: false,
-                    allowEscapeKey: false, 
+                    allowEscapeKey: false,
                 }).then((result) => { window.location.href = "/menu/categories/all"; });
             </script>
         {{else}}
