@@ -44,16 +44,16 @@ class ScheduleJobEvent {
                         const [bidder] = res;
                         if (bidder) {
                             console.log(`>>> JOB SEND WINNER: JOB_ID ${id} - ${new Date()}`);
-                            EmailService.sendEmailWithHTMLContent(
-                                bidder.email,
-                                "Bidding result - You have won a product",
-                                EmailTemplate.biddingResultBidder(
-                                    product.product_name,
-                                    product.current_price
-                                )
-                            ).catch((error) => {
-                                console.log(error);
-                            });
+                            // EmailService.sendEmailWithHTMLContent(
+                            //     bidder.email,
+                            //     "Bidding result - You have won a product",
+                            //     EmailTemplate.biddingResultBidder(
+                            //         product.product_name,
+                            //         product.current_price
+                            //     )
+                            // ).catch((error) => {
+                            //     console.log(error);
+                            // });
                         }
                     });
 
@@ -62,7 +62,8 @@ class ScheduleJobEvent {
                         if (seller) {
                             console.log(`>>> JOB SEND SELLER: JOB_ID ${id} - ${new Date()}`);
                             EmailService.sendEmailWithHTMLContent(
-                                seller.email,
+                                // seller.email,
+                                "leminhhuy.hcmus@gmail.com",
                                 "Bidding result - The product you are posting has been sold",
                                 EmailTemplate.bidResultSeller(
                                     product.product_name,
@@ -81,7 +82,8 @@ class ScheduleJobEvent {
                                 `>>> JOB SEND SELLER - NO WINNER: JOB_ID ${id} - ${new Date()}`
                             );
                             EmailService.sendEmailWithHTMLContent(
-                                seller.email,
+                                // seller.email,
+                                "leminhhuy.hcmus@gmail.com",
                                 "Bidding result - Time for your bidding product has been expired",
                                 EmailTemplate.noResultSeller(product.product_name)
                             ).catch((error) => {
