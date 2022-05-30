@@ -7,7 +7,7 @@ class EmailService {
         this.#transporter = nodeMailer.createTransport({
             host: EmailConfig.HOST,
             port: EmailConfig.PORT,
-            secure: EmailConfig.SECURE,
+            // secure: EmailConfig.SECURE,
             auth: {
                 user: EmailConfig.USER,
                 pass: EmailConfig.PASSWORD,
