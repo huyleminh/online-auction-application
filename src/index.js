@@ -110,7 +110,7 @@ class AppServer {
         try {
             await ScheduleJobEventInstance.runOldScheduledJob();
             this.app.listen(this.port, () => {
-                console.log(`Server is listening on http://localhost:${this.port}`);
+                console.log(`Server is listening on PORT:${this.port}`);
             });
         } catch (error) {
             console.log(error);

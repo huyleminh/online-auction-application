@@ -18,7 +18,7 @@ class EmailService {
     // TODO: must revise this section
     async sendEmailWithHTMLContent(to, subject, html) {
         const sendOption = {
-            from: EmailConfig.USER,
+            from: "h2ateam.se@gmail.com",
             to,
             subject,
             html,
