@@ -46,6 +46,5 @@ npm-debug.log
 .env.production.local
 .env
 
-package-lock.json
 *.http
 .firebase
