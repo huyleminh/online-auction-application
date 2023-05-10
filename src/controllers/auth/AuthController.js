@@ -2,11 +2,10 @@ import axios from "axios";
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { Strategy as LocalStrategy } from "passport-local";
-import GoogleConfig from "../../config/GoogleConfig.js";
+import { GOOGLE_CONFIG } from "../../config/index.js";
 import AuthMiddlewares from "../../middlewares/AuthMiddlewares.js";
 import UserAccountModel from "../../models/UserAccountModel.js";
 import EmailService from "../../services/EmailService.js";
-import AppConstant from "../../shared/AppConstant.js";
 import EmailTemplate from "../../shared/template/EmailTemplate.js";
 import Authenticator from "../../utils/Authenticatior.js";
 import PasswordHelper from "../../utils/helpers/PasswordHelper.js";
@@ -23,8 +22,8 @@ passport.deserializeUser((user, done) => {
 passport.use(
     new GoogleStrategy(
         {
-            clientID: GoogleConfig.AUTH_CLIENT_ID,
-            clientSecret: GoogleConfig.AUTH_CLIENT_SECRET,
+            clientID: GOOGLE_CONFIG.clientId,
+            clientSecret: GOOGLE_CONFIG.clientSecret,
             callbackURL: "/login/google/callback",
         },
         async function (token, tokenSecret, profile, done) {
@@ -33,9 +32,7 @@ passport.use(
                 const [user] = await UserAccountModel.getByColumn("username", profile._json.email);
 
                 if (!user) {
-                    const [userWithEmail] = await UserAccountModel.getUsernameByEmail(
-                        profile._json.email
-                    );
+                    const [userWithEmail] = await UserAccountModel.getUsernameByEmail(profile._json.email);
                     if (userWithEmail) {
                         return done(null, false, {
                             message:
@@ -46,7 +43,7 @@ passport.use(
                     const insertData = {
                         username: profile._json.email,
                         password: PasswordHelper.generateHashPassword(
-                            `${profile._json.sub}-${AppConstant.GOOGLE_SECRET_PASSWORD_KEY}`
+                            `${profile._json.sub}-${GOOGLE_CONFIG.secretToken}`
                         ),
                         email: profile._json.email,
                         first_name: profile._json.given_name,
@@ -70,14 +67,13 @@ passport.use(
 
                 // Verify password
                 const idValid = PasswordHelper.verifyHash(
-                    `${profile._json.sub}-${AppConstant.GOOGLE_SECRET_PASSWORD_KEY}`,
+                    `${profile._json.sub}-${GOOGLE_CONFIG.secretToken}`,
                     user.password
                 );
 
                 if (!idValid) {
                     return done(null, false, {
-                        message:
-                            "Invalid google account, please login with another account or register a new one",
+                        message: "Invalid google account, please login with another account or register a new one",
                     });
                 }
 
@@ -144,15 +140,6 @@ export default class AuthController extends AppController {
                 scope: ["profile", "email"],
             })
         );
-        // this._router.get(
-        //     "/login/google/callback",
-        //     passport.authenticate("google", { failureRedirect: "/login" }),
-        //     (req, res) => {
-        //         req.session.save(() => {
-        //             res.redirect("/");
-        //         });
-        //     }
-        // );
 
         this._router.get("/login/google/callback", function (req, res, next) {
             passport.authenticate("google", function (err, user, info) {
@@ -203,6 +190,8 @@ export default class AuthController extends AppController {
 
                     const { returnUrl } = req.session;
                     delete req.session.returnUrl;
+
+                    req.session.user = user;
                     req.session.save(function () {
                         res.redirect(returnUrl || "/");
                     });
@@ -250,7 +239,7 @@ export default class AuthController extends AppController {
         const body = req.body;
 
         const recaptchaRes = await axios.post(
-            `https://www.google.com/recaptcha/api/siteverify?secret=${GoogleConfig.RECAPTCHA_SECRET}&response=${body["g-recaptcha-response"]}`
+            `https://www.google.com/recaptcha/api/siteverify?secret=${GOOGLE_CONFIG.recaptchaSecret}&response=${body["g-recaptcha-response"]}`
         );
 
         if (!recaptchaRes.data.success) {

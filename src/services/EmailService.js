@@ -1,28 +1,23 @@
 import nodeMailer from "nodemailer";
-import EmailConfig from "../config/EmailConfig.js";
+import { EMAIL_CONFIG } from "../config/index.js";
 
 class EmailService {
     #transporter;
     constructor() {
         this.#transporter = nodeMailer.createTransport({
-            host: EmailConfig.HOST,
-            port: EmailConfig.PORT,
-            // secure: EmailConfig.SECURE,
+            host: EMAIL_CONFIG.host,
+            port: EMAIL_CONFIG.port,
+            secure: EMAIL_CONFIG.SECURE,
             auth: {
-                user: EmailConfig.USER,
-                pass: EmailConfig.PASSWORD,
+                user: EMAIL_CONFIG.user,
+                pass: EMAIL_CONFIG.password,
             },
         });
     }
 
     // TODO: must revise this section
     async sendEmailWithHTMLContent(to, subject, html) {
-        const sendOption = {
-            from: "h2ateam.se@gmail.com",
-            to,
-            subject,
-            html,
-        };
+        const sendOption = { from: EMAIL_CONFIG.user, to, subject, html };
 
         return this.#transporter.sendMail(sendOption);
     }

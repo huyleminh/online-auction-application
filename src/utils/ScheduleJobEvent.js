@@ -1,5 +1,5 @@
 import moment from "moment";
-import schedule, { rescheduleJob } from "node-schedule";
+import schedule from "node-schedule";
 import AutoBiddingJobModel from "../models/AutoBiddingJobModel.js";
 import ProductDetailModel from "../models/ProductDetailModel.js";
 import ProductModel from "../models/ProductModal.js";
@@ -62,8 +62,7 @@ class ScheduleJobEvent {
                         if (seller) {
                             console.log(`>>> JOB SEND SELLER: JOB_ID ${id} - ${new Date()}`);
                             EmailService.sendEmailWithHTMLContent(
-                                // seller.email,
-                                "leminhhuy.hcmus@gmail.com",
+                                seller.email,
                                 "Bidding result - The product you are posting has been sold",
                                 EmailTemplate.bidResultSeller(
                                     product.product_name,
@@ -82,8 +81,7 @@ class ScheduleJobEvent {
                                 `>>> JOB SEND SELLER - NO WINNER: JOB_ID ${id} - ${new Date()}`
                             );
                             EmailService.sendEmailWithHTMLContent(
-                                // seller.email,
-                                "leminhhuy.hcmus@gmail.com",
+                                seller.email,
                                 "Bidding result - Time for your bidding product has been expired",
                                 EmailTemplate.noResultSeller(product.product_name)
                             ).catch((error) => {

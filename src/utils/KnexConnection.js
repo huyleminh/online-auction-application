@@ -1,12 +1,12 @@
 import knex from "knex";
-import AppConstant from "../shared/AppConstant.js";
+import { APP_CONFIG } from "../config/index.js";
 
 export const KnexConnectionInfo = {
-    host: AppConstant.DB_HOST,
-    port: 3306,
-    user: AppConstant.DB_USER_NAME,
-    password: AppConstant.DB_PASSWORD,
-    database: AppConstant.DB_SCHEMA,
+    host: APP_CONFIG.database.host,
+    port: APP_CONFIG.database.port,
+    user: APP_CONFIG.database.username,
+    password: APP_CONFIG.database.password,
+    database: APP_CONFIG.database.name,
 };
 
 const KnexConnection = knex({

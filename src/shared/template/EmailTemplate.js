@@ -1,4 +1,4 @@
-import AppConstant from "../AppConstant.js";
+import { APP_CONFIG } from "../../config/index.js";
 
 export default class EmailTemplate {
     static OTPTemplate(otpcode) {
@@ -114,7 +114,7 @@ export default class EmailTemplate {
                 Your product - ${productName} has been bought with ${price} VND
             </p>
             <p style="font-size: 16px">
-                You can view at ${AppConstant.APP_URL}/seller/products/results
+                You can view at ${APP_CONFIG.appUrl}/seller/products/results
             </p>
         `);
     }
@@ -125,7 +125,7 @@ export default class EmailTemplate {
                 You have won ${productName} with ${price} VND
             </p>
             <p style="font-size: 16px">
-                You can view detail and rate the owner of this product at ${AppConstant.APP_URL}/bidder/won
+                You can view detail and rate the owner of this product at ${APP_CONFIG.appUrl}/bidder/won
             </p>
         `);
     }
@@ -136,7 +136,7 @@ export default class EmailTemplate {
                 Your max tolerable price has been surpassed
             </p>
             <p style="font-size: 16px">
-                You can view at ${AppConstant.APP_URL}/bidder/bidding
+                You can view at ${APP_CONFIG.appUrl}/bidder/bidding
             </p>
         `);
     }
@@ -147,7 +147,7 @@ export default class EmailTemplate {
                 Time for your ${productName} has been expired and there is no bidder won this one
             </p>
             <p style="font-size: 16px">
-                You can view at ${AppConstant.APP_URL}/seller/products/results
+                You can view at ${APP_CONFIG.appUrl}/seller/products/results
             </p>
         `);
     }
@@ -212,7 +212,7 @@ export default class EmailTemplate {
             </p>
 
             <p style="font-size: 16px; color: red">
-                You will have never bid for ${productName}. You can visit ${AppConstant.APP_URL}/bidder/bidding.
+                You will have never bid for ${productName}. You can visit ${APP_CONFIG.appUrl}/bidder/bidding.
             </p>
         `);
     }
@@ -223,7 +223,7 @@ export default class EmailTemplate {
                 You have been hit with <b>${price} VND</b> for ${productName}
             </p>
             <p style="font-size: 16px;">
-                You can visit ${AppConstant.APP_URL}/bidder/bidding to view you bidding product list.
+                You can visit ${APP_CONFIG.appUrl}/bidder/bidding to view you bidding product list.
             </p>
             <p style="font-size: 16px;">
                 We send this email to confirm that you have done this action.

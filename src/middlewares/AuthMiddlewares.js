@@ -25,17 +25,17 @@ export default class AuthMiddlewares {
     }
 
     static setReturnURL(req, res, next) {
-        if (req.session.returnUrl) {
-            return next();
-        }
+        // if (req.session.returnUrl) {
+        //     return next();
+        // }
 
-        const { referer } = req.headers;
+        // const { referer } = req.headers;
 
-        if (!referer || referer.match(/(forget-pwd)|(signup)|(login)/g)) {
-            req.session.returnUrl = "/";
-        } else {
-            req.session.returnUrl = referer;
-        }
+        // if (!referer || referer.match(/(forget-pwd)|(signup)|(login)/g)) {
+        //     req.session.returnUrl = "/";
+        // } else {
+        //     req.session.returnUrl = referer;
+        // }
         next();
     }
 }

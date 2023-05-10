@@ -2,15 +2,15 @@ import admin from "firebase-admin";
 import { getStorage } from "firebase-admin/storage";
 import { unlink } from "fs";
 import { v4 } from "uuid";
-import FirebaseConfig from "../config/FirebaseConfig.js";
+import { FIREBASE_CONFIG } from "../config/index.js";
 
 admin.initializeApp({
     credential: admin.credential.cert({
-        projectId: FirebaseConfig.PROJECT_ID,
-        private_key: FirebaseConfig.PRIVATE_KEY.replace(/\\n/g, "\n"),
-        client_email: FirebaseConfig.CLIENT_EMAIL,
+        projectId: FIREBASE_CONFIG.projectId,
+        private_key: FIREBASE_CONFIG.privateKey.replace(/\\n/g, "\n"),
+        client_email: FIREBASE_CONFIG.clientEmail,
     }),
-    storageBucket: FirebaseConfig.BUCKET,
+    storageBucket: FIREBASE_CONFIG.bucket,
 });
 
 const AppBucket = getStorage().bucket();

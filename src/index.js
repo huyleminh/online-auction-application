@@ -1,5 +1,5 @@
 import flash from "connect-flash";
-// import KnexStoreFn from "connect-session-knex";
+import cors from "cors";
 import express from "express";
 import { create } from "express-handlebars";
 import HandlebarsSection from "express-handlebars-sections";
@@ -8,57 +8,65 @@ import morgan from "morgan";
 import passport from "passport";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
+import { APP_CONFIG } from "./config/index.js";
 import AppControllers from "./controllers/index.js";
 import LocalsMiddlewares from "./middlewares/LocalsMiddlewares.js";
-import AppConstant from "./shared/AppConstant.js";
-import HbsHelper from "./utils/helpers/HbsHelper.js";
 import { ScheduleJobEventInstance } from "./utils/ScheduleJobEvent.js";
-// import knex from "./utils/KnexConnection.js";
+import HbsHelper from "./utils/helpers/HbsHelper.js";
 
 class AppServer {
     constructor() {
         this.app = express();
-        this.port = AppConstant.PORT;
+        this.port = APP_CONFIG.port;
         this.__dirname = dirname(fileURLToPath(import.meta.url));
     }
 
     initializeGlobalMiddlewares() {
         this.app.use(express.urlencoded({ extended: true }));
-
         this.app.use(express.static("public"));
+        this.app.use(morgan("[:date[web]] :remote-addr :method :url :status :res[content-length] - :response-time ms"));
 
-        // morgan
-        this.app.use(
-            morgan(
-                "[:date[web]] :remote-addr :method :url :status :res[content-length] - :response-time ms"
-            )
-        );
+        // RedisClient.initRedisConnectionAsync();
 
-        // const KnexStore = new KnexStoreFn(session);
-        // const store = new KnexStore({
-        //     knex,
-        //     tablename: "sessions",
+        // const redisStore = new RedisStore({
+        //     client: RedisClient.getRedisClient(),
+        //     prefix: "auction_app",
         // });
 
         this.app.set("trust proxy", 1);
+
+        this.app.use(passport.initialize());
+
+        this.app.use(
+            cors({
+                origin: APP_CONFIG.appUrl,
+                credentials: true,
+                allowedHeaders:
+                    "X-Requested-With, X-HTTP-Method-Override, X-Request-Id, Content-Type, Authorization, Accept",
+                methods: "GET, POST, PUT, PATCH, DELETE",
+            })
+        );
+
         this.app.use(
             session({
-                secret: AppConstant.COOKIE_KEY,
+                // store: redisStore,
+                secret: APP_CONFIG.cookieKey,
+                name: APP_CONFIG.cookieName,
                 resave: false,
                 saveUninitialized: false,
                 cookie: {
-                    secure: AppConstant.PROD,
-                    maxAge: AppConstant.COOKIE_KEY_MAX_AGE,
+                    path: "/",
+                    httpOnly: true,
+                    secure: false,
+                    maxAge: APP_CONFIG.cookieMaxAge,
                 },
-                // *BUG: does not sync session - solved
-                // TODO: check this bug in production
-                // store: store,
             })
         );
 
         //passport
-        this.app.use(passport.initialize());
-        this.app.use(passport.session());
+        this.app.use(passport.session({ pauseStream: true }));
+        this.app.use(passport.authenticate("session"));
+
         this.app.use(flash());
 
         LocalsMiddlewares.getAll().forEach((mdw) => this.app.use(mdw));
